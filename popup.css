@@ -1,0 +1,351 @@
+.popup {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	max-width: 300px;
+	max-height: 700px;
+	font-family: 'Work Sans', sans-serif;
+	text-align: center;
+	border-radius: 20px;
+}
+.popup1 {
+	background-color: rgb(144, 131, 216);
+	border: 1px solid #ccc;
+	max-width: 300px;
+	max-height: 700px;
+	font-family: 'Work Sans', sans-serif;
+	text-align: center;
+	border-radius: 20px;
+}
+.col{
+	background-color: rgb(144, 131, 216);
+}
+.close-btn{
+	position: absolute;
+	left: 275px;
+	top: 31px;
+	cursor: pointer;
+}
+.back{
+	position: absolute;
+	top: 29px;
+	left: 30px;
+}
+#heading-1{
+	margin-left: 50px;
+}
+#heading-2{
+	margin-left: 45px;
+	margin-bottom: 40px;
+}
+#heading-3{
+	margin-left: 20px;
+}
+.btn{
+	display:flex;
+    cursor: pointer;
+	padding: 1px 2px;	
+}
+.header{
+	display: flex;
+	background-color: rgb(144, 131, 216);
+	padding: 1px 2px;	
+	border-top-left-radius: 20px;
+	border-top-right-radius:20px ;
+}
+.btn2{
+	display: flex;
+    cursor: pointer;
+	padding: 1px 2px;	
+}
+.btn3{
+	display: flex;
+    cursor: pointer;
+	padding: 1px 2px;	
+}
+.btn4{
+	display: flex;
+    cursor: pointer;
+	padding: 1px 2px;	
+}
+/*.btn5{
+	display: flex;
+    cursor: pointer;
+	padding: 1px 2px;	
+}
+.btn6{
+	display: flex;
+    cursor: pointer;
+	padding: 1px 2px;	
+}*/
+.right-btn{
+	position: absolute;
+    left: 260px;
+    bottom: 171px;
+}
+.right-btn1{
+	position: absolute;
+    left: 260px;
+    bottom: 193px;
+}
+.right-btn2{
+	position: absolute;
+    left: 260px;
+    bottom: 230px;
+}
+.right-btn3{
+	position: absolute;
+    left: 260px;
+    bottom: 230px;
+}
+
+.right-btn4{
+	position: absolute;
+    left: 260px;
+    top: 108px;
+}
+.right-btn5{
+	position: absolute;
+    left: 260px;
+    top: 142px;
+}
+.right-btn6{
+	position: absolute;
+    left: 260px;
+    top: 247px;
+}
+.right-btn7{
+	position: absolute;
+    left: 258px;
+    bottom: 182px;
+}
+.right-btn8{
+	position: absolute;
+    left: 250px;
+    bottom: 173px;
+}
+.right-btn9{
+	position: absolute;
+    left: 250px;
+    bottom: 183px;
+}
+.start-btn{
+	display: flex;
+	justify-content: flex-end;
+    padding: 2px 4px;
+	border-radius: 20px;
+}
+.title{
+	margin-bottom: 200px;
+	margin-top: 100px;
+}
+#create-campaign {
+	margin-top: 50px;
+	margin-right: 20px;
+	margin-left: 20px;
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 600;
+	padding: 10px 100px;
+	cursor: pointer;
+	border-radius: 10px;
+}
+#login{
+	margin-top: 20px;
+	background-color: rgb(144, 131, 216);
+	color: black;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 300;
+	margin-bottom: 20px;
+	border-radius:5px;
+	border: none;
+	cursor: pointer;
+	margin-right: 10px;
+	padding: 5px 40px;
+}
+#contact{
+	margin-top: 20px;
+	background-color: rgb(144, 131, 216);
+	color: black;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 300;
+	margin-bottom: 20px;
+	border-radius:5px;
+	border: none;
+	cursor: pointer;
+	margin-right: 10px;
+	padding: 5px 40px;
+}
+#hi{
+	margin-top: 20px;
+	background-color: rgb(144, 131, 216);
+	color: black;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 300;
+	margin-bottom: 20px;
+	border-radius:5px;
+	border: none;
+	cursor: pointer;
+	margin-right: 10px;
+	padding: 5px 30px;
+}
+.footer{
+	display: flexbox;
+}
+p{
+	margin: 96px;
+	color: #ccc;
+}
+#search-popup{
+	margin-top: 45px;
+	margin-right: 20px;
+	margin-left: 20px;
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 500;
+	padding: 10px 55px;
+	cursor: pointer;
+    border-radius: 10px;
+	text-align: center;
+}
+/*#new-popup{
+	margin-right: 20px;
+	margin-left: 20px;
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+		font-family: 'Work Sans', sans-serif;
+	font-weight: 500;
+	padding: 10px 39px;
+	cursor: pointer;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	text-align:center;
+}
+#new1-popup{
+	margin-right: 20px;
+	margin-left: 20px;
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+		font-family: 'Work Sans', sans-serif;
+	font-weight: 500;
+	padding: 8px 40px;
+	cursor: pointer;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	text-align:center;
+}*/
+#Navigator-popup{
+	margin-top: 45px;
+	margin-right: 20px;
+	margin-left: 20px;
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 500;
+	padding: 10px 48px;
+	cursor: pointer;
+    border-radius: 10px;
+	text-align:center;
+}
+.navigator{
+	margin-bottom: 122px;
+}
+.Campaign-row1{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 150px;
+}
+.Campaign-row2{
+	display: flex;
+	background-color: rgb(144, 131, 216);
+	gap: 53px;
+}
+#Activity:hover{
+	text-decoration: underline;
+	text-underline-offset: 0.4em;
+	text-decoration-thickness: 0.30em;
+	  
+}
+#Activity{
+	background-color: transparent;
+	border: transparent;
+	font-family: 'Work Sans', sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	margin-bottom: 5px;
+	cursor: pointer;
+}
+#footer-btn{
+	margin-top: 20px;
+	margin-right: 20px;
+	margin-left: 20px;
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 600;
+	padding: 5px 100px;
+	cursor: pointer;
+	border-radius: 10px;
+	margin-bottom: 20px;
+}
+.Automation-part{
+	margin: 107px;
+	color: #ccc;
+}
+.Automation-part2{
+	margin: 118px;
+	color: #ccc;
+}
+.Automation-part3{
+	margin: 123px;
+	color: #ccc;
+}
+#next-popup{
+	background-color: rgb(144, 131, 216);
+	border-radius: 10px;
+	padding: 5px 15px;
+	border: none;
+}
+#message{
+	margin-bottom: 81px;
+}
+#create-popup{
+	margin-top: 16px;
+	margin-right: 10px;
+	margin-left: 8px;
+    background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 600;
+	padding: 5px 50px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 10px;
+	margin-bottom: 10px;
+}
+
+#Campaign1{
+	margin-top: 20px;
+	margin-right: 20px;
+	margin-left: 11px;
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 600;
+	padding: 20px 100px;
+	cursor: pointer;
+	border-radius: 10px;
+	margin-bottom: 150px;
+}
+
+  
