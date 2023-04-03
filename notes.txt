@@ -1,0 +1,46 @@
+# Element selectors used for Web Scraping & Sending Invites
+
+## Web Scraping 
+- lead-profile-link (lead-profile-link)
+- lead-image (lead-image)
+- lead-name (lead-name)
+- lead-title (lead-title)
+- next-page-btn (next-page-btn)
+
+## Sending Invites
+- lead-profile-link (lead-profile-link)
+- connect-btn (connect-btn)
+- add-note-btn (add-note-btn)
+- text-area (text-area)
+- send-btn (send-btn)
+
+
+### lead-profile-link {#lead-profile-link}
+class = app-aware-link
+href="[https://www.linkedin.com/in/sakshi-patel-390927183?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAACtir1wBgPfuvbNp0rQ-vP6DgpK4arKC4q0](https://www.linkedin.com/in/sakshi-patel-390927183?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAACtir1wBgPfuvbNp0rQ-vP6DgpK4arKC4q0)"
+
+### lead-image {lead-image}
+class = presence-entity presence-entity--size-3
+image class = presence-entity__image  ivm-view-attr__img--centered EntityPhoto-circle-3 EntityPhoto-circle-3 lazy-image ember-view
+
+### lead-name {lead-name}
+class = app-aware-link
+
+### lead-title {lead-title}
+class = entity-result__primary-subtitle t-14 t-black t-normal
+
+### next-page-btn {next-page-btn}
+class = artdeco-pagination__button artdeco-pagination__button--next artdeco-button artdeco-button--muted artdeco-button--icon-right artdeco-button--1 artdeco-button--tertiary ember-view
+
+### connect-btn {connect-btn}
+class = artdeco-button artdeco-button--2 artdeco-button--primary ember-view pvs-profile-actions__action
+
+### add-note-btn {add-note-btn}
+class = artdeco-button artdeco-button--muted artdeco-button--2 artdeco-button--secondary ember-view mr1
+
+### text-area {text-area}
+id = custom-message
+class = eber-text-area ember-view connect-button-send-invite__custom-message mb3
+
+### send-btn {send-btn}
+class = artdeco-button artdeco-button--2 artdeco-button--primary artdeco-button--disabled ember-view ml1
