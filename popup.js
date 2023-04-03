@@ -1,39 +1,13 @@
-/*
-document.addEventListener('DOMContentLoaded', function() {
-	var closeButton = document.getElementById('close-popup');
 
-	closeButton.addEventListener('click', function() {
-		window.close();
-	});
-});
+//scrapes the leads' profile info necessary for automating invites
+/*const leads = document.querySelectorAll('.entity-result');
 
-
-document.addEventListener('DOMContentLoaded', function() {
-	var endButton = document.getElementById('.close-btn');
-
-	endButton.addEventListener('click', function() {
-		window.close();
-	});
+let results = [...leads].map(lead => {
+	let leadImage = lead.querySelector('img').getAttribute('src');
+	let leadName = lead.querySelector('.app-aware-link > span > span').innerText;
+  	let leadTitle = lead.querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
+  	let leadProfileLink = lead.querySelector('.app-aware-link').href;
+ 
+  	return { leadImage, leadName, leadTitle, leadProfileLink };
 });
 */
-
-const openButton = document.querySelector('.start');
-
-openButton.addEventListener('click', function() {
-  console.log('clicked');
-	//window.location.href = 'home.html';
-});
-
-const button = document.querySelector('#create-campaign');
-
-button.addEventListener('click', function() {
-	console.log('clicked');
-	//window.location.href = 'camp.html';
-});
-
-const closeButton = document.querySelector('.close-btn');
-
-closeButton.addEventListener('click', function() {
-	console.log('clicked');
-	//window.location.href = 'btn.html';
-});
