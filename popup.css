@@ -1,8 +1,8 @@
 .popup {
 	background-color: #fff;
 	border: 1px solid #ccc;
-	max-width: 300px;
-	max-height: 700px;
+	width: 350px;
+	height: 550px;
 	font-family: 'Work Sans', sans-serif;
 	text-align: center;
 	border-radius: 20px;
@@ -10,8 +10,8 @@
 .popup1 {
 	background-color: rgb(144, 131, 216);
 	border: 1px solid #ccc;
-	max-width: 300px;
-	max-height: 700px;
+	width: 350px;
+	height: 550px;
 	font-family: 'Work Sans', sans-serif;
 	text-align: center;
 	border-radius: 20px;
