@@ -9,7 +9,7 @@
 }
 .popup1 {
 	background-color: rgb(144, 131, 216);
-	border: 1px solid #ccc;
+	border: transparent;
 	width: 350px;
 	height: 550px;
 	font-family: 'Work Sans', sans-serif;
@@ -21,13 +21,13 @@
 }
 .close-btn{
 	position: absolute;
-	left: 275px;
-	top: 31px;
+	left: 320px;
+	top: 24px;
 	cursor: pointer;
 }
 .back{
 	position: absolute;
-	top: 29px;
+	top: 23px;
 	left: 30px;
 }
 #heading-1{
@@ -40,11 +40,11 @@
 #heading-3{
 	margin-left: 20px;
 }
-.btn{
+/* .btn{
 	display:flex;
     cursor: pointer;
 	padding: 1px 2px;	
-}
+} */
 .header{
 	display: flex;
 	background-color: rgb(144, 131, 216);
@@ -52,11 +52,11 @@
 	border-top-left-radius: 20px;
 	border-top-right-radius:20px ;
 }
-.btn2{
+/* .btn2{
 	display: flex;
     cursor: pointer;
 	padding: 1px 2px;	
-}
+} */
 .btn3{
 	display: flex;
     cursor: pointer;
@@ -79,54 +79,54 @@
 }*/
 .right-btn{
 	position: absolute;
-    left: 260px;
-    bottom: 171px;
+    left: 275px;
+    bottom: 27px;
 }
 .right-btn1{
 	position: absolute;
-    left: 260px;
-    bottom: 193px;
+    left: 280px;
+    bottom: 24px;
 }
 .right-btn2{
 	position: absolute;
-    left: 260px;
-    bottom: 230px;
+    left: 285px;
+    bottom: 19px;
 }
 .right-btn3{
 	position: absolute;
-    left: 260px;
-    bottom: 230px;
+    left: 280px;
+    bottom: 20px;
 }
 
 .right-btn4{
 	position: absolute;
-    left: 260px;
-    top: 108px;
+    left: 280px;
+    top: 94px;
 }
 .right-btn5{
 	position: absolute;
-    left: 260px;
-    top: 142px;
+    left: 310px;
+    top: 125px;
 }
 .right-btn6{
 	position: absolute;
-    left: 260px;
-    top: 247px;
+    left: 310px;
+    top: 230px;
 }
 .right-btn7{
 	position: absolute;
-    left: 258px;
-    bottom: 182px;
+    left: 280px;
+    bottom: 20px;
 }
 .right-btn8{
 	position: absolute;
-    left: 250px;
-    bottom: 173px;
+    left: 280px;
+    bottom: 20px;
 }
 .right-btn9{
 	position: absolute;
-    left: 250px;
-    bottom: 183px;
+    left: 279px;
+    bottom: 21px;
 }
 .start-btn{
 	display: flex;
@@ -139,15 +139,12 @@
 	margin-top: 100px;
 }
 #create-campaign {
-	margin-top: 50px;
-	margin-right: 20px;
-	margin-left: 20px;
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
 	font-family: 'Work Sans', sans-serif;
 	font-weight: 600;
-	padding: 10px 100px;
+	padding: 5px 120px;
 	cursor: pointer;
 	border-radius: 10px;
 }
@@ -260,12 +257,23 @@ p{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 150px;
+	gap: 185px;
 }
 .Campaign-row2{
 	display: flex;
 	background-color: rgb(144, 131, 216);
-	gap: 53px;
+	gap: 168px;
+}
+.Campaign-row3{
+	display: flex;
+	background-color: rgb(144, 131, 216);
+	gap: 83px;
+}
+.Campaign-row4{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 170px;
 }
 #Activity:hover{
 	text-decoration: underline;
@@ -283,20 +291,36 @@ p{
 	cursor: pointer;
 }
 #footer-btn{
-	margin-top: 20px;
-	margin-right: 20px;
-	margin-left: 20px;
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
 	font-family: 'Work Sans', sans-serif;
 	font-weight: 600;
-	padding: 5px 100px;
+	padding: 5px 129px;
 	cursor: pointer;
 	border-radius: 10px;
-	margin-bottom: 20px;
 }
-.Automation-part{
+#footer-btn1{
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 600;
+	padding:5px 116px;
+	cursor: pointer;
+	border-radius: 10px;
+}
+#footer-btn2{
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: 'Work Sans', sans-serif;
+	font-weight: 600;
+	padding:5px 116px;
+	cursor: pointer;
+	border-radius: 10px;
+}
+/* .Automation-part{
 	margin: 107px;
 	color: #ccc;
 }
@@ -307,7 +331,7 @@ p{
 .Automation-part3{
 	margin: 123px;
 	color: #ccc;
-}
+} */
 #next-popup{
 	background-color: rgb(144, 131, 216);
 	border-radius: 10px;
@@ -318,25 +342,20 @@ p{
 	margin-bottom: 81px;
 }
 #create-popup{
-	margin-top: 16px;
-	margin-right: 10px;
-	margin-left: 8px;
     background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
 	font-family: 'Work Sans', sans-serif;
 	font-weight: 600;
-	padding: 5px 50px;
+	padding: 5px 109px;
 	text-align: center;
 	cursor: pointer;
 	border-radius: 10px;
-	margin-bottom: 10px;
 }
 
 #Campaign1{
 	margin-top: 20px;
-	margin-right: 20px;
-	margin-left: 11px;
+	margin-left: 37px;
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -345,7 +364,18 @@ p{
 	padding: 20px 100px;
 	cursor: pointer;
 	border-radius: 10px;
-	margin-bottom: 150px;
 }
-
+.footer {
+	position: absolute;
+	bottom: 18px;
+	left: 23px;
+	width: 100px;
+	background-color: white;
+	color: #fff;
+	text-align: center;
+	padding: 10px;
+  }
+h6{
+	font-size: 14px;
+}
   
