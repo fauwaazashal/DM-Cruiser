@@ -1,20 +1,24 @@
+.background{
+	background-color: rgb(144, 131, 216);
+	border-radius: 10px;
+}
 .popup {
 	background-color: #fff;
-	border: 1px solid #ccc;
+	/* border: 1px solid #ccc; */
 	width: 350px;
 	height: 550px;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	text-align: center;
-	border-radius: 20px;
+	/* border-radius: 20px; */
 }
 .popup1 {
 	background-color: rgb(144, 131, 216);
 	border: transparent;
 	width: 350px;
 	height: 550px;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	text-align: center;
-	border-radius: 20px;
+	/* border-radius: 20px; */
 }
 .col{
 	background-color: rgb(144, 131, 216);
@@ -22,12 +26,12 @@
 .close-btn{
 	position: absolute;
 	left: 320px;
-	top: 24px;
+	top: 17px;
 	cursor: pointer;
 }
 .back{
 	position: absolute;
-	top: 23px;
+	top: 14px;
 	left: 30px;
 }
 #heading-1{
@@ -48,9 +52,12 @@
 .header{
 	display: flex;
 	background-color: rgb(144, 131, 216);
-	padding: 1px 2px;	
-	border-top-left-radius: 20px;
-	border-top-right-radius:20px ;
+	padding: 1px 2px;
+	margin-left: -8px;	
+	margin-right: -8px;
+	margin-top: -8px;
+	/* border-top-left-radius: 20px;
+	border-top-right-radius:20px ; */
 }
 /* .btn2{
 	display: flex;
@@ -79,23 +86,23 @@
 }*/
 .right-btn{
 	position: absolute;
-    left: 275px;
-    bottom: 27px;
+    left: 287px;
+    bottom: 21px;
 }
 .right-btn1{
 	position: absolute;
-    left: 280px;
-    bottom: 24px;
+    left: 270px;
+    bottom: 21px;
 }
 .right-btn2{
 	position: absolute;
-    left: 285px;
+    left: 270px;
     bottom: 19px;
 }
 .right-btn3{
 	position: absolute;
-    left: 280px;
-    bottom: 20px;
+    left: 270px;
+    bottom: 21px;
 }
 
 .right-btn4{
@@ -106,12 +113,12 @@
 .right-btn5{
 	position: absolute;
     left: 310px;
-    top: 125px;
+    top: 120px;
 }
 .right-btn6{
 	position: absolute;
     left: 310px;
-    top: 230px;
+    top: 225px;
 }
 .right-btn7{
 	position: absolute;
@@ -120,13 +127,13 @@
 }
 .right-btn8{
 	position: absolute;
-    left: 280px;
-    bottom: 20px;
+    left: 270px;
+    bottom: 21px;
 }
 .right-btn9{
 	position: absolute;
-    left: 279px;
-    bottom: 21px;
+    left: 270px;
+    bottom: 20px;
 }
 .start-btn{
 	display: flex;
@@ -142,17 +149,18 @@
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	font-weight: 600;
-	padding: 5px 120px;
+	padding: 12px 88px;;
 	cursor: pointer;
 	border-radius: 10px;
+    white-space: nowrap;
 }
 #login{
 	margin-top: 20px;
 	background-color: rgb(144, 131, 216);
 	color: black;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	font-weight: 300;
 	margin-bottom: 20px;
 	border-radius:5px;
@@ -165,7 +173,7 @@
 	margin-top: 20px;
 	background-color: rgb(144, 131, 216);
 	color: black;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	font-weight: 300;
 	margin-bottom: 20px;
 	border-radius:5px;
@@ -178,7 +186,7 @@
 	margin-top: 20px;
 	background-color: rgb(144, 131, 216);
 	color: black;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	font-weight: 300;
 	margin-bottom: 20px;
 	border-radius:5px;
@@ -201,8 +209,8 @@ p{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-	font-family: 'Work Sans', sans-serif;
-	font-weight: 500;
+	font-family: "Poppins variant0", Tofu;
+	font-weight: 600;
 	padding: 10px 55px;
 	cursor: pointer;
     border-radius: 10px;
@@ -214,7 +222,7 @@ p{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-		font-family: 'Work Sans', sans-serif;
+		    font-family: "Poppins variant0", Tofu;
 	font-weight: 500;
 	padding: 10px 39px;
 	cursor: pointer;
@@ -228,7 +236,7 @@ p{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-		font-family: 'Work Sans', sans-serif;
+		    font-family: "Poppins variant0", Tofu;
 	font-weight: 500;
 	padding: 8px 40px;
 	cursor: pointer;
@@ -243,8 +251,8 @@ p{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-	font-family: 'Work Sans', sans-serif;
-	font-weight: 500;
+	font-family: "Poppins variant0", Tofu;
+	font-weight: 600;
 	padding: 10px 48px;
 	cursor: pointer;
     border-radius: 10px;
@@ -267,7 +275,7 @@ p{
 .Campaign-row3{
 	display: flex;
 	background-color: rgb(144, 131, 216);
-	gap: 83px;
+	gap: 80px;
 }
 .Campaign-row4{
 	display: flex;
@@ -284,7 +292,7 @@ p{
 #Activity{
 	background-color: transparent;
 	border: transparent;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	font-size: 11px;
 	font-weight: bold;
 	margin-bottom: 5px;
@@ -294,31 +302,34 @@ p{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	font-weight: 600;
-	padding: 5px 129px;
+	padding: 12px 108px;
 	cursor: pointer;
 	border-radius: 10px;
+	white-space: nowrap;
 }
 #footer-btn1{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	font-weight: 600;
-	padding:5px 116px;
+	padding: 12px 86px;
 	cursor: pointer;
 	border-radius: 10px;
+	white-space:nowrap;
 }
 #footer-btn2{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	font-weight: 600;
-	padding:5px 116px;
+	padding:14px 81px;
 	cursor: pointer;
 	border-radius: 10px;
+	white-space: nowrap;
 }
 /* .Automation-part{
 	margin: 107px;
@@ -345,12 +356,13 @@ p{
     background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	font-weight: 600;
-	padding: 5px 109px;
+	padding: 12px 34px;
 	text-align: center;
 	cursor: pointer;
 	border-radius: 10px;
+	white-space: nowrap;
 }
 
 #Campaign1{
@@ -359,7 +371,7 @@ p{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-	font-family: 'Work Sans', sans-serif;
+	font-family: "Poppins variant0", Tofu;
 	font-weight: 600;
 	padding: 20px 100px;
 	cursor: pointer;
