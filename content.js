@@ -6,14 +6,44 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         let leads = document.querySelectorAll('.entity-result');
   
         let scrapedData = [...leads].map(lead => {
-          //let leadImage = lead.querySelector('.presence-entity.presence-entity--size-3 img').getAttribute('src');
-          let leadName = lead.querySelector('.app-aware-link > span > span').innerText;
-          let leadTitle = lead.querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
-          let leadProfileLink = lead.querySelector('.app-aware-link').href;
+            let leadImageElement = lead.querySelector('.presence-entity.presence-entity--size-3 img');
+            let leadImage = leadImageElement ? leadImageElement.getAttribute('src') : '';            
+            let leadName = lead.querySelector('.app-aware-link > span > span').innerText;
+            let leadTitle = lead.querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
+            let leadProfileLink = lead.querySelector('.app-aware-link').href;
   
-          return { leadName, leadTitle, leadProfileLink };
+            return { leadImage, leadName, leadTitle, leadProfileLink };
         });
         console.log(scrapedData);
+
+        /*
+        let scrapedData = [];
+
+        let leads = document.querySelectorAll('.entity-result');
+
+        for (let i = 0; i < leads.length; i++) {
+            //let lead = leads[i];
+
+            let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
+            let leadTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
+            let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
+            let leadImage = leads[i].querySelector('.presence-entity.presence-entity--size-3 img').getAttribute('src');
+
+            let leadData = {
+                name: leadName,
+                title: leadTitle,
+                profileLink: leadProfileLink,
+                image: leadImage
+            };
+
+            scrapedData.push(leadData);
+        }
+        */
+
+
+        /*if (request.requestType === "pauseScraping") {
+            
+        }*/
 
         // Send the scraped data to the background script and handle any errors
         chrome.runtime.sendMessage({ requestType: "storeData", data: scrapedData, keyName: "campaign 1" }, function(response) {
