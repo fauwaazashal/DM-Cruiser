@@ -335,7 +335,13 @@ p{
 	margin: 123px;
 	color: #ccc;
 } */
-#next-popup{
+#resume-scrape-btn{
+	background-color: rgb(144, 131, 216);
+	border-radius: 10px;
+	padding: 5px 15px;
+	border: none;
+}
+#pause-scrape-btn{
 	background-color: rgb(144, 131, 216);
 	border-radius: 10px;
 	padding: 5px 15px;
