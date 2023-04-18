@@ -247,7 +247,7 @@ p{
 	background-color: rgb(144, 131, 216);
 	gap: 80px;
 }
-.search-Campaign{
+.Campaign-row4{
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -268,7 +268,7 @@ p{
 	margin-bottom: 5px;
 	cursor: pointer;
 }
-#start-search-btn{
+#Start-Search{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -301,7 +301,7 @@ p{
 	border-radius: 10px;
 	white-space: nowrap;
 }
-#end-search-btn{
+#footer-btn1{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -335,14 +335,6 @@ p{
 	margin: 123px;
 	color: #ccc;
 } */
-
-.collected{
-	align-items: flex-start;
-	justify-content: flex-start;
-	display: flex;
-
-}
-
 #resume-scrape-btn{
 	background-color: rgb(144, 131, 216);
 	border-radius: 10px;
@@ -423,17 +415,7 @@ p{
 	text-align: center;
 	padding: 10px;
   }
-  .start-search-footer {
-	position: absolute;
-	bottom: 18px;
-	left: 23px;
-	width: 100px;
-	background-color: white;
-	color: #fff;
-	text-align: center;
-	padding: 10px;
-  }
-  .end-search-footer {
+  .search-footer {
 	position: absolute;
 	bottom: 18px;
 	left: 23px;
@@ -467,7 +449,4 @@ p{
 h6{
 	font-size: 14px;
 }
-
-.hide{
-	display: none;
-}
+  
