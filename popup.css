@@ -21,14 +21,17 @@
 	top: 14px;
 	left: 30px;
 }
-#heading-1{
+#heading-search{
+	margin-left: 50px;
+}
+#heading-message{
 	margin-left: 50px;
 }
 #heading-2{
 	margin-left: 45px;
 	margin-bottom: 40px;
 }
-#heading-3{
+#heading-home{
 	margin-left: 20px;
 }
 /* .btn{
@@ -61,7 +64,7 @@
     cursor: pointer;
 	padding: 1px 2px;	
 }
-.right-btn{
+.right-arrow-btn-message-foote{
 	position: absolute;
     left: 287px;
     bottom: 21px;
@@ -71,7 +74,7 @@
     left: 270px;
     bottom: 21px;
 }
-.right-btn2{
+.right-btn-home{
 	position: absolute;
     left: 270px;
     bottom: 19px;
@@ -87,22 +90,12 @@
     left: 280px;
     top: 94px;
 }
-.right-btn5{
-	position: absolute;
-    left: 310px;
-    top: 120px;
-}
-.right-btn6{
-	position: absolute;
-    left: 310px;
-    top: 225px;
-}
-.right-btn7{
+.right-arrow-btn-end-search{
 	position: absolute;
     left: 280px;
     bottom: 20px;
 }
-.right-btn8{
+.right-arrow-btn-start-search{
 	position: absolute;
     left: 270px;
     bottom: 21px;
@@ -172,20 +165,7 @@ p{
 	margin: 96px;
 	color: #ccc;
 }
-#search-popup{
-	margin-top: 45px;
-	margin-right: 20px;
-	margin-left: 20px;
-	background-color: rgb(144, 131, 216);
-	color: black;
-	border: none;
-	font-family: "Poppins variant0", Tofu;
-	font-weight: 600;
-	padding: 10px 55px;
-	cursor: pointer;
-    border-radius: 10px;
-	text-align: center;
-}
+
 /*#new-popup{
 	margin-right: 20px;
 	margin-left: 20px;
@@ -214,20 +194,7 @@ p{
 	border-bottom-left-radius: 10px;
 	text-align:center;
 }*/
-#Navigator-popup{
-	margin-top: 45px;
-	margin-right: 20px;
-	margin-left: 20px;
-	background-color: rgb(144, 131, 216);
-	color: black;
-	border: none;
-	font-family: "Poppins variant0", Tofu;
-	font-weight: 600;
-	padding: 10px 48px;
-	cursor: pointer;
-    border-radius: 10px;
-	text-align:center;
-}
+
 .navigator{
 	margin-bottom: 122px;
 }
@@ -242,12 +209,12 @@ p{
 	background-color: rgb(144, 131, 216);
 	gap: 168px;
 }
-.Campaign-row3{
+.nextcamp-Campaign{
 	display: flex;
 	background-color: rgb(144, 131, 216);
 	gap: 80px;
 }
-.Campaign-row4{
+.search-Campaign{
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -358,7 +325,7 @@ p{
 #message{
 	margin-bottom: 81px;
 }
-#create-popup{
+#campaign-creation-completed{
     background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -383,7 +350,7 @@ p{
 	cursor: pointer;
 	border-radius: 10px;
 }
-.Campaign-footer {
+.home-footer {
 	position: absolute;
 	bottom: 18px;
 	left: 23px;
