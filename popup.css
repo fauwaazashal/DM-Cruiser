@@ -268,7 +268,7 @@ p{
 	margin-bottom: 5px;
 	cursor: pointer;
 }
-#Start-Search{
+#start-search-btn{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -301,7 +301,7 @@ p{
 	border-radius: 10px;
 	white-space: nowrap;
 }
-#End-Search{
+#end-search-btn{
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
