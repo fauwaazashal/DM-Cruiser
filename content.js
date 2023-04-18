@@ -3,6 +3,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.requestType === "scrapeLeads") {
       console.log('received request from popup script to scrape data');
       
+      /*
         let leads = document.querySelectorAll('.entity-result');
   
         let scrapedData = [...leads].map(lead => {
@@ -14,31 +15,34 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   
             return { leadImage, leadName, leadTitle, leadProfileLink };
         });
-        console.log(scrapedData);
+        console.log(scrapedData);*/
 
-        /*
+        
         let scrapedData = [];
 
         let leads = document.querySelectorAll('.entity-result');
 
         for (let i = 0; i < leads.length; i++) {
             //let lead = leads[i];
+            if (leads[i].querySelector('.artdeco-button.artdeco-button--2.artdeco-button--secondary.ember-view')) {
 
-            let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
-            let leadTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
-            let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
-            let leadImage = leads[i].querySelector('.presence-entity.presence-entity--size-3 img').getAttribute('src');
+              let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
+              let leadTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
+              let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
+              let leadImage = leads[i].querySelector('.presence-entity.presence-entity--size-3 img').getAttribute('src');
 
-            let leadData = {
+              let leadData = {
                 name: leadName,
                 title: leadTitle,
                 profileLink: leadProfileLink,
                 image: leadImage
-            };
+              };
 
-            scrapedData.push(leadData);
+              scrapedData.push(leadData);
+
+            }
         }
-        */
+        
 
 
         /*if (request.requestType === "pauseScraping") {
