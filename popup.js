@@ -38,10 +38,8 @@ if (window.location.href.includes("newsearch.html")) {
 	})
 
 	document.querySelector("#end-search-btn").addEventListener("click", () => {
-		startScrapeBtn.classList.remove("hide");
-		endScrapeBtn.classList.add("hide");
 		pauseScrapeBtn.classList.add("hide");
-		resumeScrapeBtn.classList.add("hide");
+		resumeScrapeBtn.classList.remove("hide");
 	})
 
 	document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
@@ -57,5 +55,5 @@ if (window.location.href.includes("newsearch.html")) {
 }
 
 /*if (window.location.href.includes("home.html")) {
-	console.log('this is home.html');
+	//console.log('this is home.html');
 }*/
