@@ -30,6 +30,12 @@
 	top: 14px;
 	left: 30px;
 }
+h6 {
+	font-size: 14px;
+}
+.hide {
+	display: none;
+}
 
 /* home */
 
@@ -230,20 +236,6 @@
 	cursor: pointer;
 }
 
-.btn3 {
-	display: flex;
-	cursor: pointer;
-	padding: 1px 2px;
-}
-
-.btn4 {
-	display: flex;
-	cursor: pointer;
-	padding: 1px 2px;
-}
-
-
-
 .right-arrow-btn-nextcamp {
 	position: absolute;
 	left: 270px;
@@ -251,173 +243,49 @@
 }
 
 
+/* create page */
 
-.right-btn3 {
-	position: absolute;
-	left: 270px;
-	bottom: 21px;
+#heading-create {
+	margin-left: 50px;
 }
-
-.right-btn4 {
+.campaign-created {
+	display: flex;
+	cursor: pointer;
+	padding: 1px 2px;
+}
+.delete-btn {
 	position: absolute;
 	left: 280px;
 	top: 94px;
 }
-
-#heading-2 {
-	margin-left: 54px;
+.create-footer {
+	position: absolute;
+	bottom: 18px;
+	left: 23px;
+	width: 100px;
+	background-color: white;
+	color: #fff;
+	text-align: center;
+	padding: 10px;
 }
-
-
-
-.right-btn9 {
+#create-campaign {
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: "Poppins variant0", Tofu;
+	font-weight: 600;
+	padding: 12px 88px;
+	;
+	cursor: pointer;
+	border-radius: 10px;
+	white-space: nowrap;
+}
+.right-arrow-btn-create {
 	position: absolute;
 	left: 270px;
-	bottom: 20px;
+	bottom: 21px;
 }
-
-.start-btn {
-	display: flex;
-	justify-content: flex-end;
-	padding: 2px 4px;
-	border-radius: 20px;
-}
-
-#login {
-	margin-top: 20px;
-	background-color: rgb(144, 131, 216);
-	color: black;
-	font-family: "Poppins variant0", Tofu;
-	font-weight: 300;
-	margin-bottom: 20px;
-	border-radius: 5px;
-	border: none;
-	cursor: pointer;
-	margin-right: 10px;
-	padding: 5px 40px;
-}
-
-#contact {
-	margin-top: 20px;
-	background-color: rgb(144, 131, 216);
-	color: black;
-	font-family: "Poppins variant0", Tofu;
-	font-weight: 300;
-	margin-bottom: 20px;
-	border-radius: 5px;
-	border: none;
-	cursor: pointer;
-	margin-right: 10px;
-	padding: 5px 40px;
-}
-
-#hi {
-	margin-top: 20px;
-	background-color: rgb(144, 131, 216);
-	color: black;
-	font-family: "Poppins variant0", Tofu;
-	font-weight: 300;
-	margin-bottom: 20px;
-	border-radius: 5px;
-	border: none;
-	cursor: pointer;
-	margin-right: 10px;
-	padding: 5px 30px;
-}
-
-p {
-	margin: 96px;
-	color: #ccc;
-}
-
-
-
-.navigator {
-	margin-bottom: 122px;
-}
-
-.Campaign-row1 {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 185px;
-}
-
-.Campaign-row2 {
-	display: flex;
-	background-color: rgb(144, 131, 216);
-	gap: 168px;
-}
-.Campaign-row3 {
-	display: flex;
-	background-color: rgb(144, 131, 216);
-	gap: 82px;
-}
-
-
-
-
-
-#Activity:hover {
-	text-decoration: underline;
-	text-underline-offset: 0.4em;
-	text-decoration-thickness: 0.30em;
-
-}
-
-
-
-
-
-#add-people {
-	background-color: rgb(144, 131, 216);
-	color: black;
-	border: none;
-	font-family: "Poppins variant0", Tofu;
-	font-weight: 600;
-	padding: 12px 108px;
-	cursor: pointer;
-	border-radius: 10px;
-	white-space: nowrap;
-}
-
-#activity-status {
-	background-color: rgb(144, 131, 216);
-	color: black;
-	border: none;
-	font-family: "Poppins variant0", Tofu;
-	font-weight: 600;
-	padding: 12px 108px;
-	cursor: pointer;
-	border-radius: 10px;
-	white-space: nowrap;
-}
-
-
-
-
-
-/* .Automation-part{
-	margin: 107px;
-	color: #ccc;
-}
-.Automation-part2{
-	margin: 118px;
-	color: #ccc;
-}
-.Automation-part3{
-	margin: 123px;
-	color: #ccc;
-} */
-
-
-
-
-
-
-
-
-#Campaign1 {
+#Campaign1{
 	margin-top: 20px;
 	margin-left: 37px;
 	background-color: rgb(144, 131, 216);
@@ -431,20 +299,25 @@ p {
 }
 
 
+/* activity page */
 
-
-.create-footer {
-	position: absolute;
-	bottom: 18px;
-	left: 23px;
-	width: 100px;
-	background-color: white;
-	color: #fff;
-	text-align: center;
-	padding: 10px;
+#heading-activity {
+	margin-left: 54px;
 }
-
-
+.activity-heading-section {
+	display: flex;
+	background-color: rgb(144, 131, 216);
+	gap: 82px;
+}
+#Activity {
+	background-color: transparent;
+	border: transparent;
+	font-family: "Poppins variant0", Tofu;
+	font-size: 11px;
+	font-weight: bold;
+	margin-bottom: 5px;
+	cursor: pointer;
+}
 
 .activity-footer {
 	position: absolute;
@@ -456,7 +329,50 @@ p {
 	text-align: center;
 	padding: 10px;
 }
+#activity-status {
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: "Poppins variant0", Tofu;
+	font-weight: 600;
+	padding: 12px 108px;
+	cursor: pointer;
+	border-radius: 10px;
+	white-space: nowrap;
+}
+#Activity:hover {
+	text-decoration: underline;
+	text-underline-offset: 0.4em;
+	text-decoration-thickness: 0.30em;
 
+}
+.right-arrow-btn-activity {
+	position: absolute;
+	left: 270px;
+	bottom: 20px;
+}
+
+
+/* people page */
+
+#heading-people {
+	margin-left: 54px;
+}
+
+.people-top-section {
+	display: flex;
+	background-color: rgb(144, 131, 216);
+	gap: 82px;
+}
+#Activity {
+	background-color: transparent;
+	border: transparent;
+	font-family: "Poppins variant0", Tofu;
+	font-size: 11px;
+	font-weight: bold;
+	margin-bottom: 5px;
+	cursor: pointer;
+}
 .people-footer {
 	position: absolute;
 	bottom: 18px;
@@ -467,11 +383,19 @@ p {
 	text-align: center;
 	padding: 10px;
 }
-
-h6 {
-	font-size: 14px;
+#add-people {
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: "Poppins variant0", Tofu;
+	font-weight: 600;
+	padding: 12px 108px;
+	cursor: pointer;
+	border-radius: 10px;
+	white-space: nowrap;
 }
-
-.hide {
-	display: none;
+.right-arrow-btn-people {
+	position: absolute;
+	left: 270px;
+	bottom: 20px;
 }
