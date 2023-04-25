@@ -72,6 +72,35 @@ h6 {
 	left: 270px;
 	bottom: 19px;
 }
+.Campaign-scrape-data{
+	display: flex;
+	gap: 130px;
+	background-color: #ccc;
+	box-shadow: #ccc;
+	margin-top: 12px;
+
+}
+.delete-btn{
+ position: absolute;
+ top:89px;
+ left: 320px;
+}
+.campaign-1{
+	font-family: 'Work Sans', sans-serif;
+	font-weight: bold;
+	margin: 10px 0px;
+	max-height: 200px;
+	overflow: auto;
+	padding-left: 10px;
+}
+.activity-list{
+  margin: 0px;
+  font-size: 12px;
+}
+.date{
+	font-size: 12px;
+	padding: 6px;
+}
 
 
 /* search page */
@@ -308,11 +337,11 @@ h6 {
 	cursor: pointer;
 	padding: 1px 2px;
 }
-.delete-btn {
+/* .delete-btn {
 	position: absolute;
 	left: 280px;
 	top: 94px;
-}
+} */
 .create-footer {
 	position: absolute;
 	bottom: 18px;
