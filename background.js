@@ -24,7 +24,7 @@ chrome.action.onClicked.addListener(function() {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
   // request from content script to store scraped data
-  if (request.requestType === "storeData") {
+  if (request.requestType === "Store data") {
     console.log("Received request from content script to store scraped data");
 
     // finding out the position of the new Campaign whose data is about to be stored (For Example : Campaign 3)
@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       console.log(items);
     
     
-      let campaignName = `Campaign ${keyLength + 1}`;
+      let campaignName = request.keyName;
       const myData = request.data;
       // storing data in local storage
       chrome.storage.local.set({ [campaignName]: myData }, function() {

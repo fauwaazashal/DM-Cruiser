@@ -1,4 +1,7 @@
-let data =[];
+let data = [];
+let injectData = [];
+let campaignName = "";
+let messageTemplate = "";
 
 if (window.location.href.includes("newsearch.html")) {
 	console.log('this is newsearch.html');
@@ -6,7 +9,7 @@ if (window.location.href.includes("newsearch.html")) {
 	const stopScrapeBtn = document.querySelector(".stop-search-footer");
 	const pauseScrapeBtn = document.querySelector(".pause-search");
 	const resumeScrapeBtn = document.querySelector(".resume-search");
-	const messageTemplate = document.querySelector(".message-popup");
+	const messageTemplateDiv = document.querySelector(".message-popup");
 	const newsearchDiv = document.querySelector(".newsearch-popup");
 
 	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -22,12 +25,20 @@ if (window.location.href.includes("newsearch.html")) {
 			console.log("sent request to content script start scraping");
 			port.postMessage({ action: "Start Scraping" });
 
-			port.onMessage.addListener(function(response) {
+			port.onMessage.addListener(async function(response) {
 				if (response.message === "Scraped one page" ) {
 					console.log(response.data);
-					data = response.data;
+					// length of the data scraped thus far
+					prevIterationData = data.length;
+					// storing all scraped data in this variable
+					data = response.data; 
+					// obtaining the length of the data (from reverse) that is to be injected
+					injectDataLength = data.length - prevIterationData;
+					// updating the data that needs to be injected in this iteration
+					injectData = data.slice(-injectDataLength);
+					console.log(injectData);
 					// inject response.data onto popup
-					//inject(response.data);
+					await inject_onto_newsearch(injectData);
 				}
 			});
 		})
@@ -37,13 +48,14 @@ if (window.location.href.includes("newsearch.html")) {
 			pauseScrapeBtn.classList.add("hide");
 			resumeScrapeBtn.classList.remove("hide");
 			newsearchDiv.classList.add("hide");
-			messageTemplate.classList.remove("hide");
+			messageTemplateDiv.classList.remove("hide");
 	
 			port.postMessage({ action: "Stop Scraping" });
 
 			port.onMessage.addListener(function(response) {
 				if (response.message === "Stopped Scraping" ) {
-					
+					messageTemplateDiv.getElementById("myInput").value = `Campaign ${campaignCount}`;
+					messageTemplateDiv.getElementById("myInput").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
 				}
 			});
 		})
@@ -78,7 +90,28 @@ if (window.location.href.includes("newsearch.html")) {
 
 		// button is clicked to complete campaign creation and store data in local storage
 		document.querySelector("#campaign-creation-completed").addEventListener("click", () => {
-			// get the input from user for the message template and the campaign name and store it in the local storage
+			campaignName = messageTemplateDiv.getElementById("myInput").value;
+			messageTemplate = messageTemplateDiv.getElementById("myInput").value;
+
+			// Send the scraped data to the background script and handle any errors
+			chrome.runtime.sendMessage({ requestType: "Store data", data: data, keyName: campaignName }, function(response) {
+			  console.log("Request sent to background script to store data");
+			  // receiving a response from the background script as a confirmation that the data has been stored in the local storage
+			  console.log(response.message);       
+			});
+
+			window.location.href = "home.html";
+		})
+
+		// button is clicked to go back to newsearch page
+		messageTemplateDiv.querySelector(".back").addEventListener("click", () => {
+			newsearchDiv.classList.remove("hide");
+			messageTemplateDiv.classList.add("hide");
+		})
+
+		// button is clicked to go back to home page
+		newsearchDiv.querySelector(".back").addEventListener("click", () => {
+			newsearchDiv.classList.add("hide");
 			window.location.href = "home.html";
 		})
 	});
@@ -157,57 +190,58 @@ if (window.location.href.includes("newsearch.html")) {
 
 
 
-// code for injecting data of scraped leads onto newsearch.html
-// async function inject(data) {
-// 	let leads = document.getElementByClass("leads-scraped");
+// function for injecting data of scraped leads onto newsearch.html
+async function inject_onto_newsearch(data) {
+	let leads = document.querySelector(".leads-scraped");
 
-// 	for (let i = 0; i < data.length; i++) {
+	for (let i = 0; i < data.length; i++) {
 
-// 		// create new div element for each lead
-// 		const leadDiv = document.createElement("div");
-// 		leadDiv.classList.add("lead");
+		// create new div element for each lead
+		const leadDiv = document.createElement("div");
+		leadDiv.classList.add("lead");
 
-// 		// create image element and adding to lead div
-// 		const leadImage = document.createElement("div");
-// 		leadImage.classList.add("lead-image");
-// 		leadImage.setAttribute("src", data[i].image);
-// 		leadImage.setAttribute("alt", data[i].fullName);
-// 		leadDiv.appendChild(leadImage);
-
-
-// 		// create info element and adding to lead div
-// 		const leadInfo = document.createElement("div");
-
-// 		// create name element and addding to lead info
-// 		const leadName = document.createElement("div");
-// 		leadName.classList.add("lead-name");
-// 		leadName.innerText = data.fullName[i];
-// 		leadName.setAttribute("href", data[i].profileLink);
-// 		leadInfo.appendChild(leadName);
-
-// 		// create title element and adding to lead info
-// 		const leadTitle = document.createElement("div");
-// 		leadTitle.classList.add("lead-title");
-// 		leadTitle.innerText = data[i].title;
-// 		leadInfo.appendChild(leadTitle);
-
-// 		// appending leadInfo (leadName + leadTitle) to lead div
-// 		leadDiv.appendChild(leadInfo);
+		// create image element and adding to lead div
+		const leadImage = document.createElement("div");
+		leadImage.classList.add("lead-image");
+		leadImage.setAttribute("src", data[i].image);
+		leadImage.setAttribute("alt", data[i].fullName);
+		leadDiv.appendChild(leadImage);
 
 
-// 		// creating delete button element and adding to lead div
-// 		const leadDelete = document.createElement('div');
-// 		leadDelete.classList.add("remove-btn");
-// 		leadDelete.innerText = "Remove";
-// 		leadDiv.appendChild(leadDelete);
+		// create info element and adding to lead div
+		const leadInfo = document.createElement("div");
 
-// 	}
+		// create name element and addding to lead info
+		const leadName = document.createElement("div");
+		leadName.classList.add("lead-name");
+		leadName.innerText = data[i].fullName;
+		leadName.setAttribute("href", data[i].profileLink);
+		leadInfo.appendChild(leadName);
 
-// 	leads.appendChild(leadDiv);
+		// create title element and adding to lead info
+		const leadTitle = document.createElement("div");
+		leadTitle.classList.add("lead-title");
+		leadTitle.innerText = data[i].title;
+		leadInfo.appendChild(leadTitle);
+
+		// appending leadInfo (leadName + leadTitle) to lead div
+		leadDiv.appendChild(leadInfo);
+
+
+		// creating delete button element and adding to lead div
+		const leadDelete = document.createElement('div');
+		leadDelete.classList.add("remove-btn");
+		leadDelete.innerText = "Remove";
+		leadDiv.appendChild(leadDelete);
+
+		leads.appendChild(leadDiv);
+	}	
+}
+
+// function for injecting a button of the newly created campaign
+// async function inject_onto_home() {
+
 // }
-
-
-
 
 //----------------------------------------------------------------------------------------------------
 
@@ -218,6 +252,9 @@ if (window.location.href.includes("newsearch.html")) {
 
 // if (window.location.href.includes("home.html")) {
 // 	console.log('this is home.html');
+// inject_onto_home();
+
+
 // 	document.querySelector("div that will contain all future campaign button divs");
 // 	let campaigns = document.querySelectorAll("all available/created divs of campaigns");
 

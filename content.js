@@ -8,22 +8,31 @@ chrome.runtime.onConnect.addListener(function(port) {
     port.onMessage.addListener(async function(request) {
       if (request.action === "Start Scraping") {
         console.log('receieved request from popup to begin scraping');
+  
+        while (!isStopped) {
+          if (!isPaused) {
+            // for every iteration, we scrape one page
             scrapedData = await scraping(scrapedData);
             port.postMessage({ message: "Scraped one page", data: scrapedData });
             await scroll();
             await goToNextPage();
-      //   while (!isStopped) {
-      //     if (!isPaused) {
-      //       scrapedData = await scraping(scrapedData);
-      //       port.postMessage({ message: "Scraped one page", data: scrapedData });
-      //       await scroll();
-      //       await goToNextPage();
-      //     }
-      //     else {
-      //       console.log('scraping paused');
-      //       await new Promise(resolve => setTimeout(resolve, 1000));
-      //     }
-      //   }
+
+            // Wait for 5 seconds before checking if page is loaded
+            await new Promise(resolve => setTimeout(resolve, 5000)); 
+            // Wait for the page to finish loading before calling scraping()
+            const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
+            const timeout = new Promise(resolve => setTimeout(resolve, 10000)); // Wait for 10 seconds before timing out
+            await Promise.race([loaded, timeout])
+              .then(() => console.log('Page loaded'))
+              .catch(() => console.log('Page load timed out'));
+          } 
+          else {
+            console.log('scraping is paused');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+          }
+        }
+
+
       }
 
       else if (request.action === "Pause Scraping") {
@@ -40,6 +49,8 @@ chrome.runtime.onConnect.addListener(function(port) {
       else if (request.action === "Resume Scraping") {
         console.log('receieved request from popup to resume scraping');
         isPaused = false;
+        isStopped = false;
+        port.postMessage({ message: "Resuming Scraping", data: scrapedData });
       }
     });
   }
@@ -86,6 +97,15 @@ chrome.runtime.onConnect.addListener(function(port) {
 //   return true;
 // });
 
+
+// function to wait until window has loaded
+async function waitForWindowToLoad() {
+  return new Promise((resolve) => {
+    window.onload = () => {
+      resolve();
+    };
+  });
+}
 
 
 // function to scraped leads from the current page 
