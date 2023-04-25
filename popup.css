@@ -9,6 +9,7 @@
 .col {
 	background-color: rgb(144, 131, 216);
 }
+
 .header {
 	display: flex;
 	background-color: rgb(144, 131, 216);
@@ -74,6 +75,14 @@ h6 {
 
 
 /* search page */
+
+.newsearch-popup {
+	background-color: #fff;
+	width: 350px;
+	height: 550px;
+	font-family: "Poppins variant0", Tofu;
+	text-align: center;
+}
 
 #heading-search {
 	margin-left: 50px;
@@ -196,6 +205,14 @@ h6 {
   }
 
 /* message */
+
+.message-popup {
+	background-color: #fff;
+	width: 350px;
+	height: 550px;
+	font-family: "Poppins variant0", Tofu;
+	text-align: center;
+}
 
 #heading-message {
 	margin-left: 50px;
