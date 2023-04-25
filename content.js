@@ -1,13 +1,46 @@
+let scrapedData = [];
+let isPaused = false;
+let isStopped = false;
+
 chrome.runtime.onConnect.addListener(function(port) {
   if (port.name === "popup-to-content") {
-    port.onMessage.addListener( async function(request) {
+    console.log("established connection with port");
+    port.onMessage.addListener(async function(request) {
       if (request.action === "Start Scraping") {
-        scrapedData = await scraping();
-        port.postMessage({ message: "Scraped one page", data: scrapedData });
+        console.log('receieved request from popup to begin scraping');
+            scrapedData = await scraping(scrapedData);
+            port.postMessage({ message: "Scraped one page", data: scrapedData });
+            await scroll();
+            await goToNextPage();
+      //   while (!isStopped) {
+      //     if (!isPaused) {
+      //       scrapedData = await scraping(scrapedData);
+      //       port.postMessage({ message: "Scraped one page", data: scrapedData });
+      //       await scroll();
+      //       await goToNextPage();
+      //     }
+      //     else {
+      //       console.log('scraping paused');
+      //       await new Promise(resolve => setTimeout(resolve, 1000));
+      //     }
+      //   }
       }
-      else if (request.action === "Pause Scraping") {}
-      else if (request.action === "Stop Scraping") {}
-      else if (request.action === "Resume Scraping") {}
+
+      else if (request.action === "Pause Scraping") {
+        console.log('receieved request from popup to pause scraping');
+        isPaused = true;
+      }
+
+      else if (request.action === "Stop Scraping") {
+        console.log('receieved request from popup to stop scraping');
+        isStopped = true;
+        port.postMessage({ message: "Stopped Scraping", data: scrapedData });
+      }
+
+      else if (request.action === "Resume Scraping") {
+        console.log('receieved request from popup to resume scraping');
+        isPaused = false;
+      }
     });
   }
 });
@@ -27,13 +60,14 @@ chrome.runtime.onConnect.addListener(function(port) {
 // let isStopped = false;
 // let scrapedData =[];
 
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+// chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
 //   if (request.requestType === "scrapeLeads") {
 //     console.log('receieved request from popup to begin scraping');
-//     //let scrapedData =[];
-//     scrapedData = scraping(scrapedData); // call function to scrape data
-//     console.log(scrapedData);
+    
+//     scrapedData = await scraping(scrapedData);
 //     sendResponse({ message: "scraped one page", data: scrapedData });
+//     await scroll();
+//     await goToNextPage();
 //   }
 //   else if (request.requestType === "pauseScraping") {
 //     console.log('receieved request from popup to pause scraping');
@@ -55,10 +89,9 @@ chrome.runtime.onConnect.addListener(function(port) {
 
 
 // function to scraped leads from the current page 
-const scraping = async (scrapedData) => {
+async function scraping(scrapedData) {
 
   //while (!isPaused && !isStopped) {
-    let scrapedData =[];
     let leads = document.querySelectorAll('.entity-result');
 
     for (let i = 0; i < leads.length; i++) {
@@ -67,7 +100,7 @@ const scraping = async (scrapedData) => {
 
         let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
         let leadFirstName = leadName.split(' ')[0];
-        let leadLastName = leadName.split(' ', 2)[1];
+        let leadLastName = leadName.split(' ').pop();
         let leadTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
         let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
         let leadImageElement = leads[i].querySelector('.presence-entity.presence-entity--size-3 img');
@@ -86,8 +119,6 @@ const scraping = async (scrapedData) => {
       }
     //}
     
-    console.log(scrapedData);
-
     // if (isPaused) {
     //   console.log("Action has been paused.");
     //   return;
@@ -97,62 +128,106 @@ const scraping = async (scrapedData) => {
     //   return;
     // }
     
-    await goToNextPage();
-    //await new Promise(resolve => setTimeout(resolve, 3000));
     
-    return scrapedData;
     // if (!isPaused) {
     //   scraping(scrapedData);
     // }
-  }
-  
-  
+    }
+    console.log(scrapedData);
+    return Promise.resolve(scrapedData);
+}
 
-};
+
+async function scroll() {
+  return new Promise(resolve => {
+    // Wait for 3 seconds before scrolling down to the bottom of the page
+    setTimeout(function() {
+      // Scroll down to the bottom of the page smoothly
+      document.body.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    }, 3000);
+
+    // Wait for 6 seconds before scrolling back to the top of the page
+    setTimeout(function() {
+      // Scroll back to the top of the page smoothly
+      document.body.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+
+      // Resolve the promise after the scrolling animation has completed
+      resolve();
+    }, 5000);
+  });
+}
+
+
+
+async function goToNextPage() {
+  return new Promise(resolve => {
+    // Wait for 3 seconds before clicking the button
+    setTimeout(function() {
+      let nextPage = document.querySelector('.artdeco-pagination__button.artdeco-pagination__button--next.artdeco-button.artdeco-button--muted.artdeco-button--icon-right.artdeco-button--1.artdeco-button--tertiary.ember-view');
+
+      // Check if the button is disabled
+      if (nextPage.disabled) {
+        console.log("Cannot click to go to next page");
+        // Resolve the promise anyway, since we're not actually clicking the button
+        resolve();
+      } 
+      else {
+        nextPage.click();
+        // Resolve the promise after the button has been clicked
+        resolve();
+      }
+    }, 3000);
+  });
+}
+
+
 
 
 // function to scroll to to the bottom of the page and click on Next Page
-const goToNextPage = () => {
-  return new Promise(resolve => {
-    const pageHeight = document.body.scrollHeight;
-    const animationDuration = 2000; // in milliseconds
-    const framesPerSecond = 60;
+// const goToNextPage = () => {
+//   return new Promise(resolve => {
+//     const pageHeight = document.body.scrollHeight;
+//     const animationDuration = 2000; // in milliseconds
+//     const framesPerSecond = 60;
 
-    let currentScrollPosition = window.scrollY; // get the current scroll position
+//     let currentScrollPosition = window.scrollY; // get the current scroll position
 
-    function scrollPage() {
-      currentScrollPosition += distancePerFrame;
+//     function scrollPage() {
+//       currentScrollPosition += distancePerFrame;
 
-      if (currentScrollPosition > pageHeight) {
-        currentScrollPosition = pageHeight;
-      }
+//       if (currentScrollPosition > pageHeight) {
+//         currentScrollPosition = pageHeight;
+//       }
 
-      window.scrollTo(0, currentScrollPosition);
+//       window.scrollTo(0, currentScrollPosition);
 
-      if (currentScrollPosition < pageHeight) {
-        window.requestAnimationFrame(scrollPage);
-      } 
-      else {
-        let nextPage = document.querySelector('.artdeco-pagination__button.artdeco-pagination__button--next.artdeco-button.artdeco-button--muted.artdeco-button--icon-right.artdeco-button--1.artdeco-button--tertiary.ember-view');
-        // the scrolling animation has completed, click the button if it's not disabled
-        if (nextPage.disabled) {
-         console.log("Cannot click to go to next page");
-          continueScraping = false;
-          sendResponse({ message: "No more data to scrape" });
-        } 
-        else {
-          nextPage.click();
-        }
-      }
-    }
+//       if (currentScrollPosition < pageHeight) {
+//         window.requestAnimationFrame(scrollPage);
+//       } 
+//       else {
+//         let nextPage = document.querySelector('.artdeco-pagination__button.artdeco-pagination__button--next.artdeco-button.artdeco-button--muted.artdeco-button--icon-right.artdeco-button--1.artdeco-button--tertiary.ember-view');
+//         // the scrolling animation has completed, click the button if it's not disabled
+//         if (nextPage.disabled) {
+//          console.log("Cannot click to go to next page");
+//           //continueScraping = false;
+//           sendResponse({ message: "No more data to scrape" });
+//         } 
+//         else {
+//           nextPage.click();
+//         }
+//       }
+//     }
 
-    const distancePerFrame = (pageHeight - currentScrollPosition) / (animationDuration / 1000 * framesPerSecond);
+//     const distancePerFrame = (pageHeight - currentScrollPosition) / (animationDuration / 1000 * framesPerSecond);
 
-    window.requestAnimationFrame(scrollPage);
-    resolve();
-  });
+//     window.requestAnimationFrame(scrollPage);
+//     resolve();
+//   });
   
-}
+// }
+
+
+
 
 
 
