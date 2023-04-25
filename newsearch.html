@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <div class="popup">
+    <div class="newsearch-popup">
         <div class="header">
             <a href="home.html"><img class="back" src="assets/left arrow.png" alt="" width="15px" height="20px"></a>
             <h4 id="heading-search">Add People</h4>
@@ -25,7 +25,6 @@
             <div class="pause-search hide">
                 <button id="pause-scrape-btn">Pause</button>
             </div>
-
         </div>
 
         <div class="leads-scraped"></div>
@@ -36,10 +35,32 @@
         </div>
         <div class="stop-search-footer hide">
             <button id="stop-search-btn">SEARCH Completed</button>
-            <img class="right-arrow-btn-stop-search" src="assets/right arrow.png" alt="" width="15px" height="20px"></a>
+            <!-- <img class="right-arrow-btn-stop-search" src="assets/right arrow.png" alt="" width="15px" height="20px"> -->
         </div>
-
     </div>
+
+    <div class="message-popup hide">
+        <div class="header">
+           <!--<a href="newsearch.html">--><img class="back" src="assets/left arrow.png" alt="" width="15px" height="20px"></a>
+            <h4 id="heading-message">Set up Message</h4>
+            <a href="home.html"><img class="close-btn" src="assets/Close button.png" alt="" width="15px" height="20px"></a>
+        </div>
+        <form id="message-form">
+            <h5>Create a Campaign name</h5>
+            <input>
+            <!-- <textarea id="message-input" rows="1" cols="30" placeholder="Enter your message here" form="Default Campaign"></textarea> -->
+        </form>
+        <form id="message">
+            <h5>Connection Request Message</h5>
+            <input>
+            <!-- <textarea id="message-input" rows="6" cols="30" placeholder="Enter your message here" form="Default Message"></textarea> -->
+        </form>
+        <div class="message-footer">
+            <!--<a href="create.html">--><button id="campaign-creation-completed">CAMPAIGN CREATION COMPLETED</button>
+            <img class="right-arrow-btn-message-footer" src="assets/right arrow.png" alt="" width="15px" height="20px"></a>
+        </div>
+    </div>
+
     <script src="popup.js"></script>
 </body>
 
