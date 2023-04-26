@@ -75,23 +75,30 @@ h6 {
 .Campaign-scrape-data{
 	display: flex;
 	gap: 130px;
-	background-color: #ccc;
-	box-shadow: #ccc;
-	margin-top: 12px;
+	background-color: transparent;
+	box-shadow: 0 0 5px #ccc;
 
 }
 .delete-btn{
- position: absolute;
- top:89px;
- left: 320px;
+ position: relative;
+ width: 55px;
+ height: 55px;
+}
+.delete-btn img{
+	position: absolute;
+	top: 17px;
+	right: 90px;
 }
 .campaign-1{
 	font-family: 'Work Sans', sans-serif;
 	font-weight: bold;
 	margin: 10px 0px;
 	max-height: 200px;
-	overflow: auto;
 	padding-left: 10px;
+	text-overflow: ellipsis;
+	max-width: 7rem;
+	overflow: hidden;
+	white-space: nowrap;
 }
 .activity-list{
   margin: 0px;
@@ -101,6 +108,7 @@ h6 {
 	font-size: 12px;
 	padding: 6px;
 }
+
 .campaigns-section{
 	overflow: scroll;
 	overflow-x: hidden;
