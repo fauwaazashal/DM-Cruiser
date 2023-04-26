@@ -188,7 +188,7 @@ if (window.location.href.includes("newsearch.html")) {
 
 
 
-//----------------------------------------------------------------------------------------------------
+//---------------------------------------------content injection------------------------------------------------
 
 
 
@@ -245,6 +245,11 @@ async function inject_onto_newsearch(data) {
 
 // function for injecting a button of the newly created campaign
 // async function inject_onto_home() {
+// 	let campaigns = document.querySelector(".campaigns-section");
+
+// 	// create new div element for newly created campaign
+// 	const campaignDiv = document.createElement("div");
+// 	campaignDiv.classList.add("Campaign-scrape-data");
 
 // }
 

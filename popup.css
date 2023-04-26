@@ -101,6 +101,11 @@ h6 {
 	font-size: 12px;
 	padding: 6px;
 }
+.campaigns-section{
+	overflow: scroll;
+	overflow-x: hidden;
+	height: 365px;
+}
 
 
 /* search page */
@@ -157,7 +162,7 @@ h6 {
 
 .stop-search-footer {
 	position: absolute;
-	bottom: 18px;
+	bottom: 4px;
 	left: 23px;
 	width: 100px;
 	background-color: white;
@@ -196,9 +201,8 @@ h6 {
 }
 
 .leads-scraped {
-	border: 1px solid #ccc;
+	box-shadow: 0 0 5px #ccc;
 	padding: 10px;
-	margin-bottom: 10px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -232,6 +236,11 @@ h6 {
 	font-size: 12px;
 	cursor: pointer;
   }
+  .leads-section{
+	overflow: scroll;
+	overflow-x: hidden;
+	height: 365px;
+}
 
 /* message */
 
