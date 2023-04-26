@@ -22,7 +22,7 @@ if (window.location.href.includes("newsearch.html")) {
 			stopScrapeBtn.classList.remove("hide");
 			pauseScrapeBtn.classList.remove("hide");
 
-			console.log("sent request to content script start scraping");
+			console.log("sent request to content script to start scraping");
 			port.postMessage({ action: "Start Scraping" });
 
 			port.onMessage.addListener(async function(response) {
@@ -50,12 +50,13 @@ if (window.location.href.includes("newsearch.html")) {
 			newsearchDiv.classList.add("hide");
 			messageTemplateDiv.classList.remove("hide");
 	
+			console.log("sent request to content script to stop scraping");
 			port.postMessage({ action: "Stop Scraping" });
 
 			port.onMessage.addListener(function(response) {
 				if (response.message === "Stopped Scraping" ) {
-					messageTemplateDiv.getElementById("myInput").value = `Campaign ${campaignCount}`;
-					messageTemplateDiv.getElementById("myInput").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
+					// messageTemplateDiv.getElementById("myInput").value = `Campaign ${campaignCount}`;
+					// messageTemplateDiv.getElementById("message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
 				}
 			});
 		})
@@ -65,6 +66,7 @@ if (window.location.href.includes("newsearch.html")) {
 			pauseScrapeBtn.classList.add("hide");
 			resumeScrapeBtn.classList.remove("hide");
 			
+			console.log("sent request to content script to pause scraping");
 			port.postMessage({ action: "Pause Scraping" });
 
 			port.onMessage.addListener(function(response) {
@@ -192,19 +194,22 @@ if (window.location.href.includes("newsearch.html")) {
 
 // function for injecting data of scraped leads onto newsearch.html
 async function inject_onto_newsearch(data) {
-	let leads = document.querySelector(".leads-scraped");
+	let leads = document.querySelector(".leads-section");
 
 	for (let i = 0; i < data.length; i++) {
 
 		// create new div element for each lead
 		const leadDiv = document.createElement("div");
-		leadDiv.classList.add("lead");
+		leadDiv.classList.add("leads-scraped");
 
 		// create image element and adding to lead div
 		const leadImage = document.createElement("div");
-		leadImage.classList.add("lead-image");
-		leadImage.setAttribute("src", data[i].image);
-		leadImage.setAttribute("alt", data[i].fullName);
+		const image = document.createElement("img");
+		image.classList.add("lead-image");
+		if (data[i].image == "") image.setAttribute("src", "assets/defaultprofile100.png");
+		else image.setAttribute("src", data[i].image);
+		image.setAttribute("alt", data[i].fullName);
+		leadImage.appendChild(image);
 		leadDiv.appendChild(leadImage);
 
 

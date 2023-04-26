@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="leads-scraped"></div>
+        <div class="leads-section"></div>
 
         <div class="start-search-footer">
             <button id="start-search-btn">Start Search</button>
@@ -50,13 +50,13 @@
         </div>
         <form id="message-form">
             <h5>Create a Campaign name</h5>
-            <input type="text" placeholder="Enter your Campaign's Name">
+            <input type="text" placeholder="Enter your Campaign's Name" minlength="3" maxlength="12">
             <!-- <textarea id="message-input" rows="1" cols="30" placeholder="Enter your message here" form="Default Campaign"></textarea> -->
         </form>
         <form id="message">
             <h5>Connection Request Message</h5>
-            <input type="text" placeholder="Enter your message here">
-            <!-- <textarea id="message-input" rows="6" cols="30" placeholder="Enter your message here" form="Default Message"></textarea> -->
+            <!-- <input type="text" placeholder="Enter your message here" maxlength="300"> -->
+            <textarea id="message-input" rows="6" cols="30" placeholder="Enter your message here" form="Default Message"></textarea>
         </form>
         <div class="message-footer">
             <button id="campaign-creation-completed">CAMPAIGN CREATION COMPLETED</button>
