@@ -452,6 +452,37 @@ h6 {
 	left: 270px;
 	bottom: 20px;
 }
+.data-box{
+    display: flex;
+    justify-content: space-around;
+    background: #fff;
+    padding: 10px 0;
+    flex-shrink: 0;
+}
+
+.pending, .awaiting{
+    flex-grow: 1;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.number{
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    font-size: 18px;
+    color: #101010;
+    font-weight: 700;
+}
+
+.text-desc{
+    font-size: 14px;
+    height: 25px;
+    line-height: 25px;
+    color: #101010;
+}
 
 
 /* people page */
@@ -500,3 +531,49 @@ h6 {
 	left: 270px;
 	bottom: 20px;
 }
+.profile-result {
+	border: 1px solid #ccc;
+	padding: 10px;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+  }
+  
+  .profile-result a {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	color: #333;
+  }
+  
+  .profile-result img {
+	width: 50px;
+	height: 50px;
+	border-radius: 100px;
+	object-fit: cover;
+	object-position: center;  
+	margin-right: 10px;
+  }
+  
+  .profile-info h4 {
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0;
+	margin-bottom: 5px;
+  }
+  
+  .profile-info p {
+	font-size: 12px;
+	margin: 0;
+  }
+  
+  .Remove-button {
+	background-color: #0073b1;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	padding: 8px 16px;
+	font-size: 12px;
+	cursor: pointer;
+  }
