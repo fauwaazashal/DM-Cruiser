@@ -72,7 +72,7 @@ h6 {
 	left: 270px;
 	bottom: 19px;
 }
-.Campaign-scrape-data{
+.campaign-box{
 	display: flex;
 	gap: 130px;
 	background-color: transparent;
@@ -84,12 +84,12 @@ h6 {
  width: 55px;
  height: 55px;
 }
-.delete-btn img{
+.delete-btn-img{
 	position: absolute;
 	top: 17px;
 	right: 90px;
 }
-.campaign-1{
+.campaign-name{
 	font-family: 'Work Sans', sans-serif;
 	font-weight: bold;
 	margin: 10px 0px;
@@ -100,7 +100,7 @@ h6 {
 	overflow: hidden;
 	white-space: nowrap;
 }
-.activity-list{
+.activity-status{
   margin: 0px;
   font-size: 12px;
 }
