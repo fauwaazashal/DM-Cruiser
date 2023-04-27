@@ -7,16 +7,17 @@
 </head>
 
 <body>
-    <div class="popup">
+    <!-- activity page -->
+    <div class="activity-popup">
         <div class="header">
-            <a href="nextcamp.html"><img class="back" src="assets/left arrow.png" alt="" width="15px" height="20px"></a>
+            <img class="back" src="assets/left arrow.png" alt="" width="15px" height="20px">
             <h4 id="heading-activity">Campaign 1</h4>
-            <a href="index.html"><img class="close-btn" src="assets/Close button.png" alt="" width="15px" height="20px"></a>
+            <img class="close-btn" src="assets/Close button.png" alt="" width="15px" height="20px">
         </div>
         <div class="activity-heading-section">
-            <a href=""><button id="Activity">ACTIVITY</button></a>
-            <a href="message.html"><button id="Activity">MESSAGE</button></a>
-            <a href="people.html"><button id="Activity">PEOPLE</button></a>
+            <button id="activity-tab">ACTIVITY</button>
+            <button id="message-tab">MESSAGE</button>
+            <button id="people-tab">PEOPLE</button>
         </div>
         <div class="data-box">
             <div class="pending">
@@ -29,10 +30,85 @@
             </div> 
         </div>
         <div class="activity-footer">
-            <a href="create.html"><button id="activity-status">Activity Status</button>
-            <img class="right-arrow-btn-activity" src="assets/right arrow.png" alt="" width="15px" height="20px"></a>
+            <button id="activity-status">Activity Status</button>
+            <img class="right-arrow-btn-activity" src="assets/right arrow.png" alt="" width="15px" height="20px">
         </div>
     </div>
+
+
+    <!-- message page -->
+    <div class="message-popup hide">
+        <div class="header">
+            <img class="back" src="assets/left arrow.png" alt="" width="15px" height="20px">
+            <h4 id="heading-activity">Campaign 1</h4>
+            <img class="close-btn" src="assets/Close button.png" alt="" width="15px" height="20px">
+        </div>
+        <div class="activity-heading-section">
+            <button id="activity-tab">ACTIVITY</button>
+            <button id="message-tab">MESSAGE</button>
+            <button id="people-tab">PEOPLE</button>
+        </div>
+        <form id="message-form">
+            <h5>Create a Campaign name</h5>
+            <input type="text" placeholder="Enter your Campaign's Name" minlength="3" maxlength="12">
+            <!-- <textarea id="message-input" rows="1" cols="30" placeholder="Enter your message here" form="Default Campaign"></textarea> -->
+        </form>
+        <form id="message">
+            <h5>Connection Request Message</h5>
+            <!-- <input type="text" placeholder="Enter your message here" maxlength="300"> -->
+            <textarea id="message-input" rows="6" cols="30" placeholder="Enter your message here" form="Default Message"></textarea>
+        </form>
+        <div class="activity-footer">
+            <button id="activity-status">Activity Status</button>
+            <img class="right-arrow-btn-activity" src="assets/right arrow.png" alt="" width="15px" height="20px">
+        </div>
+    </div>
+
+
+    <!-- people page -->
+    <div class="people-popup hide">
+        <div class="header">
+            <img class="back" src="assets/left arrow.png" alt="" width="15px" height="20px">
+            <h4 id="heading-people">Campaign 1</h4>
+            <img class="close-btn" src="assets/Close button.png" alt="" width="15px" height="20px">
+        </div>
+        <div class="people-top-section">
+            <button id="activity-tab">ACTIVITY</button>
+            <button id="message-tab">MESSAGE</button>
+            <button id="people-tab">PEOPLE</button>
+        </div>
+        <div class="data-box">
+            <div class="pending">
+                <div class="number">0</div>
+                <div class="text-desc">Pending</div>
+            </div>
+            <div class="awaiting">
+                <div class="number">0</div>
+                <div class="text-desc">Awaiting</div>
+            </div> 
+        </div>
+        <div class="profile-result">
+            <a href="#">
+                <div class="photo">
+                    <img src="assets/logo16.png" alt="Profile Picture">
+                </div>
+                <div class="profile-info">
+                    <div class="name">
+                        <h4>Fauwaaz Ashal</h4>
+                    </div>
+                    <div class="role">
+                        <p>Intern at Skitmedia</p>
+                    </div>
+                </div>
+            </a>
+            <button class="Remove-button">Remove</button>
+        </div>
+        <div class="people-footer">
+            <button id="add-people">Add people</button>
+            <img class="right-arrow-btn-people" src="assets/right arrow.png" alt="" width="15px" height="20px">
+        </div>
+    </div>
+    
     <script src="popup.js"></script>
 </body>
 

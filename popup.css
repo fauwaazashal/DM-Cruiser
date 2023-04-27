@@ -38,6 +38,36 @@ h6 {
 	display: none;
 }
 
+#activity-tab {
+	background-color: transparent;
+	border: transparent;
+	font-family: "Poppins variant0", Tofu;
+	font-size: 11px;
+	font-weight: bold;
+	margin-bottom: 5px;
+	cursor: pointer;
+}
+
+#message-tab {
+	background-color: transparent;
+	border: transparent;
+	font-family: "Poppins variant0", Tofu;
+	font-size: 11px;
+	font-weight: bold;
+	margin-bottom: 5px;
+	cursor: pointer;
+}
+
+#people-tab {
+	background-color: transparent;
+	border: transparent;
+	font-family: "Poppins variant0", Tofu;
+	font-size: 11px;
+	font-weight: bold;
+	margin-bottom: 5px;
+	cursor: pointer;
+}
+
 /* home */
 
 #heading-home {
@@ -252,6 +282,14 @@ h6 {
 
 /* message */
 
+.newmessage-popup {
+	background-color: #fff;
+	width: 350px;
+	height: 550px;
+	font-family: "Poppins variant0", Tofu;
+	text-align: center;
+}
+
 .message-popup {
 	background-color: #fff;
 	width: 350px;
@@ -402,6 +440,14 @@ h6 {
 
 /* activity page */
 
+.activity-popup {
+	background-color: #fff;
+	width: 350px;
+	height: 550px;
+	font-family: "Poppins variant0", Tofu;
+	text-align: center;
+}
+
 #heading-activity {
 	margin-left: 54px;
 }
@@ -486,6 +532,14 @@ h6 {
 
 
 /* people page */
+
+.people-popup {
+	background-color: #fff;
+	width: 350px;
+	height: 550px;
+	font-family: "Poppins variant0", Tofu;
+	text-align: center;
+}
 
 #heading-people {
 	margin-left: 54px;

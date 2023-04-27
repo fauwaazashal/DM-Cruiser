@@ -111,51 +111,37 @@ async function waitForWindowToLoad() {
 // function to scraped leads from the current page 
 async function scraping(scrapedData) {
 
-  //while (!isPaused && !isStopped) {
-    let leads = document.querySelectorAll('.entity-result');
+  
+  let leads = document.querySelectorAll('.entity-result');
 
-    for (let i = 0; i < leads.length; i++) {
+  for (let i = 0; i < leads.length; i++) {
 
-      if (leads[i].querySelector('.artdeco-button__text').innerText == 'Connect') {
+    if (leads[i].querySelector('.artdeco-button__text').innerText == 'Connect') {
 
-        let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
-        let leadFirstName = leadName.split(' ')[0];
-        let leadLastName = leadName.split(' ').pop();
-        let leadTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
-        let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
-        let leadImageElement = leads[i].querySelector('.presence-entity.presence-entity--size-3 img');
-        let leadImage = leadImageElement ? leadImageElement.getAttribute('src') : '';
+      let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
+      let leadFirstName = leadName.split(' ')[0];
+      let leadLastName = leadName.split(' ').pop();
+      let leadTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
+      let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
+      let leadImageElement = leads[i].querySelector('.presence-entity.presence-entity--size-3 img');
+      let leadImage = leadImageElement ? leadImageElement.getAttribute('src') : '';
 
-        let leadData = {
-          fullName: leadName,
-          firstName: leadFirstName,
-          lastName: leadLastName,
-          title: leadTitle,
-          profileLink: leadProfileLink,
-          image: leadImage
-        };
+      let leadData = {
+        fullName: leadName,
+        firstName: leadFirstName,
+        lastName: leadLastName,
+        title: leadTitle,
+        profileLink: leadProfileLink,
+        image: leadImage
+      };
 
-        scrapedData.push(leadData);
-      }
-    //}
-    
-    // if (isPaused) {
-    //   console.log("Action has been paused.");
-    //   return;
-    // }
-    // if (isStopped) {
-    //   console.log("Action has been stopped.");
-    //   return;
-    // }
-    
-    
-    // if (!isPaused) {
-    //   scraping(scrapedData);
-    // }
+      scrapedData.push(leadData);
     }
-    console.log(scrapedData);
-    return Promise.resolve(scrapedData);
+  }
+  console.log(scrapedData);
+  return Promise.resolve(scrapedData);
 }
+
 
 
 async function scroll() {
@@ -200,6 +186,41 @@ async function goToNextPage() {
   });
 }
 
+
+
+// async function sendInvitesWithMsg() {
+//   while (invitesSent <= 10) {
+//     for (let i = 0; i < data.length; i++) {
+//       if (data[i].status === "pending") {
+//         data[i].profileLink.click();
+//         // wait for 5 seconds or until window loads
+
+//         // click on the connect btn
+//         const connectBtn = document.querySelector(".artdeco-button artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+//         connectBtn.click();
+
+//         // click on the add a note btn
+//         const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view mr1");
+//         addNoteBtn.click();
+
+//         // enter text from msg template onot the text box
+//         const textBox = document.querySelector(".eber-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
+//         textBox.value = data[i].messageTemplate;
+
+//         // click on the send btn
+//         const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.artdeco-button--disabled.ember-view.ml1");
+//         sendBtn.click();
+//       }
+//     }
+//   }
+  
+// }
+
+
+
+// async function sendInvitesWithoutMsg() {
+//   // will contain similar code to sendInvitesWithMsg but without the message part
+// }
 
 
 
@@ -248,125 +269,6 @@ async function goToNextPage() {
 
 
 
-
-
-
-
-
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-
-//   continueScraping = true;
-
-//   // executes the following block when user sends a request to begin scraping
-//   if (request.requestType === "scrapeLeads") {
-//     console.log("recieved request from popup script to initiate scraping");
-
-//     let scrapedData = [];
-//     while (continueScraping) {
-
-//       let leads = document.querySelectorAll('.entity-result');
-
-//       for (let i = 0; i < leads.length; i++) {
-
-//         if (leads[i].querySelector('.artdeco-button__text').innerText == 'Connect') {
-
-//           let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
-//           let leadFirstName = leadName.split(' ')[0];
-//           let leadLastName = leadName.split(' ', 2)[1];
-//           let leadTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
-//           let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
-//           let leadImageElement = leads[i].querySelector('.presence-entity.presence-entity--size-3 img');
-//           let leadImage = leadImageElement ? leadImageElement.getAttribute('src') : '';
-
-//           let leadData = {
-//             fullName: leadName,
-//             firstName: leadFirstName,
-//             lastName: leadLastName,
-//             title: leadTitle,
-//             profileLink: leadProfileLink,
-//             image: leadImage
-//           };
-
-//           scrapedData.push(leadData);
-//         }
-//       }
-
-//       // sending response back to popup script
-//       sendResponse({ message: scrapedData });
-//       console.log(scrapedData);
-
-//       const pageHeight = document.body.scrollHeight;
-//       const animationDuration = 1000; // in milliseconds
-//       const framesPerSecond = 60;
-
-//       let currentScrollPosition = window.scrollY; // get the current scroll position
-
-//       function scrollPage() {
-//         currentScrollPosition += distancePerFrame;
-
-//         if (currentScrollPosition > pageHeight) {
-//           currentScrollPosition = pageHeight;
-//         }
-
-//         window.scrollTo(0, currentScrollPosition);
-
-//         if (currentScrollPosition < pageHeight) {
-//           window.requestAnimationFrame(scrollPage);
-//         } else {
-//           let nextPage = document.querySelector('.artdeco-pagination__button.artdeco-pagination__button--next.artdeco-button.artdeco-button--muted.artdeco-button--icon-right.artdeco-button--1.artdeco-button--tertiary.ember-view');
-//           // the scrolling animation has completed, click the button if it's not disabled
-//           if (nextPage.disabled) {
-//             console.log("Cannot click to go to next page");
-//             continueScraping = false;
-//             sendResponse({ message: "No more data to scrape" });
-//           } else {
-//             nextPage.click();
-//           }
-//         }
-//       }
-
-//       const distancePerFrame = (pageHeight - currentScrollPosition) / (animationDuration / 1000 * framesPerSecond);
-
-//       window.requestAnimationFrame(scrollPage);
-
-      /*
-      // Scroll to the bottom of the page with a smooth transition
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth"
-      });
-      // Wait for the scrolling animation to finish before executing other code
-      setTimeout(() => {}, 2000);
-
-      let nextPage = document.querySelector('.artdeco-pagination__button.artdeco-pagination__button--next.artdeco-button.artdeco-button--muted.artdeco-button--icon-right.artdeco-button--1.artdeco-button--tertiary.ember-view');
-      if (nextPage.disabled) {
-        //console.log("cannot click to go to next page");
-        continueScraping = false;
-        sendResponse({ message: "No more data to scrape" });
-      }
-      else {
-        //setTimeout(nextPage.click(), 2000);
-        nextPage.click();
-      }
-  //     */
-  //     chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  //       if (request.requestType === "pauseScraping") {
-  //         console.log("recieved request from popup script to pause scraping");
-  //         continueScraping = false;
-  //         sendResponse({ message: "scraping paused" });
-  //         return true;
-  //       }
-  //       if (request.requestType === "stopScraping") {
-  //         console.log("recieved request from popup script to stop scraping");
-  //         continueScraping = false;
-  //         sendResponse({ message: "scraping completed" });
-  //         return true;
-  //       }
-  //     });
-  //   }
-  // }
-
- 
 /*
   if (request.requestType === "scrapeLeads") {
     console.log('received request from popup script to scrape data');
@@ -420,32 +322,3 @@ async function goToNextPage() {
   
 });
 */
-
-
-
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-
-//   let scrapedData = [];
-//   let  continueScraping = true;
-//   let isScraping = false;
-//   let 
-
-//   switch (request.requestType) {
-//     case "scrapeLeads":
-//       scrapedData = scraping(); // calls function to scrape leads from current page
-//       sendResponse({ data: scrapedData });
-//       goToNextPage(); // calls function to scroll and go to next page
-
-//     case "stopScraping":
-//       continueScraping = false;
-
-//     case "pauseScraping":
-//       continueScraping = false;
-
-//     case "resumeScraping":
-//       scrapedData = scraping(); // calls function to scrape leads from current page
-//       sendResponse({ data: scrapedData });
-//       goToNextPage();// calls function to scroll and go to next page
-//   }
-
-// });
