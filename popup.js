@@ -221,6 +221,11 @@ if (window.location.href.includes("activity.html")) {
 
 		window.location.href = "home.html";
 	});
+
+	// btn to remove a lead from scraped list
+	document.querySelector(".remove-btn").addEventListener("click", () => {
+		//add code that deletes/pops the partcular leads's contents from the storage
+	});
 }
 
 

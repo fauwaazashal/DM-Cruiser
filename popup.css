@@ -68,6 +68,16 @@ h6 {
 	cursor: pointer;
 }
 
+.remove-btn {
+	background-color: #0073b1;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	padding: 8px 16px;
+	font-size: 12px;
+	cursor: pointer;
+}
+
 /* home */
 
 #heading-home {
@@ -622,12 +632,3 @@ h6 {
 	margin: 0;
   }
   
-  .Remove-button {
-	background-color: #0073b1;
-	color: #fff;
-	border: none;
-	border-radius: 4px;
-	padding: 8px 16px;
-	font-size: 12px;
-	cursor: pointer;
-  }
