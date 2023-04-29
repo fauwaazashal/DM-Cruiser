@@ -1,11 +1,32 @@
-let data = [];
+// // loading previous popup page
+// chrome.storage.local.get("lastVisitedPopup", function(data) {
+// 	var lastVisitedPopup = data.lastVisitedPopup;
+// 	if (lastVisitedPopup) {
+// 		chrome.action.setPopup({ popup: lastVisitedPopup.url });
+// 		if (lastVisitedPopup.data) {
+// 			var currentUrl = lastVisitedPopup.data.url;
+// 			// do something with the stored data
+// 		}
+// 	}
+// });
+
+
+
+//---------------------------------------------global variables--------------------------------------------------
+
+
+
+let scrapedData = [];
 let injectData = [];
+let keys = [];
+let date = "";
 let campaignName = "";
 let messageTemplate = "";
+let campaignCount = 0;
 
 
 
-//---------------------------------------------newsearch.html------------------------------------------------
+//---------------------------------------------newsearch.html--------------------------------------------------
 
 
 
@@ -36,17 +57,17 @@ if (window.location.href.includes("newsearch.html")) {
 					console.log(response.data);
 					
 					// length of the data scraped thus far
-					prevIterationData = data.length;
+					prevIterationData = scrapedData.length;
 					// storing all scraped data in this variable
-					data = response.data; 
+					scrapedData = response.data; 
 					// obtaining the length of the data (from reverse) that is to be injected
-					injectDataLength = data.length - prevIterationData;
+					injectDataLength = scrapedData.length - prevIterationData;
 					// updating the data that needs to be injected in this iteration
-					injectData = data.slice(-injectDataLength);
+					injectData = scrapedData.slice(-injectDataLength);
 					console.log(injectData);
 					// inject response.data onto popup
 					await inject_onto_newsearch(injectData);
-					document.querySelector(".collected h6").innerText = `Collected: ${data.length}`;
+					document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
 				}
 			});
 		})
@@ -63,8 +84,13 @@ if (window.location.href.includes("newsearch.html")) {
 
 			port.onMessage.addListener(function(response) {
 				if (response.message === "Stopped Scraping" ) {
-					// messageTemplateDiv.getElementById("myInput").value = `Campaign ${campaignCount}`;
-					// messageTemplateDiv.getElementById("message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
+					chrome.storage.local.get(null, function(items) {
+						campaignCount = Object.keys(items).length;
+						console.log(Object.keys(items).length);
+						});
+					  
+					messageTemplateDiv.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
+					messageTemplateDiv.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
 				}
 			});
 		})
@@ -100,15 +126,12 @@ if (window.location.href.includes("newsearch.html")) {
 
 		// button is clicked to complete campaign creation and store data in local storage
 		document.querySelector("#campaign-creation-completed").addEventListener("click", async () => {
-			campaignName = messageTemplateDiv.getElementById("").value;
-			messageTemplate = messageTemplateDiv.getElementById("").value;
+			campaignName = messageTemplateDiv.querySelector("#campaign-name").value;
+			messageTemplate = messageTemplateDiv.querySelector("#message-input").value;
+			date = new Date().toLocaleDateString("en-IN");
 
-			// Send the scraped data to the background script and handle any errors
-			chrome.runtime.sendMessage({ requestType: "Store data", data: data, keyName: campaignName }, function(response) {
-			  console.log("Request sent to background script to store data");
-			  // receiving a response from the background script as a confirmation that the data has been stored in the local storage
-			  console.log(response.message);       
-			});
+			await storeData(scrapedData, campaignName, messageTemplate, date);
+			console.log("data stored in local storage successfully");
 
 			messageTemplateDiv.classList.add("hide");
 			newsearchDiv.classList.remove("hide");
@@ -120,7 +143,7 @@ if (window.location.href.includes("newsearch.html")) {
 			inject_remove(document.querySelectorAll(".leads-scraped"));
 
 			window.location.href = "home.html";
-			await inject_onto_home();
+			//await inject_onto_home();
 		})
 
 		// button is clicked to go from message page back to newsearch page
@@ -151,7 +174,9 @@ if (window.location.href.includes("newsearch.html")) {
 if (window.location.href.includes("home.html")) {
 	console.log('this is home.html');
 
-	let campaigns = document.querySelectorAll(".campaigns-section");
+	inject_onto_home();
+
+	let campaigns = document.querySelectorAll(".campaign-box");
 
 	for (let i = 0; i < campaigns.length; i++) {
 		campaigns[i].addEventListener("click", () => {
@@ -276,6 +301,7 @@ async function inject_onto_newsearch(data) {
 		const leadDelete = document.createElement("div");
 		leadDelete.classList.add("remove-btn");
 		leadDelete.innerText = "Remove";
+		leadDelete.disabled = true;
 		leadDiv.appendChild(leadDelete);
 
 		leads.appendChild(leadDiv);
@@ -285,49 +311,61 @@ async function inject_onto_newsearch(data) {
 
 // function for injecting a button of the newly created campaign onto home.html
 async function inject_onto_home() {
-	let campaigns = document.querySelector(".campaigns-section");
-
-
-	// create new div element for newly created campaign
-	const campaignDiv = document.createElement("div");
-	campaignDiv.classList.add("campaign-box");
-
-
-	// create campaign info (name + status) element and add to campaignDiv
-	const campaignInfo = document.createElement("div");
-	campaignInfo.classList.add("campaign-info");
-	// create campaign name element and add to campaignInfo
-	const campName= document.createElement("div");
-	campName.classList.add("campaign-name");
-	campName.innerText = campaignName;
-	campaignInfo.appendChild(campName);
-	// create activity status element and add to campaignInfo
-	const campaignStatus = document.createElement("div");
-	campaignStatus.classList.add("activity-status");
-	campaignStatus.innerText = `1 of ${data.length}`;
-	campaignInfo.appendChild(campaignStatus);
-	// appending campaign info (name + status) to campaignDiv
-	campaignDiv.appendChild(campaignInfo);
-
-
-	// create date element and add it to campaignDiv
-	const campaignDate = document.createElement("div");
-	campaignDate.classList.add("date");
-	campaignDate.innerText = new Date().toLocaleDateString("en-IN");
-	campaignDiv.appendChild(campaignDate);
-
-
-	// create delete button and add it to campaignDiv
-	const deleteCampaign = document.createElement("div");
-	deleteCampaign.classList.add("delete-btn");
-	const deleteBtnImage = document.createElement("img");
-	deleteBtnImage.classList.add("delete-btn-img");
-	deleteCampaign.appendChild(deleteBtnImage);
-	campaignDiv.appendChild(deleteCampaign);
-
-
-	campaigns.appendChild(campaignDiv);
-}
+	const items = await new Promise(resolve => chrome.storage.local.get(null, resolve));
+	const keys = Object.keys(items);
+	console.log(keys);
+  
+	const campaigns = document.querySelector(".campaigns-section");
+  
+	for (let i = 0; i < keys.length; i++) {
+		const result = await new Promise(resolve => chrome.storage.local.get(keys[i], resolve));
+		console.log(result);
+		const storedScrapedData = result[keys[i]].scrapedData;
+		console.log(storedScrapedData);
+		const storedDate = result[keys[i]].date;
+		console.log(storedDate);
+	
+		// create new div element for newly created campaign
+		const campaignDiv = document.createElement("div");
+		campaignDiv.classList.add("campaign-box");
+	
+		// create campaign info (name + status) element and add to campaignDiv
+		const campaignInfo = document.createElement("div");
+		campaignInfo.classList.add("campaign-info");
+		// create campaign name element and add to campaignInfo
+		const campName = document.createElement("div");
+		campName.classList.add("campaign-name");
+		campName.innerText = keys[i];
+		campaignInfo.appendChild(campName);
+		// create activity status element and add to campaignInfo
+		const campaignStatus = document.createElement("div");
+		campaignStatus.classList.add("activity-status");
+		campaignStatus.innerText = `1 of ${storedScrapedData.length}`;
+		campaignInfo.appendChild(campaignStatus);
+		// appending campaign info (name + status) to campaignDiv
+		campaignDiv.appendChild(campaignInfo);
+	
+		// create date element and add it to campaignDiv
+		const campaignDate = document.createElement("div");
+		campaignDate.classList.add("date");
+		campaignDate.innerText = storedDate;
+		campaignDiv.appendChild(campaignDate);
+	
+		// create delete button and add it to campaignDiv
+		const deleteCampaign = document.createElement("div");
+		deleteCampaign.classList.add("delete-btn");
+		const deleteBtnImage = document.createElement("img");
+		deleteBtnImage.classList.add("delete-btn-img");
+		deleteBtnImage.setAttribute("src", "assets/delete.png");
+		deleteCampaign.appendChild(deleteBtnImage);
+		campaignDiv.appendChild(deleteCampaign);
+	
+		campaigns.appendChild(campaignDiv);
+	}
+  
+	console.log("injected all created campaigns onto home.html");
+  }
+  
 
 
 
@@ -396,12 +434,10 @@ async function inject_remove(leadDiv) {
 
 
 
-
-
-// code to inject content onto activity.html for when a campaign button is clicked
-// - send request to background script and retreive the relevant campaign from the storage
-// - after reteirving the data, inject content onto the respectives tabs of activity.html
-// - when the back button is clicked, we need to add go back to the home page and remove all injected content from the activity page
+// function to store created campaign's data in local storage
+async function storeData(scrapedData, campaignName, messageTemplate, date){
+	chrome.storage.local.set({ [campaignName]: { scrapedData, messageTemplate, date } }); // storing data in local storage
+}
 
 
 
