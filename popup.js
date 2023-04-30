@@ -22,6 +22,7 @@ let keys = [];
 let date = "";
 let campaignName = "";
 let messageTemplate = "";
+let activityStatus = "pending";
 let campaignCount = 0;
 
 
@@ -36,8 +37,10 @@ if (window.location.href.includes("newsearch.html")) {
 	const stopScrapeBtn = document.querySelector(".stop-search-footer");
 	const pauseScrapeBtn = document.querySelector(".pause-search");
 	const resumeScrapeBtn = document.querySelector(".resume-search");
-	const messageTemplateDiv = document.querySelector(".newmessage-popup");
+	const newmessageTemplateDiv = document.querySelector(".newmessage-popup");
 	const newsearchDiv = document.querySelector(".newsearch-popup");
+	const closeButton_newsearch = document.querySelector(".newsearch-popup .close-btn");
+	const closeButton_newmessage = document.querySelector(".newmessage-popup .close-btn");
 
 	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 		const port = chrome.tabs.connect(tabs[0].id, { name: "popup-to-content" });
@@ -77,20 +80,20 @@ if (window.location.href.includes("newsearch.html")) {
 			pauseScrapeBtn.classList.add("hide");
 			resumeScrapeBtn.classList.remove("hide");
 			newsearchDiv.classList.add("hide");
-			messageTemplateDiv.classList.remove("hide");
+			newmessageTemplateDiv.classList.remove("hide");
 	
 			console.log("sent request to content script to stop scraping");
 			port.postMessage({ action: "Stop Scraping" });
 
 			port.onMessage.addListener(function(response) {
 				if (response.message === "Stopped Scraping" ) {
-					chrome.storage.local.get(null, function(items) {
+					chrome.storage.local.get(null, async (items) => {
 						campaignCount = Object.keys(items).length;
 						console.log(Object.keys(items).length);
-						});
-					  
-					messageTemplateDiv.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
-					messageTemplateDiv.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
+
+						newmessageTemplateDiv.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
+						newmessageTemplateDiv.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
+						});					  
 				}
 			});
 		})
@@ -126,14 +129,14 @@ if (window.location.href.includes("newsearch.html")) {
 
 		// button is clicked to complete campaign creation and store data in local storage
 		document.querySelector("#campaign-creation-completed").addEventListener("click", async () => {
-			campaignName = messageTemplateDiv.querySelector("#campaign-name").value;
-			messageTemplate = messageTemplateDiv.querySelector("#message-input").value;
+			campaignName = newmessageTemplateDiv.querySelector("#campaign-name").value;
+			messageTemplate = newmessageTemplateDiv.querySelector("#message-input").value;
 			date = new Date().toLocaleDateString("en-IN");
 
-			await storeData(scrapedData, campaignName, messageTemplate, date);
+			await storeData(scrapedData, campaignName, messageTemplate, date, activityStatus);
 			console.log("data stored in local storage successfully");
 
-			messageTemplateDiv.classList.add("hide");
+			newmessageTemplateDiv.classList.add("hide");
 			newsearchDiv.classList.remove("hide");
 			startScrapeBtn.classList.remove("hide");
 			stopScrapeBtn.classList.add("hide");
@@ -143,13 +146,12 @@ if (window.location.href.includes("newsearch.html")) {
 			inject_remove(document.querySelectorAll(".leads-scraped"));
 
 			window.location.href = "home.html";
-			//await inject_onto_home();
 		})
 
 		// button is clicked to go from message page back to newsearch page
-		messageTemplateDiv.querySelector(".back").addEventListener("click", () => {
+		newmessageTemplateDiv.querySelector(".back").addEventListener("click", () => {
 			newsearchDiv.classList.remove("hide");
-			messageTemplateDiv.classList.add("hide");
+			newmessageTemplateDiv.classList.add("hide");
 		})
 
 		// button is clicked to go from newsearch page back to home page
@@ -162,6 +164,16 @@ if (window.location.href.includes("newsearch.html")) {
 
 			window.location.href = "home.html";
 		})
+
+		// button is clicked to close the popup
+		closeButton_newsearch.addEventListener("click", function() {
+			window.close();
+		});
+
+		closeButton_newmessage.addEventListener("click", function() {
+			window.close();
+		});
+
 	});
 }
 
@@ -174,26 +186,28 @@ if (window.location.href.includes("newsearch.html")) {
 if (window.location.href.includes("home.html")) {
 	console.log('this is home.html');
 
-	inject_onto_home();
+	// retreive data of all created campaigns from the local storage
+	chrome.storage.local.get(null, async (items) => {
+  		keys = Object.keys(items);
+		await inject_onto_home(keys);
+		console.log(document.querySelectorAll(".campaign-box"));
 
-	let campaigns = document.querySelectorAll(".campaign-box");
+		let campaigns = document.querySelectorAll(".campaign-box");
 
-	for (let i = 0; i < campaigns.length; i++) {
-		campaigns[i].addEventListener("click", () => {
-			campaignName = campaigns[i].innerText;
+		for (let i = 0; i < campaigns.length; i++) {
+			campaigns[i].addEventListener("click", async () => {
+				console.log("clicked a campaign btn");
+				campaignName = campaigns[i].querySelector(".campaign-name").innerText;
+				window.location.href = "activity.html";
+			});
+		}
+	});
 
-			// retreive data of the selected campaign from the local storage
-
-
-			// inject relevant content of selected campaign onto the activity page (activity + people)
-			//inject_onto_activity(data);
-
-			// inject the campaign name and the message template onto the message page
-			
-
-			window.location.href = "activity.html";
-		});
-	}
+	// button is clicked to close the popup
+	const closeButton_home = document.querySelector(".close-btn");
+	closeButton_home.addEventListener("click", function() {
+		window.close();
+	});
 }
 
 
@@ -205,29 +219,39 @@ if (window.location.href.includes("home.html")) {
 if (window.location.href.includes("activity.html")) {
 	console.log('this is activity.html');
 
+	// retreive data of the selected campaign from the local storage
+	// chrome.storage.local.get([campaignName], async (result) => {
+	// 	await inject_onto_activityTab(result.campaignName.scrapedData, result.campaignName.activityStatus);
+	// 	await inject_onto_messageTab(campaignName, result.campaignName.messageTemplate);
+	// 	await inject_onto_peopleTab(result.campaignName.scrapedData);
+	// });
+
+	// inject the campaign name and the message template onto the message page
+
 	const activityTab = document.querySelector(".activty-popup");
 	const messageTab = document.querySelector(".message-popup");
 	const peopleTab = document.querySelector(".people-popup");
 	// const activityBtn = document.querySelector("");
 	// const messageBtn = document.querySelector("");
 	// const peopleBtn = document.querySelector("");
+	const closeButton_activity = document.querySelector(".close-btn");
 
 	// clicks on activity tab
-	document.querySelector("#activity-tab").addEventListener("click", () => {
+	document.querySelector("#activity-btn").addEventListener("click", () => {
 		activityTab.classList.remove("hide");
 		messageTab.classList.add("hide");
 		peopleTab.classList.add("hide");
 	});
 
 	// clicks on message tab
-	document.querySelector("#message-tab").addEventListener("click", () => {
+	document.querySelector("#message-btn").addEventListener("click", () => {
 		activityTab.classList.add("hide");
 		messageTab.classList.remove("hide");
 		peopleTab.classList.add("hide");
 	});
 
 	// clicks on people tab
-	document.querySelector("#people-tab").addEventListener("click", () => {
+	document.querySelector("#people-btn").addEventListener("click", () => {
 		activityTab.classList.add("hide");
 		messageTab.classList.add("hide");
 		peopleTab.classList.remove("hide");
@@ -240,16 +264,21 @@ if (window.location.href.includes("activity.html")) {
 		peopleTab.classList.add("hide");
 
 		//remove campaign's content from activity tab
-		inject_remove();
+		inject_remove(document.querySelectorAll(".leads-scraped"));
 		//remove campaign's content from people tab
-		inject_remove();
+		inject_remove(document.querySelectorAll(".leads-scraped"));
 
 		window.location.href = "home.html";
 	});
 
-	// btn to remove a lead from scraped list
-	document.querySelector(".remove-btn").addEventListener("click", () => {
-		//add code that deletes/pops the partcular leads's contents from the storage
+	// // btn to remove a lead from scraped list
+	// document.querySelector(".remove-btn").addEventListener("click", () => {
+	// 	//add code that deletes/pops the partcular leads's contents from the storage
+	// });
+
+	// // button is clicked to close the popup
+	closeButton_activity.addEventListener('click', function() {
+		window.close();
 	});
 }
 
@@ -310,71 +339,119 @@ async function inject_onto_newsearch(data) {
 
 
 // function for injecting a button of the newly created campaign onto home.html
-async function inject_onto_home() {
-	const items = await new Promise(resolve => chrome.storage.local.get(null, resolve));
-	const keys = Object.keys(items);
-	console.log(keys);
+async function inject_onto_home(keys) {
   
 	const campaigns = document.querySelector(".campaigns-section");
   
 	for (let i = 0; i < keys.length; i++) {
-		const result = await new Promise(resolve => chrome.storage.local.get(keys[i], resolve));
-		console.log(result);
-		const storedScrapedData = result[keys[i]].scrapedData;
-		console.log(storedScrapedData);
-		const storedDate = result[keys[i]].date;
-		console.log(storedDate);
-	
-		// create new div element for newly created campaign
-		const campaignDiv = document.createElement("div");
-		campaignDiv.classList.add("campaign-box");
-	
-		// create campaign info (name + status) element and add to campaignDiv
-		const campaignInfo = document.createElement("div");
-		campaignInfo.classList.add("campaign-info");
-		// create campaign name element and add to campaignInfo
-		const campName = document.createElement("div");
-		campName.classList.add("campaign-name");
-		campName.innerText = keys[i];
-		campaignInfo.appendChild(campName);
-		// create activity status element and add to campaignInfo
-		const campaignStatus = document.createElement("div");
-		campaignStatus.classList.add("activity-status");
-		campaignStatus.innerText = `1 of ${storedScrapedData.length}`;
-		campaignInfo.appendChild(campaignStatus);
-		// appending campaign info (name + status) to campaignDiv
-		campaignDiv.appendChild(campaignInfo);
-	
-		// create date element and add it to campaignDiv
-		const campaignDate = document.createElement("div");
-		campaignDate.classList.add("date");
-		campaignDate.innerText = storedDate;
-		campaignDiv.appendChild(campaignDate);
-	
-		// create delete button and add it to campaignDiv
-		const deleteCampaign = document.createElement("div");
-		deleteCampaign.classList.add("delete-btn");
-		const deleteBtnImage = document.createElement("img");
-		deleteBtnImage.classList.add("delete-btn-img");
-		deleteBtnImage.setAttribute("src", "assets/delete.png");
-		deleteCampaign.appendChild(deleteBtnImage);
-		campaignDiv.appendChild(deleteCampaign);
-	
-		campaigns.appendChild(campaignDiv);
+		chrome.storage.local.get([keys[i]], function(result) {
+			let storedScrapedData = result[keys[i]].scrapedData;
+			let storedDate = result[keys[i]].date;
+		
+			// create new div element for newly created campaign
+			const campaignDiv = document.createElement("div");
+			campaignDiv.classList.add("campaign-box");
+		
+			// create campaign info (name + status) element and add to campaignDiv
+			const campaignInfo = document.createElement("div");
+			campaignInfo.classList.add("campaign-info");
+			// create campaign name element and add to campaignInfo
+			const campName = document.createElement("div");
+			campName.classList.add("campaign-name");
+			campName.innerText = keys[i];
+			campaignInfo.appendChild(campName);
+			// create activity status element and add to campaignInfo
+			const campaignStatus = document.createElement("div");
+			campaignStatus.classList.add("activity-status");
+			campaignStatus.innerText = `1 of ${storedScrapedData.length}`;
+			campaignInfo.appendChild(campaignStatus);
+			// appending campaign info (name + status) to campaignDiv
+			campaignDiv.appendChild(campaignInfo);
+		
+			// create date element and add it to campaignDiv
+			const campaignDate = document.createElement("div");
+			campaignDate.classList.add("date");
+			campaignDate.innerText = storedDate;
+			campaignDiv.appendChild(campaignDate);
+		
+			// create delete button and add it to campaignDiv
+			const deleteCampaign = document.createElement("div");
+			deleteCampaign.classList.add("delete-btn");
+			const deleteBtnImage = document.createElement("img");
+			deleteBtnImage.classList.add("delete-btn-img");
+			deleteBtnImage.setAttribute("src", "assets/delete.png");
+			deleteCampaign.appendChild(deleteBtnImage);
+			campaignDiv.appendChild(deleteCampaign);
+		
+			campaigns.appendChild(campaignDiv);
+		});		
 	}
-  
 	console.log("injected all created campaigns onto home.html");
-  }
-  
+  }  
 
 
 
-// function for injecting selected campaign's data onto activity.html
-async function inject_onto_activity(data) {
-	inject_onto_newsearch(data); // injects the exact same content that was injected onto newsearch page
-	
-	// code for injecting onto activty page
-	let leads = document.querySelector(".leads-section");
+// function for injecting selected campaign's data onto activity tab of activity.html
+async function inject_onto_activityTab(data, status) {
+	let leads = document.querySelector(".activity-leads-section");
+
+	for (let i = 0; i < data.length; i++) {
+
+		// create new div element for each lead
+		const leadDiv = document.createElement("div");
+		leadDiv.classList.add("leads-scraped");
+
+		// create image element and adding to leadDiv
+		const leadImage = document.createElement("div");
+		const image = document.createElement("img");
+		image.classList.add("lead-image");
+		if (data[i].image == "") image.setAttribute("src", "assets/defaultprofile100.png");
+		else image.setAttribute("src", data[i].image);
+		image.setAttribute("alt", data[i].fullName);
+		leadImage.appendChild(image);
+		leadDiv.appendChild(leadImage);
+
+
+		// create info element and adding to leadDiv
+		const leadInfo = document.createElement("div");
+		// create name element and addding to leadInfo
+		const leadName = document.createElement("div");
+		leadName.classList.add("lead-name");
+		leadName.innerText = data[i].fullName;
+		leadName.setAttribute("href", data[i].profileLink);
+		leadInfo.appendChild(leadName);
+		// create title element and adding to leadInfo
+		const leadTitle = document.createElement("div");
+		leadTitle.classList.add("lead-title");
+		leadTitle.innerText = data[i].title;
+		leadInfo.appendChild(leadTitle);
+		// appending leadInfo (leadName + leadTitle) to leadDiv
+		leadDiv.appendChild(leadInfo);
+
+
+		// creating activity status element and adding to leadDiv
+		const leadStatus = document.createElement("div");
+		leadStatus.classList.add("remove-btn");
+		leadStatus.innerText = status;
+		leadDiv.appendChild(leadStatus);
+
+		leads.appendChild(leadDiv);
+	}
+}
+
+
+
+// function for injecting selected campaign's name and mesg template onto msg tab of activity.html
+async function inject_onto_messageTab(name, message) {
+	let messageTemplateDiv = document.querySelector(".message-popup");
+	messageTemplateDiv.querySelector("#campaign-name").value = name;
+	messageTemplateDiv.querySelector("#message-input").value = message;
+}
+
+
+// function for injecting selected campaign's data onto people tab of activity.html
+async function inject_onto_peopleTab(data) {
+	let leads = document.querySelector(".people-leads-section");
 
 	for (let i = 0; i < data.length; i++) {
 
@@ -435,8 +512,8 @@ async function inject_remove(leadDiv) {
 
 
 // function to store created campaign's data in local storage
-async function storeData(scrapedData, campaignName, messageTemplate, date){
-	chrome.storage.local.set({ [campaignName]: { scrapedData, messageTemplate, date } }); // storing data in local storage
+async function storeData(scrapedData, campaignName, messageTemplate, date, activityStatus){
+	chrome.storage.local.set({ [campaignName]: { scrapedData, messageTemplate, date, activityStatus } }); // storing data in local storage
 }
 
 

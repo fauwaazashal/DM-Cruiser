@@ -38,7 +38,7 @@ h6 {
 	display: none;
 }
 
-#activity-tab {
+#activity-btn {
 	background-color: transparent;
 	border: transparent;
 	font-family: "Poppins variant0", Tofu;
@@ -48,7 +48,7 @@ h6 {
 	cursor: pointer;
 }
 
-#message-tab {
+#message-btn {
 	background-color: transparent;
 	border: transparent;
 	font-family: "Poppins variant0", Tofu;
@@ -58,7 +58,7 @@ h6 {
 	cursor: pointer;
 }
 
-#people-tab {
+#people-btn {
 	background-color: transparent;
 	border: transparent;
 	font-family: "Poppins variant0", Tofu;
@@ -287,6 +287,7 @@ h6 {
 	font-size: 12px;
 	cursor: pointer;
   }
+
   .leads-section{
 	overflow: scroll;
 	overflow-x: hidden;
@@ -314,14 +315,17 @@ h6 {
 #heading-message {
 	margin-left: 50px;
 }
+
 .right-arrow-btn-message-footer {
 	position: absolute;
 	left: 287px;
 	bottom: 21px;
 }
+
 #message {
 	margin-bottom: 81px;
 }
+
 .message-footer {
 	position: absolute;
 	bottom: 18px;
@@ -332,6 +336,18 @@ h6 {
 	text-align: center;
 	padding: 10px;
 }
+
+.newmessage-footer {
+	position: absolute;
+	bottom: 18px;
+	left: 23px;
+	width: 100px;
+	background-color: white;
+	color: #fff;
+	text-align: center;
+	padding: 10px;
+}
+
 #campaign-creation-completed {
 	background-color: rgb(144, 131, 216);
 	color: black;
@@ -543,6 +559,12 @@ h6 {
     color: #101010;
 }
 
+.activity-leads-section{
+	overflow: scroll;
+	overflow-x: hidden;
+	height: 365px;
+}
+
 
 /* people page */
 
@@ -634,4 +656,10 @@ h6 {
 	font-size: 12px;
 	margin: 0;
   }
+
+  .people-leads-section{
+	overflow: scroll;
+	overflow-x: hidden;
+	height: 365px;
+}
   
