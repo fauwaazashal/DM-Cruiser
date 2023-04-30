@@ -7,102 +7,8 @@
 </head>
 
 <body>
-    <!-- activity page -->
-    <div class="activity-popup">
-        <div class="header">
-            <img class="back" src="assets/left arrow.png" alt="" width="15px" height="20px">
-            <h4 id="heading-activity">Campaign 1</h4>
-            <img class="close-btn" src="assets/Close button.png" alt="" width="15px" height="20px">
-        </div>
-        <div class="activity-heading-section">
-            <button id="activity-tab">ACTIVITY</button>
-            <button id="message-tab">MESSAGE</button>
-            <button id="people-tab">PEOPLE</button>
-        </div>
-        <div class="data-box">
-            <div class="pending">
-                <div class="number">0</div>
-                <div class="text-desc">Pending</div>
-            </div>
-            <div class="awaiting">
-                <div class="number">0</div>
-                <div class="text-desc">Awaiting</div>
-            </div> 
-        </div>
-
-        <div class="activity-leads-section"></div>
-
-        <div class="activity-footer">
-            <button id="activity-status">Activity Status</button>
-            <img class="right-arrow-btn-activity" src="assets/right arrow.png" alt="" width="15px" height="20px">
-        </div>
-    </div>
-
-
-    <!-- message page -->
-    <div class="message-popup hide">
-        <div class="header">
-            <img class="back" src="assets/left arrow.png" alt="" width="15px" height="20px">
-            <h4 id="heading-activity">Campaign 1</h4>
-            <img class="close-btn" src="assets/Close button.png" alt="" width="15px" height="20px">
-        </div>
-        <div class="activity-heading-section">
-            <button id="activity-tab">ACTIVITY</button>
-            <button id="message-tab">MESSAGE</button>
-            <button id="people-tab">PEOPLE</button>
-        </div>
-        <form id="message-form">
-            <h5>Create a Campaign name</h5>
-            <input type="text" placeholder="Enter your Campaign's Name" minlength="3" maxlength="12">
-            <!-- <textarea id="message-input" rows="1" cols="30" placeholder="Enter your message here" form="Default Campaign"></textarea> -->
-        </form>
-        <form id="message">
-            <h5>Connection Request Message</h5>
-            <!-- <input type="text" placeholder="Enter your message here" maxlength="300"> -->
-            <textarea id="message-input" rows="6" cols="30" placeholder="Enter your message here" form="Default Message"></textarea>
-        </form>
-        <div class="activity-footer">
-            <button id="activity-status">Activity Status</button>
-            <img class="right-arrow-btn-activity" src="assets/right arrow.png" alt="" width="15px" height="20px">
-        </div>
-    </div>
-
-
-    <!-- people page -->
-    <div class="people-popup hide">
-        <div class="header">
-            <img class="back" src="assets/left arrow.png" alt="" width="15px" height="20px">
-            <h4 id="heading-people">Campaign 1</h4>
-            <img class="close-btn" src="assets/Close button.png" alt="" width="15px" height="20px">
-        </div>
-        <div class="people-top-section">
-            <button id="activity-tab">ACTIVITY</button>
-            <button id="message-tab">MESSAGE</button>
-            <button id="people-tab">PEOPLE</button>
-        </div>
-        <div class="data-box">
-            <div class="pending">
-                <div class="number">0</div>
-                <div class="text-desc">Pending</div>
-            </div>
-            <div class="awaiting">
-                <div class="number">0</div>
-                <div class="text-desc">Awaiting</div>
-            </div> 
-        </div>
-        
-        <div class="people-leads-section"></div>
-
-        <div class="people-footer">
-            <button id="add-people">Add people</button>
-            <img class="right-arrow-btn-people" src="assets/right arrow.png" alt="" width="15px" height="20px">
-        </div>
-    </div>
     
-
-
-
-    <!-- <div class="activity-popup">
+    <div class="activity-popup">
 
         <div class="header">
             <img class="back" src="assets/left arrow.png" alt="" width="15px" height="20px">
@@ -115,45 +21,69 @@
             <button id="message-btn">MESSAGE</button>
             <button id="people-btn">PEOPLE</button>
         </div>
-        
-        <div class="data-box">
-            <div class="pending">
-                <div class="number">0</div>
-                <div class="text-desc">Pending</div>
+
+        <div class="activity-section">
+            <div class="trial">
+                <div class="trial-bar">
+                    <div>Daily Limits:</div>
+                    <input type="number" class="size-36" value="10" min="1" max="99" step="1">
+                    <span>connections</span>
+                    <input type="number" class="size-36" value="20" min="1" max="99" step="1">
+                    <span>followups</span>
+                </div>
             </div>
-            <div class="awaiting">
-                <div class="number">0</div>
-                <div class="text-desc">Awaiting</div>
-            </div> 
+
+            <div class="process-box">
+                <div>Today's Queue:</div>
+                <div class="queue-num">0 connections</div>
+            </div>
+
+            <div class="activity-leads-section"></div>
+
+            <div class="activity-footer">
+                <button id="activity-status">Send Invites</button>
+            </div>
         </div>
 
 
-        <div class="message-popup hide">
-            <form id="message-form">
-                <h5>Create a Campaign name</h5>
-                <input type="text" placeholder="Enter your Campaign's Name" minlength="3" maxlength="12">             
-            </form>
-            <form id="message">
-                <h5>Connection Request Message</h5>
-                <textarea id="message-input" rows="6" cols="30" placeholder="Enter your message here" form="Default Message"></textarea>
-            </form>
+        <div class="message-section hide">
+            <div class="message-popup">
+                <form id="message-form">
+                    <h5>Create a Campaign name</h5>
+                    <input id="campaign-name" type="text" placeholder="Enter your Campaign's Name" minlength="3" maxlength="12">             
+                </form>
+                <form id="message">
+                    <h5>Connection Request Message</h5>
+                    <textarea id="message-input" rows="6" cols="30" placeholder="Enter your message here" form="Default Message"></textarea>
+                </form>
+            </div>
+
+            <div class="message-footer">
+                <button id="activity-status">Save Changes</button>
+            </div>
         </div>
 
 
-        <div class="activity-leads-section"></div>
-        <div class="people-leads-section hide"></div>
+        <div class="people-section hide">
+            <div class="data-box">
+                <div class="pending">
+                    <div class="number">0</div>
+                    <div class="text-desc">Pending</div>
+                </div>
+                <div class="awaiting">
+                    <div class="number">0</div>
+                    <div class="text-desc">Sent</div>
+                </div> 
+            </div>
 
+            <div class="people-leads-section"></div>
 
-        <div class="activity-footer">
-            <button id="activity-status">Activity Status</button>
-        </div>
-        <div class="message-footer hide">
-            <button id="activity-status">Save Changes</button>
-        </div>
-        <div class="people-footer hide">
-            <button id="add-people">Add people</button>
-        </div>
-    </div> -->
+            <div class="people-footer">
+                <button id="add-people">Add More People</button>
+            </div>
+        </div>       
+        
+    </div>
 
     <script src="popup.js"></script>
 </body>
