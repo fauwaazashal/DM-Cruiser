@@ -571,13 +571,11 @@ h6 {
 	padding: 15px;
 }
 
-  /* Handle */
+
   ::-webkit-scrollbar-thumb {
 	background: rgb(75, 75, 75); 
 	border-radius: 10px;
 }
-
-  /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
 	background:lightgray; 
 }
