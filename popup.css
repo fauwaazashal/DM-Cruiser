@@ -347,6 +347,9 @@ h6 {
 	text-align: center;
 	padding: 10px;
 }
+.sizing{
+	resize: vertical;
+}
 
 #campaign-creation-completed {
 	background-color: rgb(144, 131, 216);
