@@ -6,16 +6,16 @@
 	text-align: center;
 }
 
-.col {
+/* .col {
 	background-color: rgb(144, 131, 216);
-}
+} */
 
 .header {
 	display: flex;
 	background-color: rgb(144, 131, 216);
 	padding: 1px 2px;
-	margin-left: -8px;
-	margin-right: -8px;
+	/* margin-left: -8px;
+	margin-right: -8px; */
 	margin-top: -8px;
 }
 
