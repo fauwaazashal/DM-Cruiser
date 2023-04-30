@@ -568,9 +568,10 @@ h6 {
 }
 
 .process-box{
-	align-items: center;
+	/* align-items: center; */
 	text-align: left;
 	padding: 15px;
+	padding-left: 32px;
 }
 
 
@@ -582,8 +583,12 @@ h6 {
 	background:lightgray; 
 }
 .trial{
-	padding-bottom: 10px;
-	padding-left: 15px;
+	margin-top: 10px;
+}
+.limit{
+	text-align: left;
+	padding-left: 40px;
+	padding-top: 10px;
 }
 .trial-bar{
 	margin-left: -8px;
