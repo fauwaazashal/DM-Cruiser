@@ -14,8 +14,8 @@
 	display: flex;
 	background-color: rgb(144, 131, 216);
 	padding: 1px 2px;
-	/* margin-left: -8px;
-	margin-right: -8px; */
+	margin-left: -8px;
+	margin-right: -8px;
 	margin-top: -8px;
 }
 
@@ -483,6 +483,8 @@ h6 {
 .activity-heading-section {
 	display: flex;
 	background-color: rgb(144, 131, 216);
+	margin-left: -8px;
+	margin-right: -8px;
 	gap: 82px;
 }
 #Activity {
@@ -572,21 +574,21 @@ h6 {
 }
 
 
-  ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
 	background: rgb(75, 75, 75); 
 	border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
 	background:lightgray; 
 }
-
 .trial{
 	padding-bottom: 10px;
 	padding-left: 15px;
 }
-
-/* Trial Code Section Ending */
-
+.trial-bar{
+	margin-left: -8px;
+	margin-right: -8px;
+}
 ::-webkit-scrollbar {
 	width: 5px;
 }
