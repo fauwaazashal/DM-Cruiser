@@ -565,6 +565,40 @@ h6 {
 	height: 365px;
 }
 
+.process-box{
+	align-items: center;
+	text-align: left;
+	padding: 15px;
+}
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+	background: rgb(75, 75, 75); 
+	border-radius: 10px;
+}
+
+  /* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background:lightgray; 
+}
+
+.trial{
+	padding-bottom: 10px;
+	padding-left: 15px;
+}
+
+/* Trial Code Section Ending */
+
+::-webkit-scrollbar {
+	width: 5px;
+}
+.f-a-icons {
+    margin: 5% 3% 5% 0;
+	color: rgba(0, 0, 0, 0.1);
+}
+
+
+
 
 /* people page */
 
