@@ -251,7 +251,7 @@ if (window.location.href.includes("activity.html")) {
 		}
 
 		// calling functions to inject data of selected campaign
-		await injectOntoActivityTab(result[campaignName].scrapedData, result[campaignName].activityStatus);
+		await injectOntoActivityTab(result[campaignName].scrapedData);
 		await injectOntoMessageTab(campaignName, result[campaignName].messageTemplate);
 		await injectOntoPeopleTab(result[campaignName].scrapedData);
 	});
@@ -481,7 +481,7 @@ async function injectOntoActivityTab(data, status) {
 		// creating activity status element and adding to leadDiv
 		const leadStatus = document.createElement("div");
 		leadStatus.classList.add("lead-status");
-		leadStatus.innerText = status;
+		leadStatus.innerText = data[i].status;
 		leadDiv.appendChild(leadStatus);
 
 		leads.appendChild(leadDiv);
