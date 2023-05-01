@@ -1,15 +1,16 @@
 .popup {
-	background-color: #fff;
+	background-color: #1F2937;
 	width: 350px;
 	height: 550px;
 	font-family: "Poppins variant0", Tofu;
 	text-align: center;
 }
-
+body{
+	background-color: #1F2937;
+}
 
 .header {
 	display: flex;
-	background-color: red;
     background-image: url(assets/background-image.png);
 	background-size: 23rem 4rem;
 	padding: 1px 2px;
@@ -17,6 +18,7 @@
 	margin-right: -8px;
 	margin-top: -8px;
 }
+
 
 .close-btn {
 	position: absolute;
@@ -89,7 +91,7 @@ h6 {
 	bottom: 18px;
 	left: 23px;
 	width: 100px;
-	background-color: white;
+	background-color: #1F2937;
 	color: #fff;
 	text-align: center;
 	padding: 10px;
@@ -101,7 +103,6 @@ h6 {
 	font-family: "Poppins variant0", Tofu;
 	font-weight: 600;
 	padding: 12px 88px;
-	;
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
@@ -162,7 +163,7 @@ h6 {
 /* search page */
 
 .newsearch-popup {
-	background-color: #fff;
+	background-color: #1F2937;
 	width: 350px;
 	height: 550px;
 	font-family: "Poppins variant0", Tofu;
@@ -205,7 +206,7 @@ h6 {
 	bottom: 18px;
 	left: 23px;
 	width: 100px;
-	background-color: white;
+	background-color: #1F2937;
 	color: #fff;
 	text-align: center;
 	padding: 10px;
@@ -216,7 +217,7 @@ h6 {
 	bottom: 4px;
 	left: 23px;
 	width: 100px;
-	background-color: white;
+	background-color: #1F2937;
 	color: #fff;
 	text-align: center;
 	padding: 10px;
@@ -297,7 +298,7 @@ h6 {
 /* message */
 
 .newmessage-popup {
-	background-color: #fff;
+	background-color: #1F2937;
 	width: 350px;
 	height: 550px;
 	font-family: "Poppins variant0", Tofu;
@@ -305,7 +306,7 @@ h6 {
 }
 
 .message-popup {
-	background-color: #fff;
+	background-color: #1F2937;
 	width: 350px;
 	height: 550px;
 	font-family: "Poppins variant0", Tofu;
@@ -342,7 +343,7 @@ h6 {
 	bottom: 18px;
 	left: 23px;
 	width: 100px;
-	background-color: white;
+	background-color: #1F2937;
 	color: #fff;
 	text-align: center;
 	padding: 10px;
@@ -376,18 +377,18 @@ h6 {
 	bottom: 18px;
 	left: 23px;
 	width: 100px;
-	background-color: white;
+	background-color: #1F2937;
 	color: #fff;
 	text-align: center;
 	padding: 10px;
 }
 .nextcamp-Campaign {
 	display: flex;
-	background-color: rgb(144, 131, 216);
+background-color: #1F2937;
 	gap: 80px;
 }
 #Campaign-Completed {
-	background-color: rgb(144, 131, 216);
+background-color: #1F2937;
 	color: black;
 	border: none;
 	font-family: "Poppins variant0", Tofu;
@@ -434,13 +435,13 @@ h6 {
 	bottom: 18px;
 	left: 23px;
 	width: 100px;
-	background-color: white;
+	background-color: #1F2937;
 	color: #fff;
 	text-align: center;
 	padding: 10px;
 }
 #create-campaign {
-	background-color: rgb(144, 131, 216);
+	background-color: rgb(144, 131, 216);;
 	color: black;
 	border: none;
 	font-family: "Poppins variant0", Tofu;
@@ -459,7 +460,7 @@ h6 {
 #Campaign1{
 	margin-top: 20px;
 	margin-left: 37px;
-	background-color: rgb(144, 131, 216);
+background-color: #1F2937;
 	color: black;
 	border: none;
 	font-family: "Poppins variant0", Tofu;
@@ -473,7 +474,7 @@ h6 {
 /* activity page */
 
 .activity-popup {
-	background-color: #fff;
+	background-color: #1F2937;
 	width: 350px;
 	height: 550px;
 	font-family: "Poppins variant0", Tofu;
@@ -485,7 +486,7 @@ h6 {
 }
 .activity-heading-section {
 	display: flex;
-	background-color: rgb(144, 131, 216);
+background-color: #1F2937;
 	background-image: url(assets/background-image.png);
 	background-size: 23rem 4rem;
 	margin-left: -8px;
@@ -507,13 +508,13 @@ h6 {
 	bottom: 18px;
 	left: 23px;
 	width: 100px;
-	background-color: white;
+	background-color: #1F2937;
 	color: #fff;
 	text-align: center;
 	padding: 10px;
 }
 #activity-status {
-	background-color: rgb(144, 131, 216);
+background-color: #1F2937;
 	color: black;
 	border: none;
 	font-family: "Poppins variant0", Tofu;
@@ -537,7 +538,7 @@ h6 {
 .data-box{
     display: flex;
     justify-content: space-around;
-    background: #fff;
+	background-color: #1F2937;
     padding: 10px 0;
     flex-shrink: 0;
 }
@@ -612,6 +613,11 @@ h6 {
     margin: 5% 3% 5% 0;
 	color: rgba(0, 0, 0, 0.1);
 }
+.header-img{
+	background-image: url(assets/background-image.png);
+	background-size: 23rem 4rem;
+	margin: 0px;
+}
 
 
 
@@ -619,7 +625,7 @@ h6 {
 /* people page */
 
 .people-popup {
-	background-color: #fff;
+	background-color: #1F2937;
 	width: 350px;
 	height: 550px;
 	font-family: "Poppins variant0", Tofu;
@@ -632,7 +638,7 @@ h6 {
 
 .people-top-section {
 	display: flex;
-	background-color: rgb(144, 131, 216);
+background-color: #1F2937;
 	gap: 82px;
 }
 #Activity {
@@ -649,13 +655,13 @@ h6 {
 	bottom: 18px;
 	left: 23px;
 	width: 100px;
-	background-color: white;
+	background-color: #1F2937;
 	color: #fff;
 	text-align: center;
 	padding: 10px;
 }
 #add-people {
-	background-color: rgb(144, 131, 216);
+background-color: #1F2937;
 	color: black;
 	border: none;
 	font-family: "Poppins variant0", Tofu;
