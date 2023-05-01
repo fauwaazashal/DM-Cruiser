@@ -132,7 +132,8 @@ async function scraping(scrapedData) {
         lastName: leadLastName,
         title: leadTitle,
         profileLink: leadProfileLink,
-        image: leadImage
+        image: leadImage,
+        status: "pending"
       };
 
       scrapedData.push(leadData);
