@@ -30,6 +30,7 @@
 	position: absolute;
 	top: 14px;
 	left: 30px;
+	cursor: pointer;
 }
 h6 {
 	font-size: 14px;
@@ -117,7 +118,7 @@ h6 {
 	gap: 130px;
 	background-color: transparent;
 	box-shadow: 0 0 5px #ccc;
-
+	cursor: pointer;
 }
 .delete-btn{
  position: relative;
@@ -540,7 +541,7 @@ h6 {
     flex-shrink: 0;
 }
 
-.pending, .awaiting{
+.pending, .sent{
     flex-grow: 1;
     flex-shrink: 0;
     display: flex;
@@ -576,6 +577,12 @@ h6 {
 	padding: 15px;
 	padding-left: 32px;
 }
+
+.lead-status {
+	font-style: italic;
+	color: #333333;
+  }
+  
 
 
 ::-webkit-scrollbar-thumb {
