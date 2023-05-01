@@ -6,13 +6,12 @@
 	text-align: center;
 }
 
-/* .col {
-	background-color: rgb(144, 131, 216);
-} */
 
 .header {
 	display: flex;
-	background-color: rgb(144, 131, 216);
+	background-color: red;
+    background-image: url(assets/background-image.png);
+	background-size: 23rem 4rem;
 	padding: 1px 2px;
 	margin-left: -8px;
 	margin-right: -8px;
@@ -486,6 +485,8 @@ h6 {
 .activity-heading-section {
 	display: flex;
 	background-color: rgb(144, 131, 216);
+	background-image: url(assets/background-image.png);
+	background-size: 23rem 4rem;
 	margin-left: -8px;
 	margin-right: -8px;
 	gap: 82px;
