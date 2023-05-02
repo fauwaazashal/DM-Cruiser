@@ -281,8 +281,9 @@ h6 {
 	font-size: 12px;
 	margin: 0;
 	text-overflow: ellipsis;
-	max-width: 12rem;
+	max-width: 10rem;
 	overflow: hidden;
+	text-align: left;
   }
 
   .remove-btn {
