@@ -269,11 +269,15 @@ h6 {
 	font-weight: bold;
 	margin: 0;
 	margin-bottom: 5px;
+	text-align: left;
   }
 
   .lead-title {
 	font-size: 12px;
 	margin: 0;
+	text-overflow: ellipsis;
+	max-width: 7rem;
+	overflow: hidden;
   }
 
   .remove-btn {
