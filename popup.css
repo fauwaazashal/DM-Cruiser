@@ -539,6 +539,7 @@ h6 {
 	margin-left: -8px;
 	margin-right: -8px;
 	gap: 82px;
+	padding-left: 10px;
 }
 #Activity {
 	background-color: transparent;
