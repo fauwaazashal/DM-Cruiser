@@ -263,6 +263,11 @@ h6 {
 	margin-right: 10px;
 	border-radius: 50%;
 }
+.lead-info{
+	text-align: left;
+	width: 20px;
+	height: 20px;
+}
 
 .lead-name {
 	font-size: 14px;
@@ -276,7 +281,7 @@ h6 {
 	font-size: 12px;
 	margin: 0;
 	text-overflow: ellipsis;
-	max-width: 7rem;
+	max-width: 12rem;
 	overflow: hidden;
   }
 
