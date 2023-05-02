@@ -6,9 +6,6 @@
 	text-align: center;
 }
 
-/* .col {
-	background-color: rgb(144, 131, 216);
-} */
 
 .header {
 	display: flex;
@@ -36,7 +33,7 @@ h6 {
 	font-size: 14px;
 }
 .hide {
-	display: none;
+	display: none !important;
 }
 
 #activity-btn {
@@ -179,7 +176,7 @@ h6 {
 	justify-content: center;
 	gap: 170px;
 }
-#start-search-btn {
+#start-search-btn, #stop-search-btn {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -190,7 +187,7 @@ h6 {
 	border-radius: 10px;
 	white-space: nowrap;
 }
-#stop-search-btn {
+/* #stop-search-btn {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -200,8 +197,8 @@ h6 {
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
-}
-.start-search-footer {
+} */
+.start-search-footer, .stop-search-footer {
 	position: absolute;
 	bottom: 18px;
 	left: 23px;
@@ -212,7 +209,7 @@ h6 {
 	padding: 10px;
 }
 
-.stop-search-footer {
+/* .stop-search-footer {
 	position: absolute;
 	bottom: 4px;
 	left: 23px;
@@ -221,36 +218,36 @@ h6 {
 	color: #fff;
 	text-align: center;
 	padding: 10px;
-}
+} */
 .collected {
 	align-items: flex-start;
 	justify-content: flex-start;
 	display: flex;
 
 }
-.right-arrow-btn-start-search {
+.right-arrow-btn-start-search, .right-arrow-btn-stop-search{
 	position: absolute;
 	left: 270px;
 	bottom: 21px;
 }
-.right-arrow-btn-stop-search {
+/* .right-arrow-btn-stop-search {
 	position: absolute;
 	left: 280px;
 	bottom: 20px;
-}
-#resume-scrape-btn {
+} */
+#resume-scrape-btn, #pause-scrape-btn  {
 	background-color: rgb(144, 131, 216);
 	border-radius: 10px;
 	padding: 5px 15px;
 	border: none;
 }
 
-#pause-scrape-btn {
+/* #pause-scrape-btn {
 	background-color: rgb(144, 131, 216);
 	border-radius: 10px;
 	padding: 5px 15px;
 	border: none;
-}
+} */
 
 .leads-scraped {
 	box-shadow: 0 0 5px #ccc;
@@ -334,11 +331,10 @@ h6 {
 	  transform: translateY(-10px);
 	}
   }
-  
 
 /* message */
 
-.newmessage-popup {
+.newmessage-popup, .message-popup{
 	background-color: #fff;
 	width: 350px;
 	height: 550px;
@@ -346,13 +342,13 @@ h6 {
 	text-align: center;
 }
 
-.message-popup {
+/* .message-popup {
 	background-color: #fff;
 	width: 350px;
 	height: 550px;
 	font-family: "Poppins variant0", Tofu;
 	text-align: center;
-}
+} */
 
 #heading-message {
 	margin-left: 50px;
