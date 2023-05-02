@@ -99,7 +99,73 @@ if (window.location.href.includes("newsearch.html")) {
 
 						newmessageTemplateDiv.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
 						newmessageTemplateDiv.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
-						});					  
+						
+						// placeholder buttons functionality
+						//first name
+						document.querySelector("#firstName").addEventListener("click", () => {
+							var textarea = document.getElementById("message-input");
+							var textToAdd = "{first_name}";
+
+							// Get the current cursor position
+							var startPos = textarea.selectionStart;
+							var endPos = textarea.selectionEnd;
+
+							// Insert the text at the cursor position
+							textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+
+							// Move the cursor to the end of the inserted text
+							textarea.selectionStart = startPos + textToAdd.length;
+							textarea.selectionEnd = startPos + textToAdd.length;
+						});
+						//last name
+						document.querySelector("#lastName").addEventListener("click", () => {
+							var textarea = document.getElementById("message-input");
+							var textToAdd = "{last_name}";
+
+							// Get the current cursor position
+							var startPos = textarea.selectionStart;
+							var endPos = textarea.selectionEnd;
+
+							// Insert the text at the cursor position
+							textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+
+							// Move the cursor to the end of the inserted text
+							textarea.selectionStart = startPos + textToAdd.length;
+							textarea.selectionEnd = startPos + textToAdd.length;
+						});
+						//full name
+						document.querySelector("#fullName").addEventListener("click", () => {
+							var textarea = document.getElementById("message-input");
+							var textToAdd = "{full_name}";
+
+							// Get the current cursor position
+							var startPos = textarea.selectionStart;
+							var endPos = textarea.selectionEnd;
+
+							// Insert the text at the cursor position
+							textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+
+							// Move the cursor to the end of the inserted text
+							textarea.selectionStart = startPos + textToAdd.length;
+							textarea.selectionEnd = startPos + textToAdd.length;
+						});
+						//job title
+						document.querySelector("#jobTitle").addEventListener("click", () => {
+							var textarea = document.getElementById("message-input");
+							var textToAdd = "{job_title}";
+
+							// Get the current cursor position
+							var startPos = textarea.selectionStart;
+							var endPos = textarea.selectionEnd;
+
+							// Insert the text at the cursor position
+							textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+
+							// Move the cursor to the end of the inserted text
+							textarea.selectionStart = startPos + textToAdd.length;
+							textarea.selectionEnd = startPos + textToAdd.length;
+						});
+					});					  
 				}
 			});
 		})

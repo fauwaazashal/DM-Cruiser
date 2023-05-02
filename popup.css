@@ -574,6 +574,23 @@ h6 {
 .trial input[type=number]::-webkit-inner-spin-button {
 	opacity: 1;
 }
+
+.placeholder-button {
+	border: 0;
+	border-radius: 10px; 
+	font-family: Arial;
+	color: #ffffff;
+	font-size: 20px;
+	background: #cfcfcf;
+	padding: 4px 10px 4px 10px;
+	text-decoration: none;
+	margin: 5px;
+}
+
+.placeholder-button:hover {
+	text-decoration: none;
+}
+
 /* #Activity {
 	background-color: transparent;
 	border: transparent;
