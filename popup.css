@@ -372,6 +372,13 @@ h6 {
 	font-family: "Poppins variant0", Tofu;
 	text-align: center;
 } */
+ .message-template{
+	background-color: #fff;
+	width: 350px;
+	height: 429px;
+	font-family: "Poppins variant0", Tofu;
+	text-align: center;
+} 
 
 /* .message-popup {
 	background-color: #fff;
