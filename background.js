@@ -27,17 +27,44 @@ chrome.action.onClicked.addListener(function () {
 });
 
 
-// Saves the last visited popup's data when the popup is closed
-chrome.windows.onRemoved.addListener(function(windowId) {
-  // Check if the closed window was the popup window
-  chrome.windows.getLastFocused({populate: true}, function (window) {
-    let popupUrl = chrome.action.getPopup({}).url;
-    if (windowId === window.id && popupUrl) {
-      let currentUrl = window.tabs[0].url;
-      chrome.storage.local.set({ lastVisitedPopup: { url: popupUrl, data: { url: currentUrl } } });
-    }
-  });
-});
+// // Saves the last visited popup's data when the popup is closed
+// chrome.windows.onRemoved.addListener(function(windowId) {
+//   // Check if the closed window was the popup window
+//   chrome.windows.getLastFocused({populate: true}, function (window) {
+//     let popupUrl = chrome.action.getPopup({}).url;
+//     if (windowId === window.id && popupUrl) {
+//       let currentUrl = window.tabs[0].url;
+//       chrome.storage.local.set({ lastVisitedPopup: { url: popupUrl, data: { url: currentUrl } } });
+//     }
+//   });
+// });
+
+
+
+// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+//   if (request.requestType === "Check URL") {
+//     console.log("received request from popup script to check if we are on the right linkedin url before scraping");
+    
+//     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+//       let currentTab = tabs[0];
+//       let currentUrl = currentTab.url;
+//       let targetURL = currentUrl + "&%5B%22O%22%2C%22S%22%5D";
+  
+//       // if the URL includes the encoding for the 2nd & 3rd degree connections then no need for a reload
+//       if (currentUrl.includes("%5B%22O%22%2C%22S%22%5D")) {
+//         sendResponse({ message: "No need for page reload" });
+//         console.log("No need for page reload");
+//       }
+
+//       // if the current URL doesn't include the encoding for the 2nd & 3rd degree connections then reload with updated URL
+//       else {
+//         chrome.tabs.update(tabs[0].id, { url: targetURL}); 
+//         sendResponse({ message: "Page reloaded to targetURL" });
+//         console.log("Page reloaded to targetURL");
+//       }
+//     });
+//   }
+// });
 
 
 

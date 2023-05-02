@@ -19,6 +19,7 @@
 let scrapedData = [];
 let injectData = [];
 let keys = [];
+//let leadsBox = [];
 let date = "";
 let campaignName = "";
 let messageTemplate = "";
@@ -39,13 +40,14 @@ if (window.location.href.includes("newsearch.html")) {
 	const stopScrapeFooter = document.querySelector(".stop-search-footer");
 	const pauseScrapeFooter = document.querySelector(".pause-search");
 	const resumeScrapeFooter = document.querySelector(".resume-search");
+	const loadingContainer = document.querySelector(".loading-container");
 	const newmessageTemplateDiv = document.querySelector(".newmessage-popup");
 	const newsearchDiv = document.querySelector(".newsearch-popup");
 	const closeButtonNewsearch = document.querySelector(".newsearch-popup .close-btn");
 	const closeButtonNewmessage = document.querySelector(".newmessage-popup .close-btn");
 
 	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-		const port = chrome.tabs.connect(tabs[0].id, { name: "popup-to-content" });
+		const scrapePort = chrome.tabs.connect(tabs[0].id, { name: "scrape leads" });
 		console.log("created port between popup & content scripts");
 
 		// button is clicked to start scraping
@@ -53,13 +55,12 @@ if (window.location.href.includes("newsearch.html")) {
 			startScrapeFooter.classList.add("hide");
 			stopScrapeFooter.classList.remove("hide");
 			pauseScrapeFooter.classList.remove("hide");
-
-			// if (tabs[0].url.includes("https://www.linkedin.com/search/results/people")) {}
+			loadingContainer.classList.remove("hide");
 
 			console.log("sent request to content script to start scraping");
-			port.postMessage({ action: "Start Scraping" });
+			scrapePort.postMessage({ action: "Start Scraping" });
 
-			port.onMessage.addListener(async function(response) {
+			scrapePort.onMessage.addListener(async function(response) {
 				if (response.message === "Scraped one page" ) {
 					console.log(response.data);
 					
@@ -83,13 +84,14 @@ if (window.location.href.includes("newsearch.html")) {
 		document.querySelector("#stop-search-btn").addEventListener("click", () => {
 			pauseScrapeFooter.classList.add("hide");
 			resumeScrapeFooter.classList.remove("hide");
+			loadingContainer.classList.add("hide");
 			newsearchDiv.classList.add("hide");
 			newmessageTemplateDiv.classList.remove("hide");
 	
 			console.log("sent request to content script to stop scraping");
-			port.postMessage({ action: "Stop Scraping" });
+			scrapePort.postMessage({ action: "Stop Scraping" });
 
-			port.onMessage.addListener(function(response) {
+			scrapePort.onMessage.addListener(function(response) {
 				if (response.message === "Stopped Scraping" ) {
 					chrome.storage.local.get(null, async (items) => {
 						campaignCount = Object.keys(items).length;
@@ -106,11 +108,12 @@ if (window.location.href.includes("newsearch.html")) {
 		document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
 			pauseScrapeFooter.classList.add("hide");
 			resumeScrapeFooter.classList.remove("hide");
+			loadingContainer.classList.add("hide");
 			
 			console.log("sent request to content script to pause scraping");
-			port.postMessage({ action: "Pause Scraping" });
+			scrapePort.postMessage({ action: "Pause Scraping" });
 
-			port.onMessage.addListener(function(response) {
+			scrapePort.onMessage.addListener(function(response) {
 				if (response.message === "Paused Scraping" ) {
 					
 				}
@@ -121,10 +124,11 @@ if (window.location.href.includes("newsearch.html")) {
 		document.querySelector("#resume-scrape-btn").addEventListener("click", () => {
 			pauseScrapeFooter.classList.remove("hide");
 			resumeScrapeFooter.classList.add("hide");
+			loadingContainer.classList.remove("hide");
 			
-			port.postMessage({ action: "Resume Scraping" });
+			scrapePort.postMessage({ action: "Resume Scraping" });
 
-			port.onMessage.addListener(function(response) {
+			scrapePort.onMessage.addListener(function(response) {
 				if (response.message === "Resumed Scraping" ) {
 					
 				}
@@ -145,8 +149,12 @@ if (window.location.href.includes("newsearch.html")) {
 			stopScrapeFooter.classList.add("hide");
 			pauseScrapeFooter.classList.add("hide");
 			resumeScrapeFooter.classList.add("hide");
+			loadingContainer.classList.add("hide");
 			document.querySelector(".collected h6").innerText = "Collected: 0";
 			injectRemove(document.querySelectorAll(".leads-scraped"));
+
+			scrapePort.disconnect();
+			console.log("disconnected port connection");
 
 			window.location.href = "home.html";
 		})
@@ -220,6 +228,24 @@ if (window.location.href.includes("home.html")) {
 		}
 	});
 
+	// // button is clicked to create a new campaign
+	// document.querySelector(".create-campaign").addEventListener("click", () => {
+	// 	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+	// 		chrome.tabs.sendMessage(tabs[0].id, {requestType: "Check URL"}, function(response) {
+	// 			console.log("Sent request to background script to check if user is on right URL");
+		
+	// 			//receiving a response from the content
+	// 			if (response.message === "scraped one page") {
+	// 				console.log(response.data);
+	// 				data = response.data;
+	// 				inject(data);
+	// 			}
+	// 		});				
+	// 	});
+
+	// 	window.location.href = "newsearch.html";
+	// });
+
 	// button is clicked to close the popup
 	const closeButtonHome = document.querySelector(".close-btn");
 	closeButtonHome.addEventListener("click", function() {
@@ -235,6 +261,11 @@ if (window.location.href.includes("home.html")) {
 
 if (window.location.href.includes("activity.html")) {
 	console.log('this is activity.html');
+
+	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+		const invitePort = chrome.tabs.connect(tabs[0].id, { name: "send invites" });
+		console.log("created port between popup & content scripts to send invites");
+	});
 
 	// retrieve campaignName from session storage
 	campaignName = sessionStorage.getItem("campaignName");
@@ -254,16 +285,15 @@ if (window.location.href.includes("activity.html")) {
 		await injectOntoActivityTab(result[campaignName].scrapedData);
 		await injectOntoMessageTab(campaignName, result[campaignName].messageTemplate);
 		await injectOntoPeopleTab(result[campaignName].scrapedData);
+
+		leadsBox = document.querySelectorAll(".people-leads-section .leads-scraped");
+		console.log(leadsBox);
 	});
 
-	// inject the campaign name and the message template onto the message page
 
 	const activitySection = document.querySelector(".activity-section");
 	const messageSection = document.querySelector(".message-section");
 	const peopleSection = document.querySelector(".people-section");
-	const activityFooter = document.querySelector(".activity-popup");
-	const messageFooter = document.querySelector(".message-popup");
-	const peopleFooter = document.querySelector(".people-popup");
 	const closeButtonActivity = document.querySelector(".close-btn");
 
 	// clicks on activity tab
@@ -271,10 +301,6 @@ if (window.location.href.includes("activity.html")) {
 		activitySection.classList.remove("hide");
 		messageSection.classList.add("hide");
 		peopleSection.classList.add("hide");
-
-		// activityFooter.classList.remove("hide");
-		// messageFooter.classList.add("hide");
-		// peopleFooter.classList.adde("hide");
 	});
 
 	// clicks on message tab
@@ -282,10 +308,6 @@ if (window.location.href.includes("activity.html")) {
 		activitySection.classList.add("hide");
 		messageSection.classList.remove("hide");
 		peopleSection.classList.add("hide");
-
-		// activityFooter.classList.add("hide");
-		// messageFooter.classList.remove("hide");
-		// peopleFooter.classList.add("hide");
 	});
 
 	// clicks on people tab
@@ -294,18 +316,43 @@ if (window.location.href.includes("activity.html")) {
 		messageSection.classList.add("hide");
 		peopleSection.classList.remove("hide");
 
-		// activityFooter.classList.add("hide");
-		// messageFooter.classList.add("hide");
-		// peopleFooter.classList.remove("hide");
-
 		document.querySelector(".pending .number").innerText = pendingCount;
 		document.querySelector(".sent .number").innerText = sentCount;
 	});
 
-	// // btn to remove a lead from scraped list
-	// document.querySelector(".remove-btn").addEventListener("click", () => {
-	// 	//add code that deletes/pops the partcular leads's contents from the storage
-	// });
+
+	// btn to remove a lead from scraped list
+	// let leadsBox = document.querySelectorAll(".people-leads-section .leads-scraped");
+	// console.log(leadsBox);
+	// for (let i = 0; i < leadsBox.length; i++) {
+	// 	leadsBox[i].querySelector(".remove-btn").addEventListener("click", async () => {
+	// 		console.log("rmv btn clicked");
+	// 		let indexToDelete = i;
+	// 		await deleteLead(campaignName, indexToDelete);
+
+	// 		injectRemove(document.querySelectorAll(".leads-scraped"));
+
+	// 		pendingCount = 0;
+	// 		sentCount = 0;
+
+	// 		// retreive data of the selected campaign from the local storage
+	// 		chrome.storage.local.get([campaignName], async (result) => {
+	// 			console.log(campaignName);
+	// 			for (i = 0; i < result[campaignName].scrapedData.length; i++) {
+	// 				if (result[campaignName].scrapedData[i].status == "pending") ++pendingCount;
+	// 				else ++sentCount;
+	// 			}
+
+	// 			// calling functions to inject data of selected campaign
+	// 			await injectOntoActivityTab(result[campaignName].scrapedData);
+	// 			await injectOntoPeopleTab(result[campaignName].scrapedData);
+
+	// 			document.querySelector(".pending .number").innerText = pendingCount;
+	// 			document.querySelector(".sent .number").innerText = sentCount;
+	// 		});
+	// 	});
+	// }
+
 
 	// clicks on back btn to go back to home page
 	document.querySelector(".back").addEventListener("click", () => {
@@ -313,13 +360,7 @@ if (window.location.href.includes("activity.html")) {
 		messageSection.classList.add("hide");
 		peopleSection.classList.add("hide");
 
-		// activityFooter.classList.remove("hide");
-		// messageFooter.classList.add("hide");
-		// peopleFooter.classList.adde("hide");
-
 		//remove campaign's content from activity tab
-		injectRemove(document.querySelectorAll(".leads-scraped"));
-		//remove campaign's content from people tab
 		injectRemove(document.querySelectorAll(".leads-scraped"));
 
 		window.location.href = "home.html";
@@ -360,18 +401,19 @@ async function injectOntoNewsearch(data) {
 
 		// create info element and adding to leadDiv
 		const leadInfo = document.createElement("div");
+		leadInfo.classList.add("lead-info");
 		// create name element and addding to leadInfo
 		const leadName = document.createElement("div");
 		leadName.classList.add("lead-name");
 		leadName.innerText = data[i].fullName;
 		leadName.setAttribute("href", data[i].profileLink);
 		leadInfo.appendChild(leadName);
-		// create title element and adding to leadInfo
-		const leadTitle = document.createElement("div");
-		leadTitle.classList.add("lead-title");
-		leadTitle.innerText = data[i].title;
-		leadInfo.appendChild(leadTitle);
-		// appending leadInfo (leadName + leadTitle) to leadDiv
+		// create jobTitle element and adding to leadInfo
+		const leadJobTitle = document.createElement("div");
+		leadJobTitle.classList.add("lead-title");
+		leadJobTitle.innerText = data[i].jobTitle;
+		leadInfo.appendChild(leadJobTitle);
+		// appending leadInfo (leadName + leadJobTitle) to leadDiv
 		leadDiv.appendChild(leadInfo);
 
 
@@ -463,18 +505,19 @@ async function injectOntoActivityTab(data, status) {
 
 		// create info element and adding to leadDiv
 		const leadInfo = document.createElement("div");
+		leadInfo.classList.add("lead-info");
 		// create name element and addding to leadInfo
 		const leadName = document.createElement("div");
 		leadName.classList.add("lead-name");
 		leadName.innerText = data[i].fullName;
 		leadName.setAttribute("href", data[i].profileLink);
 		leadInfo.appendChild(leadName);
-		// create title element and adding to leadInfo
-		const leadTitle = document.createElement("div");
-		leadTitle.classList.add("lead-title");
-		leadTitle.innerText = data[i].title;
-		leadInfo.appendChild(leadTitle);
-		// appending leadInfo (leadName + leadTitle) to leadDiv
+		// create jobTitle element and adding to leadInfo
+		const leadJobTitle = document.createElement("div");
+		leadJobTitle.classList.add("lead-title");
+		leadJobTitle.innerText = data[i].jobTitle;
+		leadInfo.appendChild(leadJobTitle);
+		// appending leadInfo (leadName + leadJobTitle) to leadDiv
 		leadDiv.appendChild(leadInfo);
 
 
@@ -521,18 +564,19 @@ async function injectOntoPeopleTab(data) {
 
 		// create info element and adding to leadDiv
 		const leadInfo = document.createElement("div");
+		leadInfo.classList.add("lead-info");
 		// create name element and addding to leadInfo
 		const leadName = document.createElement("div");
 		leadName.classList.add("lead-name");
 		leadName.innerText = data[i].fullName;
 		leadName.setAttribute("href", data[i].profileLink);
 		leadInfo.appendChild(leadName);
-		// create title element and adding to leadInfo
-		const leadTitle = document.createElement("div");
-		leadTitle.classList.add("lead-title");
-		leadTitle.innerText = data[i].title;
-		leadInfo.appendChild(leadTitle);
-		// appending leadInfo (leadName + leadTitle) to leadDiv
+		// create jobTitle element and adding to leadInfo
+		const leadJobTitle = document.createElement("div");
+		leadJobTitle.classList.add("lead-title");
+		leadJobTitle.innerText = data[i].jobTitle;
+		leadInfo.appendChild(leadJobTitle);
+		// appending leadInfo (leadName + leadJobTitle) to leadDiv
 		leadDiv.appendChild(leadInfo);
 
 
@@ -564,6 +608,27 @@ async function injectRemove(leadDiv) {
 async function storeData(scrapedData, campaignName, messageTemplate, date){
 	// storing data in local storage
 	chrome.storage.local.set({ [campaignName]: { scrapedData, messageTemplate, date } });
+}
+
+
+// function to delete a lead's data from local storage
+async function deleteLead(campaignName, indexToDelete) {
+	// Get the current value of the "campaignName" key in local storage
+	chrome.storage.local.get("campaignName", function(result) {
+		// Get the current scrapedData array from the campaign object
+		const scrapedData = result.campaignName.scrapedData;
+		
+		// Remove the item at selected index postion
+		scrapedData.splice(indexToDelete, 1);
+		
+		// Update the campaign object in local storage with the modified scrapedData array
+		chrome.storage.local.set({ [campaignName]: { 
+		scrapedData: scrapedData,
+		messageTemplate: result.campaignName.messageTemplate,
+		date: result.campaignName.date
+		} });
+	});
+  
 }
 
 

@@ -3,8 +3,8 @@ let isPaused = false;
 let isStopped = false;
 
 chrome.runtime.onConnect.addListener(function(port) {
-  if (port.name === "popup-to-content") {
-    console.log("established connection with port");
+  if (port.name === "scrape leads") {
+    console.log("established connection with port to scrape leads");
     port.onMessage.addListener(async function(request) {
       if (request.action === "Start Scraping") {
         console.log('receieved request from popup to begin scraping');
@@ -31,8 +31,6 @@ chrome.runtime.onConnect.addListener(function(port) {
             await new Promise(resolve => setTimeout(resolve, 2000));
           }
         }
-
-
       }
 
       else if (request.action === "Pause Scraping") {
@@ -51,6 +49,28 @@ chrome.runtime.onConnect.addListener(function(port) {
         isPaused = false;
         isStopped = false;
         port.postMessage({ message: "Resuming Scraping", data: scrapedData });
+      }
+    });
+  }
+
+  if (port.name === "send invites") {
+    console.log("established connection with port to send invites");
+    port.onMessage.addListener(async function(request) {
+      if (request.action === "Start Sending Invites") {
+        console.log('receieved request from popup to start sending invites');
+
+        scrapedData = request.data;
+        while (true) {
+          d = await sendInvites(scrapedData); 
+          port.postMessage({ message: "Sent invite to lead", updatedData: d });
+        }
+        
+      }
+
+      else if (request.action === "Stop Sending Invites") {
+        console.log('receieved request from popup to stop sending invites');
+        isStopped = true;
+        port.postMessage({ message: "Stopped Scraping", data: scrapedData });
       }
     });
   }
@@ -121,7 +141,7 @@ async function scraping(scrapedData) {
       let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
       let leadFirstName = leadName.split(' ')[0];
       let leadLastName = leadName.split(' ').pop();
-      let leadTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
+      let leadJobTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
       let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
       let leadImageElement = leads[i].querySelector('.presence-entity.presence-entity--size-3 img');
       let leadImage = leadImageElement ? leadImageElement.getAttribute('src') : '';
@@ -130,7 +150,7 @@ async function scraping(scrapedData) {
         fullName: leadName,
         firstName: leadFirstName,
         lastName: leadLastName,
-        title: leadTitle,
+        jobTitle: leadJobTitle,
         profileLink: leadProfileLink,
         image: leadImage,
         status: "pending"
@@ -189,39 +209,31 @@ async function goToNextPage() {
 
 
 
-// async function sendInvitesWithMsg() {
-//   while (invitesSent <= 10) {
-//     for (let i = 0; i < data.length; i++) {
-//       if (data[i].status === "pending") {
-//         data[i].profileLink.click();
-//         // wait for 5 seconds or until window loads
+async function sendInvites(data) {
+  if (data.status === "pending") {
+    window.location.href = data.profileLink;
+    // wait for 5 seconds or until window loads
 
-//         // click on the connect btn
-//         const connectBtn = document.querySelector(".artdeco-button artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
-//         connectBtn.click();
+    // click on the connect btn
+    const connectBtn = document.querySelector(".artdeco-button artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+    connectBtn.click();
 
-//         // click on the add a note btn
-//         const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view mr1");
-//         addNoteBtn.click();
+    // click on the add a note btn
+    const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view mr1");
+    addNoteBtn.click();
 
-//         // enter text from msg template onot the text box
-//         const textBox = document.querySelector(".eber-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
-//         textBox.value = data[i].messageTemplate;
+    // enter text from msg template onot the text box
+    const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
+    textBox.value = data.messageTemplate;
 
-//         // click on the send btn
-//         const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.artdeco-button--disabled.ember-view.ml1");
-//         sendBtn.click();
-//       }
-//     }
-//   }
-  
-// }
+    // click on the send btn
+    const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.artdeco-button--disabled.ember-view.ml1");
+    sendBtn.classList.remove(".artdeco-button--disabled");
+    sendBtn.removeAttribute("disabled");
+    sendBtn.click();
+  } 
+}
 
-
-
-// async function sendInvitesWithoutMsg() {
-//   // will contain similar code to sendInvitesWithMsg but without the message part
-// }
 
 
 
