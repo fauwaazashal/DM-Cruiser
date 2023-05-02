@@ -136,7 +136,7 @@ if (window.location.href.includes("newsearch.html")) {
 		})
 
 		// button is clicked to complete campaign creation and store data in local storage
-		document.querySelector("#campaign-creation-completed").addEventListener("click", async () => {
+		document.querySelector("#save-campaign").addEventListener("click", async () => {
 			campaignName = newmessageTemplateDiv.querySelector("#campaign-name").value;
 			messageTemplate = newmessageTemplateDiv.querySelector("#message-input").value;
 			date = new Date().toLocaleDateString("en-IN");
@@ -199,7 +199,7 @@ if (window.location.href.includes("home.html")) {
 
 	// retreive data of all created campaigns from the local storage
 	chrome.storage.local.get(null, async (items) => {
-  		keys = Object.keys(items);
+		keys = Object.keys(items);
 		await injectOntoHome(keys);
 		console.log(document.querySelectorAll(".campaign-box"));
 

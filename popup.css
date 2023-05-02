@@ -559,6 +559,14 @@ h6 {
 	gap: 78px;
 	padding-left: 10px;
 }
+.trial input{
+	font-size: 14px;
+	width: 30px;
+}
+
+.trial input[type=number]::-webkit-inner-spin-button {
+	opacity: 1;
+}
 /* #Activity {
 	background-color: transparent;
 	border: transparent;
