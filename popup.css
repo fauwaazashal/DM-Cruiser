@@ -265,8 +265,8 @@ h6 {
 }
 .lead-info{
 	text-align: left;
-	width: 20px;
-	height: 20px;
+	width: 175px;
+	height: 32px;
 }
 
 .lead-name {
@@ -281,9 +281,11 @@ h6 {
 	font-size: 12px;
 	margin: 0;
 	text-overflow: ellipsis;
-	max-width: 10rem;
+	max-width: 20rem;
+	max-height: 12rem;
 	overflow: hidden;
 	text-align: left;
+	white-space: nowrap;
   }
 
   .remove-btn {
