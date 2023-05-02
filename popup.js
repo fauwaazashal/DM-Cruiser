@@ -207,7 +207,7 @@ if (window.location.href.includes("newsearch.html")) {
 			messageTemplate = newmessageTemplateDiv.querySelector("#message-input").value;
 			date = new Date().toLocaleDateString("en-IN");
 
-			await storeData(scrapedData, campaignName, messageTemplate, date);
+			await storeCampaignData(scrapedData, campaignName, messageTemplate, date);
 
 			newmessageTemplateDiv.classList.add("hide");
 			newsearchDiv.classList.remove("hide");
@@ -263,54 +263,37 @@ if (window.location.href.includes("newsearch.html")) {
 if (window.location.href.includes("home.html")) {
 	console.log('this is home.html');
 
-	// retreive data of all created campaigns from the local storage
-	chrome.storage.local.get(null, async (items) => {
-		keys = Object.keys(items);
-		await injectOntoHome(keys);
-		console.log(document.querySelectorAll(".campaign-box"));
+	(async () => {
+		await injectOntoHome();
+
+		console.log(document.querySelectorAll(".campaign-box"))
 
 		// button is clicked to open the activity page of selected campaign
 		let campaigns = document.querySelectorAll(".campaign-box");
 		for (let i = 0; i < campaigns.length; i++) {
-			campaigns[i].addEventListener("click", () => {
+			campaigns[i].addEventListener("click", (event) => {
+				// Check if the delete button was clicked
+				if (!event.target.classList.contains("delete-btn")) {
 				campaignName = campaigns[i].querySelector(".campaign-name").innerText;
 				// store campaignName in session storage so that it accessible even on activity.html
 				sessionStorage.setItem("campaignName", campaignName);
-				
 				window.location.href = "activity.html";
+				}
 			});
-		}
 
-		// button is clicked to delete campaign
-		let deleteBtns = document.querySelectorAll(".delete-btn");
-		for (let i = 0; i < deleteBtns.length; i++) {
-			deleteBtns[i].addEventListener("click", () => {
+			// Add click event listener to the delete button
+			campaigns[i].querySelector(".delete-btn").addEventListener("click", async (event) => {
+				// Stop the event propagation to prevent the parent div's click event from being triggered
+				event.stopPropagation();
+				
 				campaignName = campaigns[i].querySelector(".campaign-name").innerText;
-				// delete selected campaign from local storage
-				chrome.storage.local.remove(campaignName, () => {
-					console.log(`Item with key ${campaignName} has been removed`);
-				});
+				// call function to delete selected campaign
+				await deleteCampaignData(campaignName);
+				// Delete the parent div
+				campaigns[i].remove();
 			});
 		}
-	});
-
-	// // button is clicked to create a new campaign
-	// document.querySelector(".create-campaign").addEventListener("click", () => {
-	// 	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-	// 		chrome.tabs.sendMessage(tabs[0].id, {requestType: "Check URL"}, function(response) {
-	// 			console.log("Sent request to background script to check if user is on right URL");
-		
-	// 			//receiving a response from the content
-	// 			if (response.message === "scraped one page") {
-	// 				console.log(response.data);
-	// 				data = response.data;
-	// 				inject(data);
-	// 			}
-	// 		});				
-	// 	});
-
-	// 	window.location.href = "newsearch.html";
-	// });
+	})();
 
 	// button is clicked to close the popup
 	const closeButtonHome = document.querySelector(".close-btn");
@@ -328,63 +311,129 @@ if (window.location.href.includes("home.html")) {
 if (window.location.href.includes("activity.html")) {
 	console.log('this is activity.html');
 
-	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-		const invitePort = chrome.tabs.connect(tabs[0].id, { name: "send invites" });
-		console.log("created port between popup & content scripts to send invites");
-	});
-
-	// retrieve campaignName from session storage
-	campaignName = sessionStorage.getItem("campaignName");
-	document.querySelector("#heading-activity").innerText = campaignName;
-	pendingCount = 0;
-	sentCount = 0;
-
-	// retreive data of the selected campaign from the local storage
-	chrome.storage.local.get([campaignName], async (result) => {
-		console.log(campaignName);
-		for (i = 0; i < result[campaignName].scrapedData.length; i++) {
-			if (result[campaignName].scrapedData[i].status == "pending") ++pendingCount;
-			else ++sentCount;
-		}
-
-		// calling functions to inject data of selected campaign
-		await injectOntoActivityTab(result[campaignName].scrapedData);
-		await injectOntoMessageTab(campaignName, result[campaignName].messageTemplate);
-		await injectOntoPeopleTab(result[campaignName].scrapedData);
-
-		leadsBox = document.querySelectorAll(".people-leads-section .leads-scraped");
-		console.log(leadsBox);
-	});
-
+	// chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+	// 	const invitePort = chrome.tabs.connect(tabs[0].id, { name: "send invites" });
+	// 	console.log("created port between popup & content scripts to send invites");
+	// });
 
 	const activitySection = document.querySelector(".activity-section");
 	const messageSection = document.querySelector(".message-section");
 	const peopleSection = document.querySelector(".people-section");
 	const closeButtonActivity = document.querySelector(".close-btn");
 
-	// clicks on activity tab
-	document.querySelector("#activity-btn").addEventListener("click", () => {
-		activitySection.classList.remove("hide");
-		messageSection.classList.add("hide");
-		peopleSection.classList.add("hide");
-	});
+	(async () => {
+		// retrieve campaignName from session storage
+		campaignName = sessionStorage.getItem("campaignName");
+		document.querySelector("#heading-activity").innerText = campaignName;
+		pendingCount = 0;
+		sentCount = 0;
 
-	// clicks on message tab
-	document.querySelector("#message-btn").addEventListener("click", () => {
-		activitySection.classList.add("hide");
-		messageSection.classList.remove("hide");
-		peopleSection.classList.add("hide");
-	});
+		await injectOntoActivityTab(campaignName);
+		
+		// clicks on message tab
+		document.querySelector("#message-btn").addEventListener("click", async () => {
+			activitySection.classList.add("hide");
+			messageSection.classList.remove("hide");
+			peopleSection.classList.add("hide");
 
-	// clicks on people tab
-	document.querySelector("#people-btn").addEventListener("click", () => {
-		activitySection.classList.add("hide");
-		messageSection.classList.add("hide");
-		peopleSection.classList.remove("hide");
+			//await injectRemove();
+			await injectOntoMessageTab(campaignName);
 
-		document.querySelector(".pending .number").innerText = pendingCount;
-		document.querySelector(".sent .number").innerText = sentCount;
-	});
+			// clicks on message tab
+			document.querySelector("#update-msg-campname-btn").addEventListener("click", async () => {
+				
+				let messageTemplateDiv = document.querySelector(".message-template");
+				let oldCampaignName = campaignName;
+				let newCampaignName = messageTemplateDiv.querySelector("#campaign-name").value;
+				let newMessageTemplate = messageTemplateDiv.querySelector("#message-input").value;
+
+				await updateCampaignData(oldCampaignName, newCampaignName, newMessageTemplate);
+				campaignName = newCampaignName;
+				document.querySelector("#heading-activity").innerText = campaignName;
+			});
+		});
+
+		// clicks on people tab
+		document.querySelector("#people-btn").addEventListener("click", async () => {
+			activitySection.classList.add("hide");
+			messageSection.classList.add("hide");
+			peopleSection.classList.remove("hide");
+
+			document.querySelector(".pending .number").innerText = pendingCount;
+			document.querySelector(".sent .number").innerText = sentCount;
+
+			await injectRemove();
+			await injectOntoPeopleTab(campaignName);
+		})
+
+		// clicks on activity tab
+		document.querySelector("#activity-btn").addEventListener("click", async () => {
+			activitySection.classList.remove("hide");
+			messageSection.classList.add("hide");
+			peopleSection.classList.add("hide");
+
+			await injectRemove();
+			await injectOntoActivityTab(campaignName);
+		});
+
+	})();
+
+
+
+
+
+	// retrieve campaignName from session storage
+	// campaignName = sessionStorage.getItem("campaignName");
+	// document.querySelector("#heading-activity").innerText = campaignName;
+	// pendingCount = 0;
+	// sentCount = 0;
+
+	// // retreive data of the selected campaign from the local storage
+	// chrome.storage.local.get([campaignName], async (result) => {
+	// 	console.log(campaignName);
+	// 	for (i = 0; i < result[campaignName].scrapedData.length; i++) {
+	// 		if (result[campaignName].scrapedData[i].status == "pending") ++pendingCount;
+	// 		else ++sentCount;
+	// 	}
+
+	// 	// calling functions to inject data of selected campaign
+	// 	await injectOntoActivityTab(result[campaignName].scrapedData);
+	// 	await injectOntoMessageTab(campaignName, result[campaignName].messageTemplate);
+	// 	await injectOntoPeopleTab(result[campaignName].scrapedData);
+
+	// 	leadsBox = document.querySelectorAll(".people-leads-section .leads-scraped");
+	// 	console.log(leadsBox);
+	// });
+
+
+	// const activitySection = document.querySelector(".activity-section");
+	// const messageSection = document.querySelector(".message-section");
+	// const peopleSection = document.querySelector(".people-section");
+	// const closeButtonActivity = document.querySelector(".close-btn");
+
+	// // clicks on activity tab
+	// document.querySelector("#activity-btn").addEventListener("click", () => {
+	// 	activitySection.classList.remove("hide");
+	// 	messageSection.classList.add("hide");
+	// 	peopleSection.classList.add("hide");
+	// });
+
+	// // clicks on message tab
+	// document.querySelector("#message-btn").addEventListener("click", () => {
+	// 	activitySection.classList.add("hide");
+	// 	messageSection.classList.remove("hide");
+	// 	peopleSection.classList.add("hide");
+	// });
+
+	// // clicks on people tab
+	// document.querySelector("#people-btn").addEventListener("click", () => {
+	// 	activitySection.classList.add("hide");
+	// 	messageSection.classList.add("hide");
+	// 	peopleSection.classList.remove("hide");
+
+	// 	document.querySelector(".pending .number").innerText = pendingCount;
+	// 	document.querySelector(".sent .number").innerText = sentCount;
+	// });
 
 
 	// btn to remove a lead from scraped list
@@ -496,60 +545,73 @@ async function injectOntoNewsearch(data) {
 
 
 // function for injecting a button of the newly created campaign onto home.html  
-async function injectOntoHome(keys) {
-  const campaigns = document.querySelector(".campaigns-section");
+async function injectOntoHome() {
+	const items = await new Promise(resolve => {
+	  	chrome.storage.local.get(null, resolve);
+	});
+	
+	const keys = Object.keys(items);
+  
+	const campaigns = document.querySelector(".campaigns-section");
+  
+	for (let i = 0; i < keys.length; i++) {
+		const result = await new Promise(resolve => {
+			chrome.storage.local.get([keys[i]], resolve);
+		});
 
-  for (let i = 0; i < keys.length; i++) {
-    const result = await new Promise(resolve => {
-      chrome.storage.local.get([keys[i]], resolve);
-    });
-    let storedScrapedData = result[keys[i]].scrapedData;
-    let storedDate = result[keys[i]].date;
-
-    // create new div element for newly created campaign
-    const campaignDiv = document.createElement("div");
-    campaignDiv.classList.add("campaign-box");
-
-    // create campaign info (name + status) element and add to campaignDiv
-    const campaignInfo = document.createElement("div");
-    campaignInfo.classList.add("campaign-info");
-    // create campaign name element and add to campaignInfo
-    const campName = document.createElement("div");
-    campName.classList.add("campaign-name");
-    campName.innerText = keys[i];
-    campaignInfo.appendChild(campName);
-    // create activity status element and add to campaignInfo
-    const campaignStatus = document.createElement("div");
-    campaignStatus.classList.add("activity-status");
-    campaignStatus.innerText = `1 of ${storedScrapedData.length}`;
-    campaignInfo.appendChild(campaignStatus);
-    // appending campaign info (name + status) to campaignDiv
-    campaignDiv.appendChild(campaignInfo);
-
-    // create date element and add it to campaignDiv
-    const campaignDate = document.createElement("div");
-    campaignDate.classList.add("date");
-    campaignDate.innerText = storedDate;
-    campaignDiv.appendChild(campaignDate);
-
-    // create delete button and add it to campaignDiv
-    const deleteCampaign = document.createElement("div");
-    deleteCampaign.classList.add("delete-btn");
-    const deleteBtnImage = document.createElement("img");
-    deleteBtnImage.classList.add("delete-btn-img");
-    deleteBtnImage.setAttribute("src", "assets/delete.png");
-    deleteCampaign.appendChild(deleteBtnImage);
-    campaignDiv.appendChild(deleteCampaign);
-
-    campaigns.appendChild(campaignDiv);
-  }
-  console.log("injected all created campaigns onto home.html");
-}
-
+		let storedScrapedData = result[keys[i]].scrapedData;
+		let storedDate = result[keys[i]].date;
+	
+		// create new div element for newly created campaign
+		const campaignDiv = document.createElement("div");
+		campaignDiv.classList.add("campaign-box");
+	
+		// create campaign info (name + status) element and add to campaignDiv
+		const campaignInfo = document.createElement("div");
+		campaignInfo.classList.add("campaign-info");
+		// create campaign name element and add to campaignInfo
+		const campName = document.createElement("div");
+		campName.classList.add("campaign-name");
+		campName.innerText = keys[i];
+		campaignInfo.appendChild(campName);
+		// create activity status element and add to campaignInfo
+		const campaignStatus = document.createElement("div");
+		campaignStatus.classList.add("activity-status");
+		campaignStatus.innerText = `1 of ${storedScrapedData.length}`;
+		campaignInfo.appendChild(campaignStatus);
+		// appending campaign info (name + status) to campaignDiv
+		campaignDiv.appendChild(campaignInfo);
+	
+		// create date element and add it to campaignDiv
+		const campaignDate = document.createElement("div");
+		campaignDate.classList.add("date");
+		campaignDate.innerText = storedDate;
+		campaignDiv.appendChild(campaignDate);
+	
+		// create delete button and add it to campaignDiv
+		const deleteCampaign = document.createElement("div");
+		deleteCampaign.classList.add("delete-btn");
+		const deleteBtnImage = document.createElement("img");
+		deleteBtnImage.classList.add("delete-btn-img");
+		deleteBtnImage.setAttribute("src", "assets/delete.png");
+		deleteCampaign.appendChild(deleteBtnImage);
+		campaignDiv.appendChild(deleteCampaign);
+	
+		campaigns.appendChild(campaignDiv);
+	}
+	console.log("injected all created campaigns onto home.html");
+} 
 
 
 // function for injecting selected campaign's data onto activity tab of activity.html
-async function injectOntoActivityTab(data, status) {
+async function injectOntoActivityTab(campaignName) {
+	let data = await new Promise((resolve) => {
+		chrome.storage.local.get([campaignName], (result) => {
+		  	console.log(campaignName);
+		  	resolve(result[campaignName].scrapedData);
+		});
+	});
+
 	let leads = document.querySelector(".activity-leads-section");
 
 	for (let i = 0; i < data.length; i++) {
@@ -598,17 +660,38 @@ async function injectOntoActivityTab(data, status) {
 }
 
 
-
 // function for injecting selected campaign's name and mesg template onto msg tab of activity.html
-async function injectOntoMessageTab(name, message) {
-	let messageTemplateDiv = document.querySelector(".message-popup");
-	messageTemplateDiv.querySelector("#campaign-name").value = name;
+async function injectOntoMessageTab(campaignName) {
+	let message = await new Promise((resolve) => {
+		chrome.storage.local.get([campaignName], (result) => {
+		  	resolve(result[campaignName].messageTemplate);
+		});
+	});
+
+	let messageTemplateDiv = document.querySelector(".message-template");
+	messageTemplateDiv.querySelector("#campaign-name").value = campaignName;
 	messageTemplateDiv.querySelector("#message-input").value = message;
 }
 
 
 // function for injecting selected campaign's data onto people tab of activity.html
-async function injectOntoPeopleTab(data) {
+async function injectOntoPeopleTab(campaignName) {
+	let pendingCount = 0;
+	let sentCount = 0;
+  
+	let data = await new Promise((resolve) => {
+	  	chrome.storage.local.get([campaignName], (result) => {
+			console.log(campaignName);
+			for (i = 0; i < result[campaignName].scrapedData.length; i++) {
+		  		if (result[campaignName].scrapedData[i].status == "pending") ++pendingCount;
+		  		else ++sentCount;
+			}
+		document.querySelector(".pending .number").innerText = pendingCount;
+		document.querySelector(".sent .number").innerText = sentCount;
+		resolve(result[campaignName].scrapedData);
+		});
+	});
+
 	let leads = document.querySelector(".people-leads-section");
 
 	for (let i = 0; i < data.length; i++) {
@@ -658,7 +741,8 @@ async function injectOntoPeopleTab(data) {
 
 
 // function to remove injected content from the page
-async function injectRemove(leadDiv) {
+async function injectRemove() {
+	let leadDiv = document.querySelectorAll(".leads-scraped");
 	for (let i = 0; i < leadDiv.length; i++) {
 		leadDiv[i].remove();
 	}
@@ -671,11 +755,44 @@ async function injectRemove(leadDiv) {
 
 
 // function to store created campaign's data in local storage
-async function storeData(scrapedData, campaignName, messageTemplate, date){
+async function storeCampaignData(scrapedData, campaignName, messageTemplate, date){
 	// storing data in local storage
 	chrome.storage.local.set({ [campaignName]: { scrapedData, messageTemplate, date } });
 }
 
+
+// function to delete selected campaign's data from local storage
+async function deleteCampaignData(campaignName){
+	// deleting data from local storage
+	chrome.storage.local.remove(campaignName);
+}
+
+
+// function for updating the message template and/or campaign name of selected campaign
+async function updateCampaignData(oldCampaignName, newCampaignName, newMessageTemplate) {
+	return new Promise((resolve, reject) => {
+		chrome.storage.local.get(oldCampaignName, function(data) {
+			const existingData = data[oldCampaignName];
+			if (!existingData) {
+				reject(`Data for campaign ${oldCampaignName} not found in storage`);
+				return;
+			}
+	
+			const newData = {
+				scrapedData: existingData.scrapedData,
+				messageTemplate: newMessageTemplate,
+				date: existingData.date
+			};
+	
+			chrome.storage.local.remove(oldCampaignName, function() {
+				chrome.storage.local.set({ [newCampaignName]: newData }, function() {
+					resolve(`Campaign data updated successfully. New campaign name: ${newCampaignName}`);
+				});
+			});
+		});
+	});
+}
+  
 
 // function to delete a lead's data from local storage
 async function deleteLead(campaignName, indexToDelete) {

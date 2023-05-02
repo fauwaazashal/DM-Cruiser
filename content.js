@@ -21,7 +21,7 @@ chrome.runtime.onConnect.addListener(function(port) {
             await new Promise(resolve => setTimeout(resolve, 5000)); 
             // Wait for the page to finish loading before calling scraping()
             const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
-            const timeout = new Promise(resolve => setTimeout(resolve, 10000)); // Wait for 10 seconds before timing out
+            const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 10 seconds before timing out
             await Promise.race([loaded, timeout])
               .then(() => console.log('Page loaded'))
               .catch(() => console.log('Page load timed out'));
@@ -58,12 +58,14 @@ chrome.runtime.onConnect.addListener(function(port) {
     port.onMessage.addListener(async function(request) {
       if (request.action === "Start Sending Invites") {
         console.log('receieved request from popup to start sending invites');
-
         scrapedData = request.data;
-        while (true) {
-          d = await sendInvites(scrapedData); 
-          port.postMessage({ message: "Sent invite to lead", updatedData: d });
-        }
+        await sendInvites(scrapedData); 
+
+        // scrapedData = request.data;
+        // while (true) {
+        //   await sendInvites(scrapedData); 
+        //   port.postMessage({ message: "Sent invite to lead", updatedData: d });
+        // }
         
       }
 
@@ -210,28 +212,33 @@ async function goToNextPage() {
 
 
 async function sendInvites(data) {
-  if (data.status === "pending") {
-    window.location.href = data.profileLink;
-    // wait for 5 seconds or until window loads
+  
+  // wait for 5 seconds or until window loads
+  window.location.href = data.profileLink;
+  await new Promise(resolve => setTimeout(resolve, 5000));
 
-    // click on the connect btn
-    const connectBtn = document.querySelector(".artdeco-button artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
-    connectBtn.click();
+  // click on the connect btn
+  const connectBtn = document.querySelector(".artdeco-button artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+  connectBtn.click();
+  await new Promise(resolve => setTimeout(resolve, 3000));
 
-    // click on the add a note btn
-    const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view mr1");
-    addNoteBtn.click();
+  // click on the add a note btn
+  const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view mr1");
+  addNoteBtn.click();
+  await new Promise(resolve => setTimeout(resolve, 3000));
 
-    // enter text from msg template onot the text box
-    const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
-    textBox.value = data.messageTemplate;
+  // enter text from msg template onot the text box
+  const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
+  textBox.value = data.messageTemplate;
+  await new Promise(resolve => setTimeout(resolve, 3000));
 
-    // click on the send btn
-    const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.artdeco-button--disabled.ember-view.ml1");
-    sendBtn.classList.remove(".artdeco-button--disabled");
-    sendBtn.removeAttribute("disabled");
-    sendBtn.click();
-  } 
+  // click on the send btn
+  const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.artdeco-button--disabled.ember-view.ml1");
+  sendBtn.classList.remove(".artdeco-button--disabled");
+  sendBtn.removeAttribute("disabled");
+  sendBtn.click();
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  
 }
 
 
