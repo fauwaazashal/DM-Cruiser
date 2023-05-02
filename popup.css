@@ -14,6 +14,7 @@
 	margin-left: -8px;
 	margin-right: -8px;
 	margin-top: -8px;
+	font-size: 17px;
 }
 
 .close-btn {
@@ -98,11 +99,12 @@ h6 {
 	border: none;
 	font-family: "Poppins variant0", Tofu;
 	font-weight: 600;
-	padding: 12px 88px;
-	;
+	padding: 12px 80px;
+	margin-left: 10px;
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
+	font-size: 15px;
 }
 
 .right-arrow-btn-home {
@@ -538,7 +540,7 @@ h6 {
 	background-color: rgb(144, 131, 216);
 	margin-left: -8px;
 	margin-right: -8px;
-	gap: 82px;
+	gap: 78px;
 	padding-left: 10px;
 }
 #Activity {
