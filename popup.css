@@ -1,4 +1,4 @@
-.popup {
+.popup,.newsearch-popup,.newmessage-popup, .message-popup,.activity-popup,.people-popup  {
 	background-color: #fff;
 	width: 350px;
 	height: 550px;
@@ -20,14 +20,14 @@
 .close-btn {
 	position: absolute;
 	left: 320px;
-	top: 17px;
+	top: 23px;
 	cursor: pointer;
 }
 
 .back {
 	position: absolute;
-	top: 14px;
-	left: 30px;
+	top: 22px;
+	left: 26px;
 	cursor: pointer;
 }
 h6 {
@@ -37,7 +37,7 @@ h6 {
 	display: none !important;
 }
 
-#activity-btn {
+#activity-btn, #message-btn, #people-btn,#Activity{
 	background-color: transparent;
 	border: transparent;
 	font-family: "Poppins variant0", Tofu;
@@ -46,8 +46,18 @@ h6 {
 	margin-bottom: 5px;
 	cursor: pointer;
 }
-
-#message-btn {
+.home-footer,.start-search-footer, .stop-search-footer,
+.message-footer,.newmessage-footer,.nextcamp-footer,.create-footer,.activity-footer,.people-footer,#Campaign-Completed {
+	position: absolute;
+	bottom: 18px;
+	left: 23px;
+	width: 100px;
+	background-color: white;
+	color: #fff;
+	text-align: center;
+	padding: 10px;
+}
+/* #message-btn {
 	background-color: transparent;
 	border: transparent;
 	font-family: "Poppins variant0", Tofu;
@@ -55,8 +65,8 @@ h6 {
 	font-weight: bold;
 	margin-bottom: 5px;
 	cursor: pointer;
-}
-
+} */
+/* 
 #people-btn {
 	background-color: transparent;
 	border: transparent;
@@ -65,7 +75,7 @@ h6 {
 	font-weight: bold;
 	margin-bottom: 5px;
 	cursor: pointer;
-}
+} */
 
 .remove-btn {
 	background-color: #0073b1;
@@ -76,6 +86,12 @@ h6 {
 	font-size: 12px;
 	cursor: pointer;
 }
+.right-arrow-btn-start-search, .right-arrow-btn-stop-search, .right-arrow-btn-home,.right-arrow-btn-people,.right-arrow-btn-activity,
+.right-arrow-btn-nextcamp,.right-arrow-btn-create{
+	position: absolute;
+	left: 270px;
+	bottom: 21px;
+}
 
 /* home */
 
@@ -83,7 +99,7 @@ h6 {
 	margin-left: 20px;
 }
 
-.home-footer {
+/* .home-footer {
 	position: absolute;
 	bottom: 18px;
 	left: 23px;
@@ -92,14 +108,14 @@ h6 {
 	color: #fff;
 	text-align: center;
 	padding: 10px;
-}
-#create-campaign {
+} */
+#create-campaign,#start-search-btn, #stop-search-btn,#save-campaign,#activity-status,#add-people  {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
 	font-family: "Poppins variant0", Tofu;
 	font-weight: 600;
-	padding: 12px 75px;
+	padding: 12px 100px;
 	margin-left: 10px;
 	cursor: pointer;
 	border-radius: 10px;
@@ -107,11 +123,11 @@ h6 {
 	font-size: 15px;
 }
 
-.right-arrow-btn-home {
+/* .right-arrow-btn-home {
 	position: absolute;
 	left: 270px;
 	bottom: 19px;
-}
+} */
 .campaign-box{
 	display: flex;
 	gap: 130px;
@@ -161,13 +177,13 @@ h6 {
 
 /* search page */
 
-.newsearch-popup {
+/* .newsearch-popup {
 	background-color: #fff;
 	width: 350px;
 	height: 550px;
 	font-family: "Poppins variant0", Tofu;
 	text-align: center;
-}
+} */
 
 #heading-search {
 	margin-left: 50px;
@@ -178,7 +194,7 @@ h6 {
 	justify-content: center;
 	gap: 170px;
 }
-#start-search-btn, #stop-search-btn {
+/* #start-search-btn, #stop-search-btn {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -188,7 +204,7 @@ h6 {
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
-}
+} */
 /* #stop-search-btn {
 	background-color: rgb(144, 131, 216);
 	color: black;
@@ -200,16 +216,7 @@ h6 {
 	border-radius: 10px;
 	white-space: nowrap;
 } */
-.start-search-footer, .stop-search-footer {
-	position: absolute;
-	bottom: 18px;
-	left: 23px;
-	width: 100px;
-	background-color: white;
-	color: #fff;
-	text-align: center;
-	padding: 10px;
-}
+
 
 /* .stop-search-footer {
 	position: absolute;
@@ -227,22 +234,18 @@ h6 {
 	display: flex;
 
 }
-.right-arrow-btn-start-search, .right-arrow-btn-stop-search{
-	position: absolute;
-	left: 270px;
-	bottom: 21px;
-}
+
 /* .right-arrow-btn-stop-search {
 	position: absolute;
 	left: 280px;
 	bottom: 20px;
 } */
-#resume-scrape-btn, #pause-scrape-btn  {
+/* #resume-scrape-btn, #pause-scrape-btn  {
 	background-color: rgb(144, 131, 216);
 	border-radius: 10px;
 	padding: 5px 15px;
 	border: none;
-}
+} */
 
 /* #pause-scrape-btn {
 	background-color: rgb(144, 131, 216);
@@ -348,13 +351,13 @@ h6 {
 
 /* message */
 
-.newmessage-popup, .message-popup{
+/* .newmessage-popup, .message-popup{
 	background-color: #fff;
 	width: 350px;
 	height: 550px;
 	font-family: "Poppins variant0", Tofu;
 	text-align: center;
-}
+} */
 
 /* .message-popup {
 	background-color: #fff;
@@ -367,18 +370,18 @@ h6 {
 #heading-message {
 	margin-left: 50px;
 }
-
+/* 
 .right-arrow-btn-message-footer {
 	position: absolute;
 	left: 287px;
 	bottom: 21px;
-}
+} */
 
 #message {
 	margin-bottom: 81px;
 }
 
-.message-footer {
+/* .message-footer {
 	position: absolute;
 	bottom: 18px;
 	left: 23px;
@@ -387,9 +390,9 @@ h6 {
 	color: #fff;
 	text-align: center;
 	padding: 10px;
-}
+} */
 
-.newmessage-footer {
+/* .newmessage-footer {
 	position: absolute;
 	bottom: 18px;
 	left: 23px;
@@ -398,12 +401,12 @@ h6 {
 	color: #fff;
 	text-align: center;
 	padding: 10px;
-}
+} */
 .sizing{
 	resize: vertical;
 }
 
-#campaign-creation-completed {
+/* #campaign-creation-completed {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -414,16 +417,16 @@ h6 {
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
-}
+} */
 
 /* nextcamp page */
 
-#heading-nextcamp {
+/* #heading-nextcamp {
 	margin-left: 45px;
 	margin-bottom: 40px;
-}
+} */
 
-.nextcamp-footer {
+/* .nextcamp-footer {
 	position: absolute;
 	bottom: 18px;
 	left: 23px;
@@ -432,13 +435,13 @@ h6 {
 	color: #fff;
 	text-align: center;
 	padding: 10px;
-}
-.nextcamp-Campaign {
+} */
+/* .nextcamp-Campaign {
 	display: flex;
 	background-color: rgb(144, 131, 216);
 	gap: 80px;
-}
-#Campaign-Completed {
+} */
+/* #Campaign-Completed {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -448,8 +451,8 @@ h6 {
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
-}
-#Activity {
+} */
+/* #Activity {
 	background-color: transparent;
 	border: transparent;
 	font-family: "Poppins variant0", Tofu;
@@ -457,31 +460,31 @@ h6 {
 	font-weight: bold;
 	margin-bottom: 5px;
 	cursor: pointer;
-}
+} */
 
-.right-arrow-btn-nextcamp {
+/* .right-arrow-btn-nextcamp {
 	position: absolute;
 	left: 270px;
 	bottom: 21px;
-}
+} */
 
 
 /* create page */
 
-#heading-create {
+/* #heading-create {
 	margin-left: 50px;
 }
 .campaign-created {
 	display: flex;
 	cursor: pointer;
 	padding: 1px 2px;
-}
+} */
 /* .delete-btn {
 	position: absolute;
 	left: 280px;
 	top: 94px;
 } */
-.create-footer {
+/* .create-footer {
 	position: absolute;
 	bottom: 18px;
 	left: 23px;
@@ -490,24 +493,23 @@ h6 {
 	color: #fff;
 	text-align: center;
 	padding: 10px;
-}
-#create-campaign {
+} */
+/* #create-campaign {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
 	font-family: "Poppins variant0", Tofu;
 	font-weight: 600;
 	padding: 12px 88px;
-	;
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
-}
-.right-arrow-btn-create {
+} */
+/* .right-arrow-btn-create {
 	position: absolute;
 	left: 270px;
 	bottom: 21px;
-}
+} */
 #Campaign1{
 	margin-top: 20px;
 	margin-left: 37px;
@@ -524,18 +526,18 @@ h6 {
 
 /* activity page */
 
-.activity-popup {
+/* .activity-popup {
 	background-color: #fff;
 	width: 350px;
 	height: 550px;
 	font-family: "Poppins variant0", Tofu;
 	text-align: center;
-}
+} */
 
-#heading-activity {
+#heading-activity,#heading-people{
 	margin-left: 54px;
 }
-.activity-heading-section {
+.activity-heading-section,.people-top-section {
 	display: flex;
 	background-color: rgb(144, 131, 216);
 	margin-left: -8px;
@@ -543,7 +545,7 @@ h6 {
 	gap: 78px;
 	padding-left: 10px;
 }
-#Activity {
+/* #Activity {
 	background-color: transparent;
 	border: transparent;
 	font-family: "Poppins variant0", Tofu;
@@ -551,9 +553,9 @@ h6 {
 	font-weight: bold;
 	margin-bottom: 5px;
 	cursor: pointer;
-}
+} */
 
-.activity-footer {
+/* .activity-footer {
 	position: absolute;
 	bottom: 18px;
 	left: 23px;
@@ -562,8 +564,8 @@ h6 {
 	color: #fff;
 	text-align: center;
 	padding: 10px;
-}
-#activity-status {
+} */
+/* #activity-status,#add-people {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -573,18 +575,18 @@ h6 {
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
-}
+} */
 #Activity:hover {
 	text-decoration: underline;
 	text-underline-offset: 0.4em;
 	text-decoration-thickness: 0.30em;
 
 }
-.right-arrow-btn-activity {
+/* .right-arrow-btn-activity {
 	position: absolute;
 	left: 270px;
 	bottom: 20px;
-}
+} */
 .data-box{
     display: flex;
     justify-content: space-around;
@@ -668,25 +670,25 @@ h6 {
 
 
 /* people page */
-
+/* 
 .people-popup {
 	background-color: #fff;
 	width: 350px;
 	height: 550px;
 	font-family: "Poppins variant0", Tofu;
 	text-align: center;
-}
+} */
 
-#heading-people {
+/* #heading-people {
 	margin-left: 54px;
-}
+} */
 
-.people-top-section {
+/* .people-top-section {
 	display: flex;
 	background-color: rgb(144, 131, 216);
 	gap: 82px;
-}
-#Activity {
+} */
+/* #Activity {
 	background-color: transparent;
 	border: transparent;
 	font-family: "Poppins variant0", Tofu;
@@ -694,8 +696,8 @@ h6 {
 	font-weight: bold;
 	margin-bottom: 5px;
 	cursor: pointer;
-}
-.people-footer {
+} */
+/* .people-footer {
 	position: absolute;
 	bottom: 18px;
 	left: 23px;
@@ -704,8 +706,8 @@ h6 {
 	color: #fff;
 	text-align: center;
 	padding: 10px;
-}
-#add-people {
+} */
+/* #add-people {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
@@ -715,12 +717,12 @@ h6 {
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
-}
-.right-arrow-btn-people {
+} */
+/* .right-arrow-btn-people {
 	position: absolute;
 	left: 270px;
 	bottom: 20px;
-}
+} */
 .profile-result {
 	border: 1px solid #ccc;
 	padding: 10px;
