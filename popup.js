@@ -339,7 +339,7 @@ if (window.location.href.includes("activity.html")) {
 			//await injectRemove();
 			await injectOntoMessageTab(campaignName);
 
-			// clicks on message tab
+			// clicks on btn to save changes made to campaign name and/or message template
 			document.querySelector("#update-msg-campname-btn").addEventListener("click", async () => {
 				
 				let messageTemplateDiv = document.querySelector(".message-template");
@@ -359,11 +359,23 @@ if (window.location.href.includes("activity.html")) {
 			messageSection.classList.add("hide");
 			peopleSection.classList.remove("hide");
 
-			document.querySelector(".pending .number").innerText = pendingCount;
-			document.querySelector(".sent .number").innerText = sentCount;
+			document.querySelector(".pending .number").textContent = pendingCount;
+			document.querySelector(".sent .number").textContent = sentCount;
 
 			await injectRemove();
 			await injectOntoPeopleTab(campaignName);
+
+			// clicks on btn to remove selected lead from campaign 
+			let leads = document.querySelectorAll(".leads-scraped");
+			let removeBtns = document.querySelectorAll(".remove-btn");
+			for (let i = 0; i < removeBtns.length; i++) {
+				removeBtns[i].addEventListener("click", async () => {
+					let indexToDelete = i;
+
+					await deleteLead(campaignName, indexToDelete);
+					leads[i].remove();
+				});
+			}
 		})
 
 		// clicks on activity tab
@@ -377,97 +389,6 @@ if (window.location.href.includes("activity.html")) {
 		});
 
 	})();
-
-
-
-
-
-	// retrieve campaignName from session storage
-	// campaignName = sessionStorage.getItem("campaignName");
-	// document.querySelector("#heading-activity").innerText = campaignName;
-	// pendingCount = 0;
-	// sentCount = 0;
-
-	// // retreive data of the selected campaign from the local storage
-	// chrome.storage.local.get([campaignName], async (result) => {
-	// 	console.log(campaignName);
-	// 	for (i = 0; i < result[campaignName].scrapedData.length; i++) {
-	// 		if (result[campaignName].scrapedData[i].status == "pending") ++pendingCount;
-	// 		else ++sentCount;
-	// 	}
-
-	// 	// calling functions to inject data of selected campaign
-	// 	await injectOntoActivityTab(result[campaignName].scrapedData);
-	// 	await injectOntoMessageTab(campaignName, result[campaignName].messageTemplate);
-	// 	await injectOntoPeopleTab(result[campaignName].scrapedData);
-
-	// 	leadsBox = document.querySelectorAll(".people-leads-section .leads-scraped");
-	// 	console.log(leadsBox);
-	// });
-
-
-	// const activitySection = document.querySelector(".activity-section");
-	// const messageSection = document.querySelector(".message-section");
-	// const peopleSection = document.querySelector(".people-section");
-	// const closeButtonActivity = document.querySelector(".close-btn");
-
-	// // clicks on activity tab
-	// document.querySelector("#activity-btn").addEventListener("click", () => {
-	// 	activitySection.classList.remove("hide");
-	// 	messageSection.classList.add("hide");
-	// 	peopleSection.classList.add("hide");
-	// });
-
-	// // clicks on message tab
-	// document.querySelector("#message-btn").addEventListener("click", () => {
-	// 	activitySection.classList.add("hide");
-	// 	messageSection.classList.remove("hide");
-	// 	peopleSection.classList.add("hide");
-	// });
-
-	// // clicks on people tab
-	// document.querySelector("#people-btn").addEventListener("click", () => {
-	// 	activitySection.classList.add("hide");
-	// 	messageSection.classList.add("hide");
-	// 	peopleSection.classList.remove("hide");
-
-	// 	document.querySelector(".pending .number").innerText = pendingCount;
-	// 	document.querySelector(".sent .number").innerText = sentCount;
-	// });
-
-
-	// btn to remove a lead from scraped list
-	// let leadsBox = document.querySelectorAll(".people-leads-section .leads-scraped");
-	// console.log(leadsBox);
-	// for (let i = 0; i < leadsBox.length; i++) {
-	// 	leadsBox[i].querySelector(".remove-btn").addEventListener("click", async () => {
-	// 		console.log("rmv btn clicked");
-	// 		let indexToDelete = i;
-	// 		await deleteLead(campaignName, indexToDelete);
-
-	// 		injectRemove(document.querySelectorAll(".leads-scraped"));
-
-	// 		pendingCount = 0;
-	// 		sentCount = 0;
-
-	// 		// retreive data of the selected campaign from the local storage
-	// 		chrome.storage.local.get([campaignName], async (result) => {
-	// 			console.log(campaignName);
-	// 			for (i = 0; i < result[campaignName].scrapedData.length; i++) {
-	// 				if (result[campaignName].scrapedData[i].status == "pending") ++pendingCount;
-	// 				else ++sentCount;
-	// 			}
-
-	// 			// calling functions to inject data of selected campaign
-	// 			await injectOntoActivityTab(result[campaignName].scrapedData);
-	// 			await injectOntoPeopleTab(result[campaignName].scrapedData);
-
-	// 			document.querySelector(".pending .number").innerText = pendingCount;
-	// 			document.querySelector(".sent .number").innerText = sentCount;
-	// 		});
-	// 	});
-	// }
-
 
 	// clicks on back btn to go back to home page
 	document.querySelector(".back").addEventListener("click", () => {
@@ -686,9 +607,9 @@ async function injectOntoPeopleTab(campaignName) {
 		  		if (result[campaignName].scrapedData[i].status == "pending") ++pendingCount;
 		  		else ++sentCount;
 			}
-		document.querySelector(".pending .number").innerText = pendingCount;
-		document.querySelector(".sent .number").innerText = sentCount;
-		resolve(result[campaignName].scrapedData);
+			document.querySelector(".pending .number").textContent = pendingCount;
+			document.querySelector(".sent .number").textContent = sentCount;
+			resolve(result[campaignName].scrapedData);
 		});
 	});
 
@@ -796,22 +717,36 @@ async function updateCampaignData(oldCampaignName, newCampaignName, newMessageTe
 
 // function to delete a lead's data from local storage
 async function deleteLead(campaignName, indexToDelete) {
-	// Get the current value of the "campaignName" key in local storage
-	chrome.storage.local.get("campaignName", function(result) {
-		// Get the current scrapedData array from the campaign object
-		const scrapedData = result.campaignName.scrapedData;
-		
-		// Remove the item at selected index postion
-		scrapedData.splice(indexToDelete, 1);
-		
-		// Update the campaign object in local storage with the modified scrapedData array
-		chrome.storage.local.set({ [campaignName]: { 
-		scrapedData: scrapedData,
-		messageTemplate: result.campaignName.messageTemplate,
-		date: result.campaignName.date
-		} });
+	let pendingCount = document.querySelector(".pending .number").textContent;
+	let sentCount = document.querySelector(".sent .number").textContent;
+	let messageTemplate = "";
+	let date = "";
+
+	let data = await new Promise((resolve) => {
+		chrome.storage.local.get([campaignName], (result) => {
+		  	console.log(campaignName);
+			messageTemplate = result[campaignName].messageTemplate;
+			date = result[campaignName].date;
+			if (pendingCount > 0) document.querySelector(".pending .number").textContent = --pendingCount;
+			if (sentCount > 0) document.querySelector(".sent .number").textContent = --sentCount;
+		  	resolve(result[campaignName].scrapedData);
+		});
 	});
-  
+
+	// Remove the item at selected index postion
+	data.splice(indexToDelete, 1);
+
+	// Update the campaign object in local storage with the modified scrapedData array
+	return new Promise((resolve) => {
+		chrome.storage.local.set({ 
+		  	[campaignName]: { 
+				scrapedData: data,
+				messageTemplate: messageTemplate,
+				date: date
+		  	} 
+		}, () => {resolve();}
+		);
+	});
 }
 
 
