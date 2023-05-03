@@ -153,6 +153,7 @@ h6 {
  position: relative;
  width: 55px;
  height: 55px;
+display: flex;
 }
 .delete-btn-img{
 	position: absolute;
