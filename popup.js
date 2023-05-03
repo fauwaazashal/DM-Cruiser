@@ -277,14 +277,14 @@ if (window.location.href.includes("home.html")) {
 	(async () => {
 		await injectOntoHome();
 
-		console.log(document.querySelectorAll(".campaign-box"))
+		console.log(document.querySelectorAll(".campaign-box"));
 
 		// button is clicked to open the activity page of selected campaign
 		let campaigns = document.querySelectorAll(".campaign-box");
 		for (let i = 0; i < campaigns.length; i++) {
 			campaigns[i].addEventListener("click", (event) => {
 				// Check if the delete button was clicked
-				if (!event.target.classList.contains("delete-btn")) {
+				if (!event.target.classList.contains("delete-campaign-btn")) {
 				campaignName = campaigns[i].querySelector(".campaign-name").innerText;
 				// store campaignName in session storage so that it accessible even on activity.html
 				sessionStorage.setItem("campaignName", campaignName);
@@ -292,16 +292,41 @@ if (window.location.href.includes("home.html")) {
 				}
 			});
 
+			// storing refernces of the delete btn, cancel delete btn and confirm delete btn
+			let deleteCampaignBtn = campaigns[i].querySelector(".delete-campaign-btn");
+			let confirmDeleteBtn = campaigns[i].querySelector(".confirm-delete-btn");
+			let cancelDeleteBtn = campaigns[i].querySelector(".cancel-delete-btn");
+
 			// Add click event listener to the delete button
-			campaigns[i].querySelector(".delete-btn").addEventListener("click", async (event) => {
+			campaigns[i].querySelector(".delete-campaign-btn").addEventListener("click", async (event) => {
 				// Stop the event propagation to prevent the parent div's click event from being triggered
 				event.stopPropagation();
 				
+				deleteCampaignBtn.classList.add("hide");
+				confirmDeleteBtn.classList.remove("hide");
+				cancelDeleteBtn.classList.remove("hide");				
+			});
+
+			// btn is clicked to confirm the deleting of the campaign
+			campaigns[i].querySelector(".confirm-delete-btn").addEventListener("click", async (event) => {
+				// Stop the event propagation to prevent the parent div's click event from being triggered
+				event.stopPropagation();
+
 				campaignName = campaigns[i].querySelector(".campaign-name").innerText;
 				// call function to delete selected campaign
 				await deleteCampaignData(campaignName);
 				// Delete the parent div
 				campaigns[i].remove();
+			});
+			
+			// btn is clicked to cancel the deleting of the campaign
+			campaigns[i].querySelector(".cancel-delete-btn").addEventListener("click", async (event) => {
+				// Stop the event propagation to prevent the parent div's click event from being triggered
+				event.stopPropagation();
+				
+				deleteCampaignBtn.classList.remove("hide");
+				confirmDeleteBtn.classList.add("hide");
+				cancelDeleteBtn.classList.add("hide");
 			});
 		}
 	})();
@@ -519,15 +544,33 @@ async function injectOntoHome() {
 		campaignDate.classList.add("date");
 		campaignDate.innerText = storedDate;
 		campaignDiv.appendChild(campaignDate);
+
+		// create cancel delete button and add it to campaignDiv
+		const cancelDelete = document.createElement("div");
+		cancelDelete.classList.add("cancel-delete-btn", "hide");
+		const cancelDeleteImage = document.createElement("img");
+		cancelDeleteImage.classList.add("cancel-delete-btn-img");
+		cancelDeleteImage.setAttribute("src", "assets/Close button2.png");
+		cancelDelete.appendChild(cancelDeleteImage);
+		campaignDiv.appendChild(cancelDelete);
 	
 		// create delete button and add it to campaignDiv
 		const deleteCampaign = document.createElement("div");
-		deleteCampaign.classList.add("delete-btn");
+		deleteCampaign.classList.add("delete-campaign-btn");
 		const deleteBtnImage = document.createElement("img");
-		deleteBtnImage.classList.add("delete-btn-img");
+		deleteBtnImage.classList.add("delete-campaign-btn-img");
 		deleteBtnImage.setAttribute("src", "assets/delete.png");
 		deleteCampaign.appendChild(deleteBtnImage);
 		campaignDiv.appendChild(deleteCampaign);
+
+		// create confirm delete button and add it to campaignDiv
+		const confirmDelete = document.createElement("div");
+		confirmDelete.classList.add("confirm-delete-btn", "hide");
+		const confirmDeleteImage = document.createElement("img");
+		confirmDeleteImage.classList.add("confirm-delete-btn-img");
+		confirmDeleteImage.setAttribute("src", "assets/right-tick.jpg");
+		confirmDelete.appendChild(confirmDeleteImage);
+		campaignDiv.appendChild(confirmDelete);
 	
 		campaigns.appendChild(campaignDiv);
 	}

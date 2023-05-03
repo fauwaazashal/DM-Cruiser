@@ -149,37 +149,41 @@ h6 {
 	box-shadow: 0 0 5px #ccc;
 	cursor: pointer;
 }
-.delete-btn{
+.delete-campaign-btn{
  position: relative;
  width: 55px;
  height: 55px;
 }
-.delete-btn-img{
+.delete-campaign-btn-img{
 	position: absolute;
 	top: 17px;
 	right: 90px;
 	width: 20px;
 	height: 20px;
 }
-.right-tick-btn {
+.confirm-delete-btn{
 	position: relative;
 	width: 0px;
 	height: 0px;
 }
-.right-tick-btn-img {
+.confirm-delete-btn-img {
 	position: absolute;
 	top: 15px;
 	right: 205px;
+	width: 20px;
+	height: 20px;
 }
-.close-button {
+.cancel-delete-btn {
 	position: relative;
 	width: 0px;
 	height: 0px;
 }
-.close-button-img {
+.cancel-delete-btn-img {
 	position: absolute;
 	top: 17px;
 	right: 110px;
+	width: 15px;
+	height: 15px;
 }
 
 .campaign-name{
