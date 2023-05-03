@@ -161,6 +161,27 @@ h6 {
 	width: 20px;
 	height: 20px;
 }
+.right-tick-btn {
+	position: relative;
+	width: 0px;
+	height: 0px;
+}
+.right-tick-btn-img {
+	position: absolute;
+	top: 19px;
+	right: 78px;
+}
+.close-button {
+	position: relative;
+	width: 0px;
+	height: 0px;
+}
+.close-button-img {
+	position: absolute;
+	top: 15px;
+	right: 205px;
+}
+
 .campaign-name{
 	font-family: 'Work Sans', sans-serif;
 	font-weight: bold;
