@@ -48,7 +48,7 @@ if (window.location.href.includes("newsearch.html")) {
 
 	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 		const scrapePort = chrome.tabs.connect(tabs[0].id, { name: "scrape leads" });
-		console.log("created port between popup & content scripts");
+		console.log("created port between popup & content scripts to scrape leads");
 
 		// button is clicked to start scraping
 		document.querySelector("#start-search-btn").addEventListener("click", () => {
@@ -347,33 +347,33 @@ if (window.location.href.includes("home.html")) {
 if (window.location.href.includes("activity.html")) {
 	console.log('this is activity.html');
 
-	// chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-	// 	const invitePort = chrome.tabs.connect(tabs[0].id, { name: "send invites" });
-	// 	console.log("created port between popup & content scripts to send invites");
-	// });
-
 	const activitySection = document.querySelector(".activity-section");
 	const messageSection = document.querySelector(".message-section");
 	const peopleSection = document.querySelector(".people-section");
 	const closeButtonActivity = document.querySelector(".close-btn");
 
-	(async () => {
-		// retrieve campaignName from session storage
-		campaignName = sessionStorage.getItem("campaignName");
-		document.querySelector("#heading-activity").innerText = campaignName;
-		pendingCount = 0;
-		sentCount = 0;
+	// retrieve campaignName from session storage
+	campaignName = sessionStorage.getItem("campaignName");
+	document.querySelector("#heading-activity").innerText = campaignName;
+	pendingCount = 0;
+	sentCount = 0;
+
+	chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+		const invitePort = chrome.tabs.connect(tabs[0].id, { name: "send invites" });
+		console.log("created port between popup & content scripts to send invites");
 
 		await injectOntoActivityTab(campaignName);
 		
 		// clicks on message tab
 		document.querySelector("#message-btn").addEventListener("click", async () => {
-			activitySection.classList.add("hide");
-			messageSection.classList.remove("hide");
-			peopleSection.classList.add("hide");
+			if (messageSection.classList.contains("hide")) {
+				activitySection.classList.add("hide");
+				messageSection.classList.remove("hide");
+				peopleSection.classList.add("hide");
 
-			//await injectRemove();
-			await injectOntoMessageTab(campaignName);
+				//await injectRemove();
+				await injectOntoMessageTab(campaignName);
+			}
 
 			// clicks on btn to save changes made to campaign name and/or message template
 			document.querySelector("#update-msg-campname-btn").addEventListener("click", async () => {
@@ -391,16 +391,18 @@ if (window.location.href.includes("activity.html")) {
 
 		// clicks on people tab
 		document.querySelector("#people-btn").addEventListener("click", async () => {
-			activitySection.classList.add("hide");
-			messageSection.classList.add("hide");
-			peopleSection.classList.remove("hide");
+			if (peopleSection.classList.contains("hide")) {
+				activitySection.classList.add("hide");
+				messageSection.classList.add("hide");
+				peopleSection.classList.remove("hide");
 
-			document.querySelector(".pending .number").textContent = pendingCount;
-			document.querySelector(".sent .number").textContent = sentCount;
+				document.querySelector(".pending .number").textContent = pendingCount;
+				document.querySelector(".sent .number").textContent = sentCount;
 
-			await injectRemove();
-			await injectOntoPeopleTab(campaignName);
-
+				await injectRemove();
+				await injectOntoPeopleTab(campaignName);
+			}
+			
 			// clicks on btn to remove selected lead from campaign 
 			let leads = document.querySelectorAll(".leads-scraped");
 			let removeBtns = document.querySelectorAll(".remove-btn");
@@ -416,32 +418,65 @@ if (window.location.href.includes("activity.html")) {
 
 		// clicks on activity tab
 		document.querySelector("#activity-btn").addEventListener("click", async () => {
+			if (activitySection.classList.contains("hide")) {
+				activitySection.classList.remove("hide");
+				messageSection.classList.add("hide");
+				peopleSection.classList.add("hide");
+
+				await injectRemove();
+				await injectOntoActivityTab(campaignName);
+			}
+		});
+
+		// // clicks on btn to start sending invites to leads
+		// document.querySelector("start sending invites").addEventListener("click", async () => {
+		// 	startsending.classList.add("hide");
+		// 	stopsending.classList.remove("hide");
+
+		// 	console.log("sent request to content script to pause scraping");
+		// 	invitePort.postMessage({ action: "Start Sending Invites" });
+
+		// 	invitePort.onMessage.addListener(function(response) {
+		// 		if (response.message === "" ) {
+					
+		// 		}
+		// 	});
+		// });
+
+		// // clicks on btn to stop sending invites to leads
+		// document.querySelector("stop sending invites").addEventListener("click", async () => {
+		// 	startsending.classList.remove("hide");
+		// 	stopsending.classList.add("hide");
+
+		// 	console.log("sent request to content script to stop sending invites");
+		// 	invitePort.postMessage({ action: "Stop Sending Invites" });
+
+		// 	invitePort.onMessage.addListener(function(response) {
+		// 		if (response.message === "" ) {
+					
+		// 		}
+		// 	});
+		// });
+
+		// clicks on back btn to go back to home page
+		document.querySelector(".back").addEventListener("click", () => {
 			activitySection.classList.remove("hide");
 			messageSection.classList.add("hide");
 			peopleSection.classList.add("hide");
 
-			await injectRemove();
-			await injectOntoActivityTab(campaignName);
+			//remove campaign's content from activity tab
+			injectRemove(document.querySelectorAll(".leads-scraped"));
+
+			window.location.href = "home.html";
 		});
 
-	})();
-
-	// clicks on back btn to go back to home page
-	document.querySelector(".back").addEventListener("click", () => {
-		activitySection.classList.remove("hide");
-		messageSection.classList.add("hide");
-		peopleSection.classList.add("hide");
-
-		//remove campaign's content from activity tab
-		injectRemove(document.querySelectorAll(".leads-scraped"));
-
-		window.location.href = "home.html";
+		// button is clicked to close the popup
+		closeButtonActivity.addEventListener('click', function() {
+			window.close();
+		});
 	});
 
-	// // button is clicked to close the popup
-	closeButtonActivity.addEventListener('click', function() {
-		window.close();
-	});
+	
 }
 
 

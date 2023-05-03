@@ -64,7 +64,7 @@ chrome.runtime.onConnect.addListener(function(port) {
         // scrapedData = request.data;
         // while (true) {
         //   await sendInvites(scrapedData); 
-        //   port.postMessage({ message: "Sent invite to lead", updatedData: d });
+        //   port.postMessage({ message: "", updatedData:  });
         // }
         
       }
@@ -72,7 +72,7 @@ chrome.runtime.onConnect.addListener(function(port) {
       else if (request.action === "Stop Sending Invites") {
         console.log('receieved request from popup to stop sending invites');
         isStopped = true;
-        port.postMessage({ message: "Stopped Scraping", data: scrapedData });
+        port.postMessage({ message: "", data: scrapedData });
       }
     });
   }
