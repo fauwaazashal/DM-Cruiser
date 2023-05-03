@@ -21,7 +21,7 @@ chrome.runtime.onConnect.addListener(function(port) {
             await new Promise(resolve => setTimeout(resolve, 5000)); 
             // Wait for the page to finish loading before calling scraping()
             const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
-            const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 10 seconds before timing out
+            const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
             await Promise.race([loaded, timeout])
               .then(() => console.log('Page loaded'))
               .catch(() => console.log('Page load timed out'));
@@ -173,7 +173,7 @@ async function scroll() {
     setTimeout(function() {
       // Scroll down to the bottom of the page smoothly
       document.body.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
-    }, 3000);
+    }, 2000);
 
     // Wait for 6 seconds before scrolling back to the top of the page
     setTimeout(function() {
@@ -182,7 +182,7 @@ async function scroll() {
 
       // Resolve the promise after the scrolling animation has completed
       resolve();
-    }, 5000);
+    }, 4000);
   });
 }
 

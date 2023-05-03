@@ -75,6 +75,17 @@ if (window.location.href.includes("newsearch.html")) {
 					console.log(injectData);
 					// inject response.data onto popup
 					await injectOntoNewsearch(injectData);
+					
+					// scrolls to bottom of leads section to show latest list of leads that were scraped
+					setTimeout(() => {
+						const section = document.querySelector(".leads-section");
+						section.scrollTo({
+							top: section.scrollHeight,
+							behavior: "smooth"
+						});
+					  }, 1000);
+
+					// displays the numbers of leads that have been scraped
 					document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
 				}
 			});
