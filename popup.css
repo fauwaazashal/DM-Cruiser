@@ -49,7 +49,7 @@ h6 {
 .home-footer,.start-search-footer, .stop-search-footer,
 .message-footer,.newmessage-footer,.nextcamp-footer,.create-footer,.activity-footer,.people-footer,#Campaign-Completed {
 	position: absolute;
-	bottom: 18px;
+	bottom: 0px;
 	left: 23px;
 	width: 100px;
 	/* background-color: white; */
@@ -345,7 +345,7 @@ h6 {
   .leads-section{
 	overflow: scroll;
 	overflow-x: hidden;
-	height: 365px;
+	height: 350px;
 }
 .loading-container {
 	display: flex;
@@ -693,7 +693,7 @@ h6 {
 .activity-leads-section{
 	overflow: scroll;
 	overflow-x: hidden;
-	height: 320px;
+	height: 280px;
 }
 
 .process-box{
@@ -837,6 +837,6 @@ h6 {
   .people-leads-section{
 	overflow: scroll;
 	overflow-x: hidden;
-	height: 365px;
+	height: 325px;
 }
   
