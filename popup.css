@@ -59,6 +59,7 @@ h6 {
 	text-align: center;
 	padding: 10px;
 }
+
 /* #message-btn {
 	background-color: transparent;
 	border: transparent;
@@ -94,14 +95,27 @@ h6 {
 	left: 270px;
 	bottom: 21px;
 }
-#start-search-btn, #stop-search-btn, #activity-status, #start-invite-btn, 
-#stop-invite-btn, #save-update-msg-campname-btn {
+#start-search-btn, #stop-search-btn, #activity-status, #save-update-msg-campname-btn {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
 	font-family: "Poppins variant0", Tofu;
 	font-weight: 600;
 	padding: 12px 100px;
+	margin-left: 10px;
+	cursor: pointer;
+	border-radius: 10px;
+	white-space: nowrap;
+	font-size: 15px;
+}
+#start-invite-btn, 
+#stop-invite-btn{
+	background-color: rgb(144, 131, 216);
+	color: black;
+	border: none;
+	font-family: "Poppins variant0", Tofu;
+	font-weight: 600;
+	padding: 12px 72px;
 	margin-left: 10px;
 	cursor: pointer;
 	border-radius: 10px;
