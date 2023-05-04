@@ -43,6 +43,7 @@ if (window.location.href.includes("newsearch.html")) {
 	const loadingContainer = document.querySelector(".loading-container");
 	const newmessageTemplateDiv = document.querySelector(".newmessage-popup");
 	const newsearchDiv = document.querySelector(".newsearch-popup");
+	const inputElement = document.querySelector("#campaign-name");
 	const closeButtonNewsearch = document.querySelector(".newsearch-popup .close-btn");
 	const closeButtonNewmessage = document.querySelector(".newmessage-popup .close-btn");
 
@@ -196,6 +197,11 @@ if (window.location.href.includes("newsearch.html")) {
 				}
 			});
 		})
+
+		// handling click of enter key inside the input tag
+		inputElement.addEventListener("keypress", (event) => {
+			if (event.key === "Enter") event.preventDefault();
+		});
 	
 		// button is clicked to resume scraping
 		document.querySelector("#resume-scrape-btn").addEventListener("click", () => {
@@ -352,6 +358,7 @@ if (window.location.href.includes("activity.html")) {
 	const peopleSection = document.querySelector(".people-section");
 	const startInviteFooter = document.querySelector(".start-invite-activity-footer");
 	const stopInviteFooter = document.querySelector(".stop-invite-activity-footer");
+	const inputElement = document.querySelector("#campaign-name");
 	const closeButtonActivity = document.querySelector(".close-btn");
 
 	// retrieve campaignName from session storage
@@ -388,6 +395,11 @@ if (window.location.href.includes("activity.html")) {
 				await updateCampaignData(oldCampaignName, newCampaignName, newMessageTemplate);
 				campaignName = newCampaignName;
 				document.querySelector("#heading-activity").innerText = campaignName;
+			});
+
+			// handling click of enter key inside the input tag
+			inputElement.addEventListener("keypress", (event) => {
+				if (event.key === "Enter") event.preventDefault();
 			});
 		});
 
@@ -430,35 +442,35 @@ if (window.location.href.includes("activity.html")) {
 			}
 		});
 
-		// // clicks on btn to start sending invites to leads
-		// document.querySelector("#start-invite-btn").addEventListener("click", async () => {
-		// 	startInviteFooter.classList.add("hide");
-		// 	stopInviteFooter.classList.remove("hide");
+		// clicks on btn to start sending invites to leads
+		document.querySelector("#start-invite-btn").addEventListener("click", async () => {
+			startInviteFooter.classList.add("hide");
+			stopInviteFooter.classList.remove("hide");
 
-		// 	console.log("sent request to content script to pause scraping");
-		// 	invitePort.postMessage({ action: "Start Sending Invites" });
+			console.log("sent request to content script to pause scraping");
+			invitePort.postMessage({ action: "Start Sending Invites" });
 
-		// 	invitePort.onMessage.addListener(function(response) {
-		// 		if (response.message === "" ) {
+			invitePort.onMessage.addListener(function(response) {
+				if (response.message === "" ) {
 					
-		// 		}
-		// 	});
-		// });
+				}
+			});
+		});
 
-		// // clicks on btn to stop sending invites to leads
-		// document.querySelector("#stop-invite-btn").addEventListener("click", async () => {
-		// 	startInviteFooter.classList.remove("hide");
-		// 	stopInviteFooter.classList.add("hide");
+		// clicks on btn to stop sending invites to leads
+		document.querySelector("#stop-invite-btn").addEventListener("click", async () => {
+			startInviteFooter.classList.remove("hide");
+			stopInviteFooter.classList.add("hide");
 
-		// 	console.log("sent request to content script to stop sending invites");
-		// 	invitePort.postMessage({ action: "Stop Sending Invites" });
+			console.log("sent request to content script to stop sending invites");
+			invitePort.postMessage({ action: "Stop Sending Invites" });
 
-		// 	invitePort.onMessage.addListener(function(response) {
-		// 		if (response.message === "" ) {
+			invitePort.onMessage.addListener(function(response) {
+				if (response.message === "" ) {
 					
-		// 		}
-		// 	});
-		// });
+				}
+			});
+		});
 
 		// clicks on back btn to go back to home page
 		document.querySelector(".back").addEventListener("click", () => {
