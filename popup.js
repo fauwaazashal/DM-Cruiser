@@ -350,6 +350,8 @@ if (window.location.href.includes("activity.html")) {
 	const activitySection = document.querySelector(".activity-section");
 	const messageSection = document.querySelector(".message-section");
 	const peopleSection = document.querySelector(".people-section");
+	const startInviteFooter = document.querySelector(".start-invite-activity-footer");
+	const stopInviteFooter = document.querySelector(".stop-invite-activity-footer");
 	const closeButtonActivity = document.querySelector(".close-btn");
 
 	// retrieve campaignName from session storage
@@ -376,7 +378,7 @@ if (window.location.href.includes("activity.html")) {
 			}
 
 			// clicks on btn to save changes made to campaign name and/or message template
-			document.querySelector("#update-msg-campname-btn").addEventListener("click", async () => {
+			document.querySelector("#save-update-msg-campname-btn").addEventListener("click", async () => {
 				
 				let messageTemplateDiv = document.querySelector(".message-template");
 				let oldCampaignName = campaignName;
@@ -429,9 +431,9 @@ if (window.location.href.includes("activity.html")) {
 		});
 
 		// // clicks on btn to start sending invites to leads
-		// document.querySelector("start sending invites").addEventListener("click", async () => {
-		// 	startsending.classList.add("hide");
-		// 	stopsending.classList.remove("hide");
+		// document.querySelector("#start-invite-btn").addEventListener("click", async () => {
+		// 	startInviteFooter.classList.add("hide");
+		// 	stopInviteFooter.classList.remove("hide");
 
 		// 	console.log("sent request to content script to pause scraping");
 		// 	invitePort.postMessage({ action: "Start Sending Invites" });
@@ -444,9 +446,9 @@ if (window.location.href.includes("activity.html")) {
 		// });
 
 		// // clicks on btn to stop sending invites to leads
-		// document.querySelector("stop sending invites").addEventListener("click", async () => {
-		// 	startsending.classList.remove("hide");
-		// 	stopsending.classList.add("hide");
+		// document.querySelector("#stop-invite-btn").addEventListener("click", async () => {
+		// 	startInviteFooter.classList.remove("hide");
+		// 	stopInviteFooter.classList.add("hide");
 
 		// 	console.log("sent request to content script to stop sending invites");
 		// 	invitePort.postMessage({ action: "Stop Sending Invites" });

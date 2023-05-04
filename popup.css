@@ -47,7 +47,9 @@ h6 {
 	cursor: pointer;
 }
 .home-footer,.start-search-footer, .stop-search-footer,
-.message-footer,.newmessage-footer,.nextcamp-footer,.create-footer,.activity-footer,.people-footer,#Campaign-Completed {
+.message-footer,.newmessage-footer,.nextcamp-footer,.create-footer,
+.activity-footer,.people-footer,#Campaign-Completed,
+.start-invite-activity-footer, .stop-invite-activity-footer {
 	position: absolute;
 	bottom: 0px;
 	left: 23px;
@@ -92,7 +94,8 @@ h6 {
 	left: 270px;
 	bottom: 21px;
 }
-#start-search-btn, #stop-search-btn, #activity-status, #update-msg-campname-btn {
+#start-search-btn, #stop-search-btn, #activity-status, #start-invite-btn, 
+#stop-invite-btn, #save-update-msg-campname-btn {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
