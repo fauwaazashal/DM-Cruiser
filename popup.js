@@ -84,7 +84,7 @@ if (window.location.href.includes("newsearch.html")) {
 							top: section.scrollHeight,
 							behavior: "smooth"
 						});
-					  }, 1000);
+					}, 1000);
 
 					// displays the numbers of leads that have been scraped
 					document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
@@ -117,18 +117,20 @@ if (window.location.href.includes("newsearch.html")) {
 						document.querySelector("#firstName").addEventListener("click", () => {
 							var textarea = document.getElementById("message-input");
 							var textToAdd = "{first_name}";
-
+						
 							// Get the current cursor position
 							var startPos = textarea.selectionStart;
 							var endPos = textarea.selectionEnd;
-
+						
 							// Insert the text at the cursor position
 							textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-
+						
 							// Move the cursor to the end of the inserted text
+							textarea.focus(); // Set focus on the textarea
 							textarea.selectionStart = startPos + textToAdd.length;
 							textarea.selectionEnd = startPos + textToAdd.length;
 						});
+						
 						//last name
 						document.querySelector("#lastName").addEventListener("click", () => {
 							var textarea = document.getElementById("message-input");
@@ -142,6 +144,7 @@ if (window.location.href.includes("newsearch.html")) {
 							textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
 
 							// Move the cursor to the end of the inserted text
+							textarea.focus(); // Set focus on the textarea
 							textarea.selectionStart = startPos + textToAdd.length;
 							textarea.selectionEnd = startPos + textToAdd.length;
 						});
@@ -158,6 +161,7 @@ if (window.location.href.includes("newsearch.html")) {
 							textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
 
 							// Move the cursor to the end of the inserted text
+							textarea.focus(); // Set focus on the textarea
 							textarea.selectionStart = startPos + textToAdd.length;
 							textarea.selectionEnd = startPos + textToAdd.length;
 						});
@@ -174,8 +178,14 @@ if (window.location.href.includes("newsearch.html")) {
 							textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
 
 							// Move the cursor to the end of the inserted text
+							textarea.focus(); // Set focus on the textarea
 							textarea.selectionStart = startPos + textToAdd.length;
 							textarea.selectionEnd = startPos + textToAdd.length;
+						});
+						// This will move the cursor to the end of the textarea's value when the textarea loses focus, keeping it at the end of the inserted text.
+						textarea.addEventListener('blur', () => {
+							textarea.selectionStart = textarea.value.length;
+							textarea.selectionEnd = textarea.value.length;
 						});
 					});					  
 				}
@@ -553,13 +563,13 @@ async function injectOntoNewsearch(data) {
 // function for injecting a button of the newly created campaign onto home.html  
 async function injectOntoHome() {
 	const items = await new Promise(resolve => {
-	  	chrome.storage.local.get(null, resolve);
+		chrome.storage.local.get(null, resolve);
 	});
 	
 	const keys = Object.keys(items);
-  
+
 	const campaigns = document.querySelector(".campaigns-section");
-  
+
 	for (let i = 0; i < keys.length; i++) {
 		const result = await new Promise(resolve => {
 			chrome.storage.local.get([keys[i]], resolve);
@@ -631,8 +641,8 @@ async function injectOntoHome() {
 async function injectOntoActivityTab(campaignName) {
 	let data = await new Promise((resolve) => {
 		chrome.storage.local.get([campaignName], (result) => {
-		  	console.log(campaignName);
-		  	resolve(result[campaignName].scrapedData);
+			console.log(campaignName);
+			resolve(result[campaignName].scrapedData);
 		});
 	});
 
@@ -688,7 +698,7 @@ async function injectOntoActivityTab(campaignName) {
 async function injectOntoMessageTab(campaignName) {
 	let message = await new Promise((resolve) => {
 		chrome.storage.local.get([campaignName], (result) => {
-		  	resolve(result[campaignName].messageTemplate);
+			resolve(result[campaignName].messageTemplate);
 		});
 	});
 
@@ -702,13 +712,13 @@ async function injectOntoMessageTab(campaignName) {
 async function injectOntoPeopleTab(campaignName) {
 	let pendingCount = 0;
 	let sentCount = 0;
-  
+
 	let data = await new Promise((resolve) => {
-	  	chrome.storage.local.get([campaignName], (result) => {
+		chrome.storage.local.get([campaignName], (result) => {
 			console.log(campaignName);
 			for (i = 0; i < result[campaignName].scrapedData.length; i++) {
-		  		if (result[campaignName].scrapedData[i].status == "pending") ++pendingCount;
-		  		else ++sentCount;
+				if (result[campaignName].scrapedData[i].status == "pending") ++pendingCount;
+				else ++sentCount;
 			}
 			document.querySelector(".pending .number").textContent = pendingCount;
 			document.querySelector(".sent .number").textContent = sentCount;
@@ -816,7 +826,6 @@ async function updateCampaignData(oldCampaignName, newCampaignName, newMessageTe
 		});
 	});
 }
-  
 
 // function to delete a lead's data from local storage
 async function deleteLead(campaignName, indexToDelete) {
@@ -827,12 +836,12 @@ async function deleteLead(campaignName, indexToDelete) {
 
 	let data = await new Promise((resolve) => {
 		chrome.storage.local.get([campaignName], (result) => {
-		  	console.log(campaignName);
+			console.log(campaignName);
 			messageTemplate = result[campaignName].messageTemplate;
 			date = result[campaignName].date;
 			if (pendingCount > 0) document.querySelector(".pending .number").textContent = --pendingCount;
 			if (sentCount > 0) document.querySelector(".sent .number").textContent = --sentCount;
-		  	resolve(result[campaignName].scrapedData);
+			resolve(result[campaignName].scrapedData);
 		});
 	});
 
@@ -842,11 +851,11 @@ async function deleteLead(campaignName, indexToDelete) {
 	// Update the campaign object in local storage with the modified scrapedData array
 	return new Promise((resolve) => {
 		chrome.storage.local.set({ 
-		  	[campaignName]: { 
+			[campaignName]: { 
 				scrapedData: data,
 				messageTemplate: messageTemplate,
 				date: date
-		  	} 
+			} 
 		}, () => {resolve();}
 		);
 	});
@@ -876,7 +885,7 @@ async function deleteLead(campaignName, indexToDelete) {
 // 					inject(data);
 // 				}
 // 			});
-			  
+
 // 		});
 // 	})
 
@@ -887,7 +896,7 @@ async function deleteLead(campaignName, indexToDelete) {
 // 		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 // 			chrome.tabs.sendMessage(tabs[0].id, {"requestType": "stopScraping",  "url": tabs[0].url}, function(response) {
 // 				console.log("Sent request to content script to stop scraping");
-		
+
 // 			  	//receiving a response from the content script confirming that the data has been scraped and stored in the local storage
 // 			  	if (response.message === "scraping completed") {
 // 					window.location.href = "new-page.html";
@@ -907,7 +916,7 @@ async function deleteLead(campaignName, indexToDelete) {
 // 			  	//receiving a response from the content script confirming that the data has been scraped and stored in the local storage
 // 			  	//console.log(response.message);
 // 			});
- 
+
 // 		});
 // 	})
 
@@ -918,10 +927,10 @@ async function deleteLead(campaignName, indexToDelete) {
 // 		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 // 			chrome.tabs.sendMessage(tabs[0].id, {"requestType": "resumeScraping",  "url": tabs[0].url}, function(response) {
 // 			  	console.log("Sent request to content script to resume scraping");
-		
+
 // 			  	//receiving a response from the content script confirming that the data has been scraped and stored in the local storage
 // 			  	//console.log(response.message);
 // 			});
-			  
+
 // 		});
 // 	})

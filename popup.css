@@ -617,12 +617,17 @@ h6 {
 	opacity: 1;
 }
 
+.placeholders {
+	text-align: left;
+	padding-left: 30px;
+}
+
 .placeholder-button {
 	border: 0;
 	border-radius: 10px; 
 	font-family: Arial;
 	color: #ffffff;
-	font-size: 20px;
+	font-size: 12px;
 	background: #cfcfcf;
 	padding: 4px 10px 4px 10px;
 	text-decoration: none;
