@@ -89,15 +89,11 @@ chrome.runtime.onConnect.addListener(function(port) {
     port.onMessage.addListener(async function(request) {
       if (request.action === "Start Sending Invites") {
         console.log('receieved request from popup to start sending invites');
-        scrapedData = request.data;
-        await sendInvites(scrapedData); 
+        let campaignName = request.campaignName;
+        let campaignData = request.campaignData;
+        let messageTemplate = request.messageTemplate;
 
-        // scrapedData = request.data;
-        // while (true) {
-        //   await sendInvites(scrapedData); 
-        //   port.postMessage({ message: "", updatedData:  });
-        // }
-        
+        await sendInvites(campaignData[0], messageTemplate);
       }
 
       else if (request.action === "Stop Sending Invites") {
@@ -206,33 +202,49 @@ async function goToNextPage() {
 
 
 
-async function sendInvites(data) {
+async function sendInvites(campaignData, messageTemplate) {
   
-  // wait for 5 seconds or until window loads
-  window.location.href = data.profileLink;
+  // put the rest of your code here
   await new Promise(resolve => setTimeout(resolve, 5000));
-
+  console.log("click on user profile");
   // click on the connect btn
-  const connectBtn = document.querySelector(".artdeco-button artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+  const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
   connectBtn.click();
+  console.log("clicked on connect btn");
   await new Promise(resolve => setTimeout(resolve, 3000));
 
-  // click on the add a note btn
-  const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view mr1");
-  addNoteBtn.click();
-  await new Promise(resolve => setTimeout(resolve, 3000));
 
-  // enter text from msg template onot the text box
-  const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
-  textBox.value = data.messageTemplate;
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  if (messageTemplate.length > 0) {
+    // click on the add a note btn
+    const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view.mr1");
+    addNoteBtn.click();
+    console.log("clicked on add note btn");
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    
+
+    // enter text from msg template onot the text box
+    const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
+    
+    let customMessage = messageTemplate
+      .replace(/{first_name}/g, campaignData.firstName)
+      .replace(/{last_name}/g, campaignData.lastName)
+      .replace(/{full_name}/g, campaignData.fullName)
+      .replace(/{job_title}/g, campaignData.jobTitle);
+
+    textBox.value = customMessage;
+    // Manually trigger the input event on the text box
+    const inputEvent = new Event('input');
+    textBox.dispatchEvent(inputEvent);
+    console.log("injected msg onto text box");
+    await new Promise(resolve => setTimeout(resolve, 3000));
+  }
+
 
   // click on the send btn
-  const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.artdeco-button--disabled.ember-view.ml1");
-  sendBtn.classList.remove(".artdeco-button--disabled");
-  sendBtn.removeAttribute("disabled");
-  sendBtn.click();
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1");
+  //sendBtn.click();
+  console.log("clicked send btn");
+  await new Promise(resolve => setTimeout(resolve, 5000));
   
 }
 

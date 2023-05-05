@@ -367,23 +367,24 @@ if (window.location.href.includes("home.html")) {
 if (window.location.href.includes("activity.html")) {
 	console.log('this is activity.html');
 
-	const activitySection = document.querySelector(".activity-section");
-	const messageSection = document.querySelector(".message-section");
-	const peopleSection = document.querySelector(".people-section");
-	const startInviteFooter = document.querySelector(".start-invite-activity-footer");
-	const stopInviteFooter = document.querySelector(".stop-invite-activity-footer");
-	const inputElement = document.querySelector("#campaign-name");
-	const closeButtonActivity = document.querySelector(".close-btn");
+	(async () => {
 
-	// retrieve campaignName from session storage
-	campaignName = sessionStorage.getItem("campaignName");
-	document.querySelector("#heading-activity").innerText = campaignName;
-	pendingCount = 0;
-	sentCount = 0;
+		const activitySection = document.querySelector(".activity-section");
+		const messageSection = document.querySelector(".message-section");
+		const peopleSection = document.querySelector(".people-section");
+		const startInviteFooter = document.querySelector(".start-invite-activity-footer");
+		const stopInviteFooter = document.querySelector(".stop-invite-activity-footer");
+		const inputElement = document.querySelector("#campaign-name");
+		const closeButtonActivity = document.querySelector(".close-btn");
 
-	chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
-		const invitePort = chrome.tabs.connect(tabs[0].id, { name: "send invites" });
-		console.log("created port between popup & content scripts to send invites");
+		// retrieve campaignName from session storage
+		campaignName = sessionStorage.getItem("campaignName");
+		document.querySelector("#heading-activity").innerText = campaignName;
+		pendingCount = 0;
+		sentCount = 0;
+
+		const loadUrlPort = chrome.runtime.connect({ name: "load leads profiles" });
+		console.log("created port between popup & background scripts to load leads' profiles in order to send invites");
 
 		await injectOntoActivityTab(campaignName);
 		
@@ -461,11 +462,19 @@ if (window.location.href.includes("activity.html")) {
 			startInviteFooter.classList.add("hide");
 			stopInviteFooter.classList.remove("hide");
 
-			console.log("sent request to content script to pause scraping");
-			invitePort.postMessage({ action: "Start Sending Invites" });
+			let campaignData = await retrieveCampaignData(campaignName);
+			let messageTemplate = await retrieveMessageTemplate(campaignName);
 
-			invitePort.onMessage.addListener(function(response) {
-				if (response.message === "" ) {
+			console.log("sent request to background script to load leads' profiles");
+			loadUrlPort.postMessage({ 
+				action: "Start Sending Invites", 
+				campaignName: campaignName, 
+				campaignData: campaignData,
+				messageTemplate: messageTemplate
+			});
+
+			loadUrlPort.onMessage.addListener(function(response) {
+				if (response.message === "") {
 					
 				}
 			});
@@ -477,11 +486,11 @@ if (window.location.href.includes("activity.html")) {
 			stopInviteFooter.classList.add("hide");
 
 			console.log("sent request to content script to stop sending invites");
-			invitePort.postMessage({ action: "Stop Sending Invites" });
+			loadUrlPort.postMessage({ action: "Stop Sending Invites" });
 
-			invitePort.onMessage.addListener(function(response) {
-				if (response.message === "" ) {
-					
+			loadUrlPort.onMessage.addListener(function(response) {
+				if (response.message === "page fully loaded") {
+					console.log(response.message);
 				}
 			});
 		});
@@ -502,15 +511,36 @@ if (window.location.href.includes("activity.html")) {
 		closeButtonActivity.addEventListener('click', function() {
 			window.close();
 		});
-	});
-
-	
+	})();
 }
 
 
 
 //---------------------------------------------content injection------------------------------------------------
 
+
+// function to retrieve selected campaign's data
+async function retrieveCampaignData(campaignName) {
+	let data = await new Promise((resolve) => {
+		chrome.storage.local.get([campaignName], (result) => {
+		  	console.log(campaignName);
+		  	resolve(result[campaignName].scrapedData);
+		});
+	});
+	return data;
+}
+
+
+// function to retrieve selected campaign's message tenplate
+async function retrieveMessageTemplate(campaignName) {
+	let messageTemplate = await new Promise((resolve) => {
+		chrome.storage.local.get([campaignName], (result) => {
+		  	console.log(campaignName);
+		  	resolve(result[campaignName].messageTemplate);
+		});
+	});
+	return messageTemplate;
+}
 
 
 // function for injecting data of scraped leads onto newsearch.html

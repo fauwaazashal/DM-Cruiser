@@ -27,6 +27,56 @@ chrome.action.onClicked.addListener(function () {
 });
 
 
+
+chrome.runtime.onConnect.addListener(function(port) {
+  console.log("background port detected");
+  if (port.name === "load leads profiles") {
+    console.log("established connection with port to load users' profiles one by one");
+
+    port.onMessage.addListener(function(request) {
+      if (request.action === "Start Sending Invites") {
+        console.log("receieved request from popup to load users' profiles");
+        let campaignName = request.campaignName;
+        let campaignData = request.campaignData;
+        let messageTemplate = request.messageTemplate;
+        console.log(campaignData[0].profileLink);
+
+        // Update the URL of the tab
+        chrome.tabs.update({ url: campaignData[0].profileLink }, function(tab) {
+          // Wait until the new URL has been fully loaded before sending the message
+          chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+            if (tabId === tab.id && changeInfo.status === "complete") {
+              chrome.tabs.onUpdated.removeListener(listener);
+              port.postMessage({ message: "page fully loaded" });
+              console.log("profile page loaded");
+
+              chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+                const invitePort = chrome.tabs.connect(tabs[0].id, { name: "send invites" });
+                    console.log("sent request from background script to content script to send invite to a lead")
+                    invitePort.postMessage({ 
+                      action: request.action, 
+                      campaignName: campaignName, 
+                      campaignData: campaignData,
+                      messageTemplate: messageTemplate
+                    });
+              });
+            }
+          });
+        });
+      }
+
+      else if (request.action === "Stop Sending Invites") {
+        console.log('receieved request from popup to stop sending invites');
+        isStopped = true;
+        port.postMessage({ message: "", data: scrapedData });
+      }
+    });
+  }
+});
+
+
+
+
 // // Saves the last visited popup's data when the popup is closed
 // chrome.windows.onRemoved.addListener(function(windowId) {
 //   // Check if the closed window was the popup window
