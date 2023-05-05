@@ -127,9 +127,15 @@ if (window.location.href.includes("newsearch.html")) {
 			// Insert the text at the cursor position
 			textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
 			// Move the cursor to the end of the inserted text
-			textarea.focus(); // Set focus on the textarea
 			textarea.selectionStart = startPos + textToAdd.length;
 			textarea.selectionEnd = startPos + textToAdd.length;
+			// Scroll to the position of the cursor
+			var cursorPos = textarea.selectionStart;
+			var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+			var linesAbove = Math.floor(cursorPos / textarea.cols);
+			textarea.scrollTop = lineHeight * linesAbove;
+			// Set focus on the textarea
+			textarea.focus();
 		});
 
 		//last name
@@ -142,9 +148,15 @@ if (window.location.href.includes("newsearch.html")) {
 			// Insert the text at the cursor position
 			textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
 			// Move the cursor to the end of the inserted text
-			textarea.focus(); // Set focus on the textarea
 			textarea.selectionStart = startPos + textToAdd.length;
 			textarea.selectionEnd = startPos + textToAdd.length;
+			// Scroll to the position of the cursor
+			var cursorPos = textarea.selectionStart;
+			var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+			var linesAbove = Math.floor(cursorPos / textarea.cols);
+			textarea.scrollTop = lineHeight * linesAbove;
+			// Set focus on the textarea
+			textarea.focus();
 		});
 
 		//full name
@@ -157,9 +169,15 @@ if (window.location.href.includes("newsearch.html")) {
 			// Insert the text at the cursor position
 			textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
 			// Move the cursor to the end of the inserted text
-			textarea.focus(); // Set focus on the textarea
 			textarea.selectionStart = startPos + textToAdd.length;
 			textarea.selectionEnd = startPos + textToAdd.length;
+			// Scroll to the position of the cursor
+			var cursorPos = textarea.selectionStart;
+			var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+			var linesAbove = Math.floor(cursorPos / textarea.cols);
+			textarea.scrollTop = lineHeight * linesAbove;
+			// Set focus on the textarea
+			textarea.focus();
 		});
 
 		//job title
@@ -172,9 +190,15 @@ if (window.location.href.includes("newsearch.html")) {
 			// Insert the text at the cursor position
 			textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
 			// Move the cursor to the end of the inserted text
-			textarea.focus(); // Set focus on the textarea
 			textarea.selectionStart = startPos + textToAdd.length;
 			textarea.selectionEnd = startPos + textToAdd.length;
+			// Scroll to the position of the cursor
+			var cursorPos = textarea.selectionStart;
+			var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+			var linesAbove = Math.floor(cursorPos / textarea.cols);
+			textarea.scrollTop = lineHeight * linesAbove;
+			// Set focus on the textarea
+			textarea.focus();
 		});
 
 		// button is clicked to pause scraping
