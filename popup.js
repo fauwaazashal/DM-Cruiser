@@ -594,7 +594,7 @@ async function injectOntoHome() {
 		cancelDelete.classList.add("cancel-delete-btn", "hide");
 		const cancelDeleteImage = document.createElement("img");
 		cancelDeleteImage.classList.add("cancel-delete-btn-img");
-		cancelDeleteImage.setAttribute("src", "assets/Close button2.png");
+		cancelDeleteImage.setAttribute("src", "assets/Close-icon.png");
 		cancelDelete.appendChild(cancelDeleteImage);
 		campaignDiv.appendChild(cancelDelete);
 	
@@ -603,7 +603,7 @@ async function injectOntoHome() {
 		deleteCampaign.classList.add("delete-campaign-btn");
 		const deleteBtnImage = document.createElement("img");
 		deleteBtnImage.classList.add("delete-campaign-btn-img");
-		deleteBtnImage.setAttribute("src", "assets/delete.png");
+		deleteBtnImage.setAttribute("src", "assets/delete-icon.png");
 		deleteCampaign.appendChild(deleteBtnImage);
 		campaignDiv.appendChild(deleteCampaign);
 
@@ -612,7 +612,7 @@ async function injectOntoHome() {
 		confirmDelete.classList.add("confirm-delete-btn", "hide");
 		const confirmDeleteImage = document.createElement("img");
 		confirmDeleteImage.classList.add("confirm-delete-btn-img");
-		confirmDeleteImage.setAttribute("src", "assets/right-tick.jpg");
+		confirmDeleteImage.setAttribute("src", "assets/right-tick-icon.png");
 		confirmDelete.appendChild(confirmDeleteImage);
 		campaignDiv.appendChild(confirmDelete);
 	
