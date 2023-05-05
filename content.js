@@ -1,40 +1,14 @@
+//---------------------------------------------global variables--------------------------------------------------
+
 let scrapedData = [];
 let isPaused = false;
 let isStopped = false;
 
+//----------------------------------------Listening to Port requests----------------------------------------------------
+
+
+
 chrome.runtime.onConnect.addListener(function(port) {
-
-  // // function to call other functions to carry out the scraping
-  // async function scrape() {
-  //   if (!isStopped) {
-  //     if (!isPaused) {
-  //       // for every iteration, we scrape one page
-  //       scrapedData = await scraping(scrapedData);
-  //       port.postMessage({ message: "Scraped one page", data: scrapedData });
-  //       await scroll();
-  //       await goToNextPage();
-
-  //       // Wait for 5 seconds before checking if page is loaded
-  //       await new Promise(resolve => setTimeout(resolve, 5000)); 
-  //       // Wait for the page to finish loading before calling scraping()
-  //       const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
-  //       const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
-  //       await Promise.race([loaded, timeout])
-  //         .then(() => console.log('Page loaded'))
-  //         .catch(() => console.log('Page load timed out'));
-
-  //       // Recursively call the scrape function
-  //       await scrape();
-  //     } 
-  //     else {
-  //       console.log('scraping is paused');
-  //       await new Promise(resolve => setTimeout(resolve, 2000));
-
-  //       // Recursively call the scrape function
-  //       await scrape();
-  //     }
-  //   } 
-  // }
 
   if (port.name === "scrape leads") {
     console.log("established connection with port to scrape leads");
@@ -135,46 +109,10 @@ chrome.runtime.onConnect.addListener(function(port) {
   }
 });
 
-// // Send the scraped data to the background script and handle any errors
-// chrome.runtime.sendMessage({ requestType: "storeData", data: scrapedData, keyName: "campaign 1" }, function(response) {
-//   console.log("Request sent to background script to store data");
 
-//   // receiving a response from the background script as a confirmation that the data has been stored in the local storage
-//   console.log(response.message);
 
-//   // sending response back to popup script confirming that the data has been scraped and stored in the local storage  
-//   sendResponse({ message: "Data scraped and stored successfully" });        
-// });
+//-----------------------------------------------functions ()----------------------------------------------------
 
-// let isPaused = false;
-// let isStopped = false;
-// let scrapedData =[];
-
-// chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
-//   if (request.requestType === "scrapeLeads") {
-//     console.log('receieved request from popup to begin scraping');
-    
-//     scrapedData = await scraping(scrapedData);
-//     sendResponse({ message: "scraped one page", data: scrapedData });
-//     await scroll();
-//     await goToNextPage();
-//   }
-//   else if (request.requestType === "pauseScraping") {
-//     console.log('receieved request from popup to pause scraping');
-//     isPaused = true; // 
-//   }
-//   else if (request.requestType === "stopScraping") {
-//     console.log('receieved request from popup to stop scraping');
-//     isStopped = true;
-//     sendResponse({ message: "scraping completed" });
-//   }
-//   else if (request.requestType === "resumeScraping") {
-//     console.log('receieved request from popup to resume scraping');
-//     isPaused = false;
-//     scraping(scrapedData);
-//   }
-//   return true;
-// });
 
 
 // function to wait until window has loaded
@@ -297,6 +235,53 @@ async function sendInvites(data) {
   await new Promise(resolve => setTimeout(resolve, 3000));
   
 }
+
+
+
+//-------------------------------------------------previous drafts----------------------------------------------------
+
+
+
+// // Send the scraped data to the background script and handle any errors
+// chrome.runtime.sendMessage({ requestType: "storeData", data: scrapedData, keyName: "campaign 1" }, function(response) {
+//   console.log("Request sent to background script to store data");
+
+//   // receiving a response from the background script as a confirmation that the data has been stored in the local storage
+//   console.log(response.message);
+
+//   // sending response back to popup script confirming that the data has been scraped and stored in the local storage  
+//   sendResponse({ message: "Data scraped and stored successfully" });        
+// });
+
+// let isPaused = false;
+// let isStopped = false;
+// let scrapedData =[];
+
+// chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
+//   if (request.requestType === "scrapeLeads") {
+//     console.log('receieved request from popup to begin scraping');
+    
+//     scrapedData = await scraping(scrapedData);
+//     sendResponse({ message: "scraped one page", data: scrapedData });
+//     await scroll();
+//     await goToNextPage();
+//   }
+//   else if (request.requestType === "pauseScraping") {
+//     console.log('receieved request from popup to pause scraping');
+//     isPaused = true; // 
+//   }
+//   else if (request.requestType === "stopScraping") {
+//     console.log('receieved request from popup to stop scraping');
+//     isStopped = true;
+//     sendResponse({ message: "scraping completed" });
+//   }
+//   else if (request.requestType === "resumeScraping") {
+//     console.log('receieved request from popup to resume scraping');
+//     isPaused = false;
+//     scraping(scrapedData);
+//   }
+//   return true;
+// });
 
 
 

@@ -14,12 +14,9 @@
 
 //---------------------------------------------global variables--------------------------------------------------
 
-
-
 let scrapedData = [];
 let injectData = [];
 let keys = [];
-//let leadsBox = [];
 let date = "";
 let campaignName = "";
 let messageTemplate = "";
@@ -27,8 +24,6 @@ let activityStatus = "";
 let campaignCount = 0;
 let pendingCount = 0;
 let sentCount = 0;
-
-
 
 //---------------------------------------------newsearch.html--------------------------------------------------
 
@@ -62,7 +57,7 @@ if (window.location.href.includes("newsearch.html")) {
 			scrapePort.postMessage({ action: "Start Scraping" });
 
 			scrapePort.onMessage.addListener(async function(response) {
-				if (response.message === "Scraped one page" ) {
+				if (response.message === "Scraped one page") {
 					console.log(response.data);
 					
 					// length of the data scraped thus far
@@ -104,7 +99,7 @@ if (window.location.href.includes("newsearch.html")) {
 			scrapePort.postMessage({ action: "Stop Scraping" });
 
 			scrapePort.onMessage.addListener(function(response) {
-				if (response.message === "Stopped Scraping" ) {
+				if (response.message === "Stopped Scraping") {
 					chrome.storage.local.get(null, async (items) => {
 						campaignCount = Object.keys(items).length;
 						console.log(Object.keys(items).length);
@@ -211,7 +206,7 @@ if (window.location.href.includes("newsearch.html")) {
 			scrapePort.postMessage({ action: "Pause Scraping" });
 
 			scrapePort.onMessage.addListener(function(response) {
-				if (response.message === "Paused Scraping" ) {
+				if (response.message === "Paused Scraping") {
 					
 				}
 			});
@@ -226,7 +221,7 @@ if (window.location.href.includes("newsearch.html")) {
 			scrapePort.postMessage({ action: "Resume Scraping" });
 
 			scrapePort.onMessage.addListener(function(response) {
-				if (response.message === "Resumed Scraping" ) {
+				if (response.message === "Resumed Scraping") {
 					
 				}
 			});
