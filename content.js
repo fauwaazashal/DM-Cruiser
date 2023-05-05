@@ -43,6 +43,8 @@ chrome.runtime.onConnect.addListener(function(port) {
     async function scrape() {
       if (!isStopped) {
         if (!isPaused) {
+          // Wait for 2 seconds before checking if page is loaded
+          await new Promise(resolve => setTimeout(resolve, 2000));
           // for every iteration, we scrape one page
           scrapedData = await scraping(scrapedData);
           port.postMessage({ message: "Scraped one page", data: scrapedData });
