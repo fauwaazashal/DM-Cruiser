@@ -3,8 +3,74 @@ let isPaused = false;
 let isStopped = false;
 
 chrome.runtime.onConnect.addListener(function(port) {
+
+  // // function to call other functions to carry out the scraping
+  // async function scrape() {
+  //   if (!isStopped) {
+  //     if (!isPaused) {
+  //       // for every iteration, we scrape one page
+  //       scrapedData = await scraping(scrapedData);
+  //       port.postMessage({ message: "Scraped one page", data: scrapedData });
+  //       await scroll();
+  //       await goToNextPage();
+
+  //       // Wait for 5 seconds before checking if page is loaded
+  //       await new Promise(resolve => setTimeout(resolve, 5000)); 
+  //       // Wait for the page to finish loading before calling scraping()
+  //       const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
+  //       const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
+  //       await Promise.race([loaded, timeout])
+  //         .then(() => console.log('Page loaded'))
+  //         .catch(() => console.log('Page load timed out'));
+
+  //       // Recursively call the scrape function
+  //       await scrape();
+  //     } 
+  //     else {
+  //       console.log('scraping is paused');
+  //       await new Promise(resolve => setTimeout(resolve, 2000));
+
+  //       // Recursively call the scrape function
+  //       await scrape();
+  //     }
+  //   } 
+  // }
+
   if (port.name === "scrape leads") {
     console.log("established connection with port to scrape leads");
+
+    // function to call other functions to carry out the scraping
+    async function scrape() {
+      if (!isStopped) {
+        if (!isPaused) {
+          // for every iteration, we scrape one page
+          scrapedData = await scraping(scrapedData);
+          port.postMessage({ message: "Scraped one page", data: scrapedData });
+          await scroll();
+          await goToNextPage();
+
+          // Wait for 5 seconds before checking if page is loaded
+          await new Promise(resolve => setTimeout(resolve, 5000)); 
+          // Wait for the page to finish loading before calling scraping()
+          const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
+          const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
+          await Promise.race([loaded, timeout])
+            .then(() => console.log('Page loaded'))
+            .catch(() => console.log('Page load timed out'));
+
+          // Recursively call the scrape function
+          await scrape();
+        } 
+        else {
+          console.log('scraping is paused');
+          await new Promise(resolve => setTimeout(resolve, 2000));
+
+          // Recursively call the scrape function
+          await scrape();
+        }
+      } 
+    }
+
     port.onMessage.addListener(async function(request) {
       if (request.action === "Start Scraping") {
         console.log('receieved request from popup to begin scraping');
@@ -12,29 +78,9 @@ chrome.runtime.onConnect.addListener(function(port) {
         scrapedData = [];
         isPaused = false;
         isStopped = false;
-  
-        while (!isStopped) {
-          if (!isPaused) {
-            // for every iteration, we scrape one page
-            scrapedData = await scraping(scrapedData);
-            port.postMessage({ message: "Scraped one page", data: scrapedData });
-            await scroll();
-            await goToNextPage();
 
-            // Wait for 5 seconds before checking if page is loaded
-            await new Promise(resolve => setTimeout(resolve, 5000)); 
-            // Wait for the page to finish loading before calling scraping()
-            const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
-            const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
-            await Promise.race([loaded, timeout])
-              .then(() => console.log('Page loaded'))
-              .catch(() => console.log('Page load timed out'));
-          } 
-          else {
-            console.log('scraping is paused');
-            await new Promise(resolve => setTimeout(resolve, 2000));
-          }
-        }
+        // Start the scraping process
+        scrape().then(() => console.log('scraping complete'));
       }
 
       else if (request.action === "Pause Scraping") {
@@ -53,6 +99,11 @@ chrome.runtime.onConnect.addListener(function(port) {
         isPaused = false;
         isStopped = false;
         port.postMessage({ message: "Resuming Scraping", data: scrapedData });
+
+        // Wait for 5 seconds before calling the scrape function to ensure that the page is loaded
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        // Start the scraping process
+        scrape().then(() => console.log('scraping resumed'));
       }
     });
   }
