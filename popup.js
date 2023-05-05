@@ -182,11 +182,6 @@ if (window.location.href.includes("newsearch.html")) {
 							textarea.selectionStart = startPos + textToAdd.length;
 							textarea.selectionEnd = startPos + textToAdd.length;
 						});
-						// This will move the cursor to the end of the textarea's value when the textarea loses focus, keeping it at the end of the inserted text.
-						textarea.addEventListener('blur', () => {
-							textarea.selectionStart = textarea.value.length;
-							textarea.selectionEnd = textarea.value.length;
-						});
 					});					  
 				}
 			});
