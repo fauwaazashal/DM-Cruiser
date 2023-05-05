@@ -192,11 +192,6 @@ if (window.location.href.includes("newsearch.html")) {
 				}
 			});
 		})
-
-		// handling click of enter key inside the input tag
-		inputElement.addEventListener("keypress", (event) => {
-			if (event.key === "Enter") event.preventDefault();
-		});
 	
 		// button is clicked to resume scraping
 		document.querySelector("#resume-scrape-btn").addEventListener("click", () => {
@@ -212,6 +207,11 @@ if (window.location.href.includes("newsearch.html")) {
 				}
 			});
 		})
+
+		// handling click of enter key inside the input tag
+		inputElement.addEventListener("keypress", (event) => {
+			if (event.key === "Enter") event.preventDefault();
+		});
 
 		// button is clicked to complete campaign creation and store data in local storage
 		document.querySelector("#save-campaign").addEventListener("click", async () => {
