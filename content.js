@@ -8,6 +8,10 @@ chrome.runtime.onConnect.addListener(function(port) {
     port.onMessage.addListener(async function(request) {
       if (request.action === "Start Scraping") {
         console.log('receieved request from popup to begin scraping');
+
+        scrapedData = [];
+        isPaused = false;
+        isStopped = false;
   
         while (!isStopped) {
           if (!isPaused) {
