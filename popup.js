@@ -117,21 +117,25 @@ if (window.location.href.includes("newsearch.html")) {
 		document.querySelector("#firstName").addEventListener("click", () => {
 			var textarea = document.getElementById("message-input");
 			var textToAdd = "{first_name}";
-			// Get the current cursor position
-			var startPos = textarea.selectionStart;
-			var endPos = textarea.selectionEnd;
-			// Insert the text at the cursor position
-			textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-			// Move the cursor to the end of the inserted text
-			textarea.selectionStart = startPos + textToAdd.length;
-			textarea.selectionEnd = startPos + textToAdd.length;
-			// Scroll to the position of the cursor
-			var cursorPos = textarea.selectionStart;
-			var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-			var linesAbove = Math.floor(cursorPos / textarea.cols);
-			textarea.scrollTop = lineHeight * linesAbove;
-			// Set focus on the textarea
-			textarea.focus();
+			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			// Check if there is enough space for the full string
+			if (remainingSpace >= textToAdd.length) {
+				// Get the current cursor position
+				var startPos = textarea.selectionStart;
+				var endPos = textarea.selectionEnd;
+				// Insert the text at the cursor position
+				textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+				// Move the cursor to the end of the inserted text
+				textarea.selectionStart = startPos + textToAdd.length;
+				textarea.selectionEnd = startPos + textToAdd.length;
+				// Scroll to the position of the cursor
+				var cursorPos = textarea.selectionStart;
+				var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+				var linesAbove = Math.floor(cursorPos / textarea.cols);
+				textarea.scrollTop = lineHeight * linesAbove;
+				// Set focus on the textarea
+				textarea.focus();
+			}
 			updateCharacterCount();
 		});
 
@@ -139,21 +143,25 @@ if (window.location.href.includes("newsearch.html")) {
 		document.querySelector("#lastName").addEventListener("click", () => {
 			var textarea = document.getElementById("message-input");
 			var textToAdd = "{last_name}";
-			// Get the current cursor position
-			var startPos = textarea.selectionStart;
-			var endPos = textarea.selectionEnd;
-			// Insert the text at the cursor position
-			textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-			// Move the cursor to the end of the inserted text
-			textarea.selectionStart = startPos + textToAdd.length;
-			textarea.selectionEnd = startPos + textToAdd.length;
-			// Scroll to the position of the cursor
-			var cursorPos = textarea.selectionStart;
-			var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-			var linesAbove = Math.floor(cursorPos / textarea.cols);
-			textarea.scrollTop = lineHeight * linesAbove;
-			// Set focus on the textarea
-			textarea.focus();
+			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			// Check if there is enough space for the full string
+			if (remainingSpace >= textToAdd.length) {
+				// Get the current cursor position
+				var startPos = textarea.selectionStart;
+				var endPos = textarea.selectionEnd;
+				// Insert the text at the cursor position
+				textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+				// Move the cursor to the end of the inserted text
+				textarea.selectionStart = startPos + textToAdd.length;
+				textarea.selectionEnd = startPos + textToAdd.length;
+				// Scroll to the position of the cursor
+				var cursorPos = textarea.selectionStart;
+				var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+				var linesAbove = Math.floor(cursorPos / textarea.cols);
+				textarea.scrollTop = lineHeight * linesAbove;
+				// Set focus on the textarea
+				textarea.focus();
+			}
 			updateCharacterCount();
 		});
 
@@ -161,21 +169,25 @@ if (window.location.href.includes("newsearch.html")) {
 		document.querySelector("#fullName").addEventListener("click", () => {
 			var textarea = document.getElementById("message-input");
 			var textToAdd = "{full_name}";
-			// Get the current cursor position
-			var startPos = textarea.selectionStart;
-			var endPos = textarea.selectionEnd;
-			// Insert the text at the cursor position
-			textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-			// Move the cursor to the end of the inserted text
-			textarea.selectionStart = startPos + textToAdd.length;
-			textarea.selectionEnd = startPos + textToAdd.length;
-			// Scroll to the position of the cursor
-			var cursorPos = textarea.selectionStart;
-			var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-			var linesAbove = Math.floor(cursorPos / textarea.cols);
-			textarea.scrollTop = lineHeight * linesAbove;
-			// Set focus on the textarea
-			textarea.focus();
+			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			// Check if there is enough space for the full string
+			if (remainingSpace >= textToAdd.length) {
+				// Get the current cursor position
+				var startPos = textarea.selectionStart;
+				var endPos = textarea.selectionEnd;
+				// Insert the text at the cursor position
+				textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+				// Move the cursor to the end of the inserted text
+				textarea.selectionStart = startPos + textToAdd.length;
+				textarea.selectionEnd = startPos + textToAdd.length;
+				// Scroll to the position of the cursor
+				var cursorPos = textarea.selectionStart;
+				var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+				var linesAbove = Math.floor(cursorPos / textarea.cols);
+				textarea.scrollTop = lineHeight * linesAbove;
+				// Set focus on the textarea
+				textarea.focus();
+			}
 			updateCharacterCount();
 		});
 
@@ -183,21 +195,25 @@ if (window.location.href.includes("newsearch.html")) {
 		document.querySelector("#jobTitle").addEventListener("click", () => {
 			var textarea = document.getElementById("message-input");
 			var textToAdd = "{job_title}";
-			// Get the current cursor position
-			var startPos = textarea.selectionStart;
-			var endPos = textarea.selectionEnd;
-			// Insert the text at the cursor position
-			textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-			// Move the cursor to the end of the inserted text
-			textarea.selectionStart = startPos + textToAdd.length;
-			textarea.selectionEnd = startPos + textToAdd.length;
-			// Scroll to the position of the cursor
-			var cursorPos = textarea.selectionStart;
-			var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-			var linesAbove = Math.floor(cursorPos / textarea.cols);
-			textarea.scrollTop = lineHeight * linesAbove;
-			// Set focus on the textarea
-			textarea.focus();
+			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			// Check if there is enough space for the full string
+			if (remainingSpace >= textToAdd.length) {
+				// Get the current cursor position
+				var startPos = textarea.selectionStart;
+				var endPos = textarea.selectionEnd;
+				// Insert the text at the cursor position
+				textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+				// Move the cursor to the end of the inserted text
+				textarea.selectionStart = startPos + textToAdd.length;
+				textarea.selectionEnd = startPos + textToAdd.length;
+				// Scroll to the position of the cursor
+				var cursorPos = textarea.selectionStart;
+				var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+				var linesAbove = Math.floor(cursorPos / textarea.cols);
+				textarea.scrollTop = lineHeight * linesAbove;
+				// Set focus on the textarea
+				textarea.focus();
+			}
 			updateCharacterCount();
 		});
 
