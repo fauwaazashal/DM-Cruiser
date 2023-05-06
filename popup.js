@@ -178,6 +178,7 @@ if (window.location.href.includes("newsearch.html")) {
 			textarea.scrollTop = lineHeight * linesAbove;
 			// Set focus on the textarea
 			textarea.focus();
+			updateCharacterCount();
 		});
 
 		//job title
@@ -199,7 +200,46 @@ if (window.location.href.includes("newsearch.html")) {
 			textarea.scrollTop = lineHeight * linesAbove;
 			// Set focus on the textarea
 			textarea.focus();
+			updateCharacterCount();
 		});
+
+		var textarea = document.getElementById("message-input");
+		var charCount = document.getElementById("charCount");
+		function updateCharacterCount() {
+			var count = textarea.value.length;
+			// Display the character count
+			charCount.textContent = count + "/275";
+			// Limit the input to 275 characters
+			if (count >= 275) {
+				textarea.value = textarea.value.slice(0, 275);
+				// count = 275;
+				charCount.textContent = count + "/275";
+			}
+			// if (count >= 275) {
+			// 	textarea.addEventListener("keydown", function(event) {
+			// 	  	// Allow Backspace and Delete keys for removing characters
+			// 		if (event.key === "Backspace" || event.key === "Delete") {
+			// 			setTimeout(function() {
+			// 				updateCharacterCount(); // Update the character count after a brief delay
+			// 			}, 500);
+			// 			return;
+			// 		}
+			// 		else {
+			// 			event.preventDefault(); // Prevent other key inputs
+			// 		}
+			// 	});
+			// } else {
+			// 	textarea.removeEventListener("keydown", function(event) {
+			// 		event.preventDefault();
+			// 	});
+			// }
+		};
+
+		// Call the function initially to display the character count
+		updateCharacterCount();
+
+		// Update the character count whenever there is an input event
+		textarea.addEventListener("input", updateCharacterCount);
 
 		// button is clicked to pause scraping
 		document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
