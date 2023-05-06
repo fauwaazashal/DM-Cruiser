@@ -498,9 +498,11 @@ if (window.location.href.includes("activity.html")) {
 				messageTemplate: messageTemplate
 			});
 
-			loadUrlPort.onMessage.addListener(function(response) {
+			loadUrlPort.onMessage.addListener(async function(response) {
 				if (response.message === "") {
-					
+					let leads = document.querySelectorAll(".leads-scraped");
+					leads[0].remove();
+					await injectLeadAtBottom(campaignName);
 				}
 			});
 		});
@@ -514,7 +516,7 @@ if (window.location.href.includes("activity.html")) {
 			loadUrlPort.postMessage({ action: "Stop Sending Invites" });
 
 			loadUrlPort.onMessage.addListener(function(response) {
-				if (response.message === "page fully loaded") {
+				if (response.message === "stopped sending invites") {
 					console.log(response.message);
 				}
 			});
@@ -698,12 +700,14 @@ async function injectOntoHome() {
 
 // function for injecting selected campaign's data onto activity tab of activity.html
 async function injectOntoActivityTab(campaignName) {
-	let data = await new Promise((resolve) => {
-		chrome.storage.local.get([campaignName], (result) => {
-			console.log(campaignName);
-			resolve(result[campaignName].scrapedData);
-		});
-	});
+	// let data = await new Promise((resolve) => {
+	// 	chrome.storage.local.get([campaignName], (result) => {
+	// 		console.log(campaignName);
+	// 		resolve(result[campaignName].scrapedData);
+	// 	});
+	// });
+	let campaignData = await chrome.storage.local.get(campaignName);
+	let data = campaignData[campaignName].scrapedData;
 
 	let leads = document.querySelector(".activity-leads-section");
 
@@ -755,11 +759,13 @@ async function injectOntoActivityTab(campaignName) {
 
 // function for injecting selected campaign's name and mesg template onto msg tab of activity.html
 async function injectOntoMessageTab(campaignName) {
-	let message = await new Promise((resolve) => {
-		chrome.storage.local.get([campaignName], (result) => {
-			resolve(result[campaignName].messageTemplate);
-		});
-	});
+	// let message = await new Promise((resolve) => {
+	// 	chrome.storage.local.get([campaignName], (result) => {
+	// 		resolve(result[campaignName].messageTemplate);
+	// 	});
+	// });
+	let campaignData = await chrome.storage.local.get(campaignName);
+	let message = campaignData[campaignName].messageTemplate;
 
 	let messageTemplateDiv = document.querySelector(".message-template");
 	messageTemplateDiv.querySelector("#campaign-name").value = campaignName;
@@ -772,18 +778,28 @@ async function injectOntoPeopleTab(campaignName) {
 	let pendingCount = 0;
 	let sentCount = 0;
 
-	let data = await new Promise((resolve) => {
-		chrome.storage.local.get([campaignName], (result) => {
-			console.log(campaignName);
-			for (i = 0; i < result[campaignName].scrapedData.length; i++) {
-				if (result[campaignName].scrapedData[i].status == "pending") ++pendingCount;
-				else ++sentCount;
-			}
-			document.querySelector(".pending .number").textContent = pendingCount;
-			document.querySelector(".sent .number").textContent = sentCount;
-			resolve(result[campaignName].scrapedData);
-		});
-	});
+	// let data = await new Promise((resolve) => {
+	// 	chrome.storage.local.get([campaignName], (result) => {
+	// 		console.log(campaignName);
+	// 		for (i = 0; i < result[campaignName].scrapedData.length; i++) {
+	// 			if (result[campaignName].scrapedData[i].status == "pending") ++pendingCount;
+	// 			else ++sentCount;
+	// 		}
+	// 		document.querySelector(".pending .number").textContent = pendingCount;
+	// 		document.querySelector(".sent .number").textContent = sentCount;
+	// 		resolve(result[campaignName].scrapedData);
+	// 	});
+	// });
+
+	let campaignData = await chrome.storage.local.get(campaignName);
+	let data = campaignData[campaignName].scrapedData;
+
+	for (i = 0; i < data.length; i++) {
+		if (data[i].status == "pending") ++pendingCount;
+		else ++sentCount;
+	}
+	document.querySelector(".pending .number").textContent = pendingCount;
+	document.querySelector(".sent .number").textContent = sentCount;
 
 	let leads = document.querySelector(".people-leads-section");
 
@@ -830,6 +846,56 @@ async function injectOntoPeopleTab(campaignName) {
 
 		leads.appendChild(leadDiv);
 	}
+}
+
+
+// function to inject lead at the bottom of the leads-section
+async function injectLeadAtBottom(campaignName) {
+	let campaignData = await chrome.storage.local.get(campaignName);
+	let data = campaignData[campaignName].scrapedData;
+
+	let leads = document.querySelector(".activity-leads-section");
+
+	// create new div element for lead
+	const leadDiv = document.createElement("div");
+	leadDiv.classList.add("leads-scraped");
+
+	// create image element and adding to leadDiv
+	const leadImage = document.createElement("div");
+	const image = document.createElement("img");
+	image.classList.add("lead-image");
+	if (data[i].image == "") image.setAttribute("src", "assets/defaultprofile100.png");
+	else image.setAttribute("src", data[i].image);
+	image.setAttribute("alt", data[i].fullName);
+	leadImage.appendChild(image);
+	leadDiv.appendChild(leadImage);
+
+
+	// create info element and adding to leadDiv
+	const leadInfo = document.createElement("div");
+	leadInfo.classList.add("lead-info");
+	// create name element and addding to leadInfo
+	const leadName = document.createElement("div");
+	leadName.classList.add("lead-name");
+	leadName.innerText = data[i].fullName;
+	leadName.setAttribute("href", data[i].profileLink);
+	leadInfo.appendChild(leadName);
+	// create jobTitle element and adding to leadInfo
+	const leadJobTitle = document.createElement("div");
+	leadJobTitle.classList.add("lead-title");
+	leadJobTitle.innerText = data[i].jobTitle;
+	leadInfo.appendChild(leadJobTitle);
+	// appending leadInfo (leadName + leadJobTitle) to leadDiv
+	leadDiv.appendChild(leadInfo);
+
+
+	// creating activity status element and adding to leadDiv
+	const leadStatus = document.createElement("div");
+	leadStatus.classList.add("lead-status");
+	leadStatus.innerText = data[i].status;
+	leadDiv.appendChild(leadStatus);
+
+	leads.appendChild(leadDiv);
 }
 
 
@@ -890,34 +956,53 @@ async function updateCampaignData(oldCampaignName, newCampaignName, newMessageTe
 async function deleteLead(campaignName, indexToDelete) {
 	let pendingCount = document.querySelector(".pending .number").textContent;
 	let sentCount = document.querySelector(".sent .number").textContent;
-	let messageTemplate = "";
-	let date = "";
+	// let messageTemplate = "";
+	// let date = "";
 
-	let data = await new Promise((resolve) => {
-		chrome.storage.local.get([campaignName], (result) => {
-			console.log(campaignName);
-			messageTemplate = result[campaignName].messageTemplate;
-			date = result[campaignName].date;
-			if (pendingCount > 0) document.querySelector(".pending .number").textContent = --pendingCount;
-			if (sentCount > 0) document.querySelector(".sent .number").textContent = --sentCount;
-			resolve(result[campaignName].scrapedData);
-		});
-	});
+	// let data = await new Promise((resolve) => {
+	// 	chrome.storage.local.get([campaignName], (result) => {
+	// 		console.log(campaignName);
+	// 		messageTemplate = result[campaignName].messageTemplate;
+	// 		date = result[campaignName].date;
+	// 		if (pendingCount > 0) document.querySelector(".pending .number").textContent = --pendingCount;
+	// 		if (sentCount > 0) document.querySelector(".sent .number").textContent = --sentCount;
+	// 		resolve(result[campaignName].scrapedData);
+	// 	});
+	// });
+
+	// // Remove the item at selected index postion
+	// data.splice(indexToDelete, 1);
+
+	// // Update the campaign object in local storage with the modified scrapedData array
+	// return new Promise((resolve) => {
+	// 	chrome.storage.local.set({ 
+	// 		[campaignName]: { 
+	// 			scrapedData: data,
+	// 			messageTemplate: messageTemplate,
+	// 			date: date
+	// 		} 
+	// 	}, () => {resolve();}
+	// 	);
+	// });
+
+	let campaignData = await chrome.storage.local.get(campaignName);
+	let data = campaignData[campaignName].scrapedData;
+	
+	if (pendingCount > 0) document.querySelector(".pending .number").textContent = --pendingCount;
+	if (sentCount > 0) document.querySelector(".sent .number").textContent = --sentCount;
 
 	// Remove the item at selected index postion
 	data.splice(indexToDelete, 1);
 
-	// Update the campaign object in local storage with the modified scrapedData array
-	return new Promise((resolve) => {
-		chrome.storage.local.set({ 
-			[campaignName]: { 
-				scrapedData: data,
-				messageTemplate: messageTemplate,
-				date: date
-			} 
-		}, () => {resolve();}
-		);
-	});
+	// Save the updated data back to local storage
+	await chrome.storage.local.set({
+		[campaignName]: {
+		  scrapedData: campaignData[campaignName].scrapedData,
+		  messageTemplate: campaignData[campaignName].messageTemplate,
+		  date: campaignData[campaignName].date,
+		},
+	  });
+
 }
 
 

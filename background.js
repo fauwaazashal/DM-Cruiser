@@ -26,7 +26,7 @@ chrome.action.onClicked.addListener(function () {
   });
 });
 
-
+let isStopped = false;
 
 chrome.runtime.onConnect.addListener(function(port) {
   console.log("background port detected");
@@ -52,13 +52,20 @@ chrome.runtime.onConnect.addListener(function(port) {
 
               chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
                 const invitePort = chrome.tabs.connect(tabs[0].id, { name: "send invites" });
-                    console.log("sent request from background script to content script to send invite to a lead")
-                    invitePort.postMessage({ 
-                      action: request.action, 
-                      campaignName: campaignName, 
-                      campaignData: campaignData,
-                      messageTemplate: messageTemplate
-                    });
+                console.log("sent request from background script to content script to send invite to a lead");
+                invitePort.postMessage({ 
+                  action: request.action, 
+                  campaignName: campaignName, 
+                  campaignData: campaignData,
+                  messageTemplate: messageTemplate
+                });
+
+                invitePort.onMessage.addListener( async function(response) {
+                  if (response.message === "invite sent") {
+                    await updateCampaignData(campaignName);
+
+                  }
+                });
               });
             }
           });
@@ -68,11 +75,32 @@ chrome.runtime.onConnect.addListener(function(port) {
       else if (request.action === "Stop Sending Invites") {
         console.log('receieved request from popup to stop sending invites');
         isStopped = true;
-        port.postMessage({ message: "", data: scrapedData });
+        port.postMessage({ message: "stopped sending invites" });
       }
     });
   }
 });
+
+
+
+
+// function for updating the message template and/or campaign name of selected campaign
+async function updateCampaignData(campaignName) {
+
+  let data = await chrome.storage.local.get(campaignName);
+  let firstItem = data[campaignName].scrapedData.shift();
+  firstItem.status = "sent";
+  data[campaignName].scrapedData.push(firstItem);
+
+   // Save the updated data back to local storage
+  await chrome.storage.local.set({
+    [campaignName]: {
+      scrapedData: data[campaignName].scrapedData,
+      messageTemplate: data[campaignName].messageTemplate,
+      date: data[campaignName].date,
+    },
+  });
+}
 
 
 
