@@ -89,17 +89,12 @@ chrome.runtime.onConnect.addListener(function(port) {
     port.onMessage.addListener(async function(request) {
       if (request.action === "Start Sending Invites") {
         console.log('receieved request from popup to start sending invites');
-        let campaignName = request.campaignName;
-        let campaignData = request.campaignData;
+        let leadData = request.leadData;
         let messageTemplate = request.messageTemplate;
 
-        await sendInvites(campaignData[0], messageTemplate);
-      }
+        await sendInvites(leadData, messageTemplate);
 
-      else if (request.action === "Stop Sending Invites") {
-        console.log('receieved request from popup to stop sending invites');
-        isStopped = true;
-        port.postMessage({ message: "", data: scrapedData });
+        port.postMessage({ message: "invite sent" });
       }
     });
   }
@@ -202,7 +197,7 @@ async function goToNextPage() {
 
 
 
-async function sendInvites(campaignData, messageTemplate) {
+async function sendInvites(leadData, messageTemplate) {
   
   // put the rest of your code here
   await new Promise(resolve => setTimeout(resolve, 5000));
@@ -226,10 +221,10 @@ async function sendInvites(campaignData, messageTemplate) {
     const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
     
     let customMessage = messageTemplate
-      .replace(/{first_name}/g, campaignData.firstName)
-      .replace(/{last_name}/g, campaignData.lastName)
-      .replace(/{full_name}/g, campaignData.fullName)
-      .replace(/{job_title}/g, campaignData.jobTitle);
+      .replace(/{first_name}/g, leadData.firstName)
+      .replace(/{last_name}/g, leadData.lastName)
+      .replace(/{full_name}/g, leadData.fullName)
+      .replace(/{job_title}/g, leadData.jobTitle);
 
     textBox.value = customMessage;
     // Manually trigger the input event on the text box
