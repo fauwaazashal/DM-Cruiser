@@ -106,6 +106,7 @@ if (window.location.href.includes("newsearch.html")) {
 
 						newmessageTemplateDiv.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
 						newmessageTemplateDiv.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
+						updateCharacterCount();
 					});					  
 				}
 			});
@@ -131,6 +132,7 @@ if (window.location.href.includes("newsearch.html")) {
 			textarea.scrollTop = lineHeight * linesAbove;
 			// Set focus on the textarea
 			textarea.focus();
+			updateCharacterCount();
 		});
 
 		//last name
@@ -152,6 +154,7 @@ if (window.location.href.includes("newsearch.html")) {
 			textarea.scrollTop = lineHeight * linesAbove;
 			// Set focus on the textarea
 			textarea.focus();
+			updateCharacterCount();
 		});
 
 		//full name
@@ -173,6 +176,7 @@ if (window.location.href.includes("newsearch.html")) {
 			textarea.scrollTop = lineHeight * linesAbove;
 			// Set focus on the textarea
 			textarea.focus();
+			updateCharacterCount();
 		});
 
 		//job title
@@ -194,7 +198,28 @@ if (window.location.href.includes("newsearch.html")) {
 			textarea.scrollTop = lineHeight * linesAbove;
 			// Set focus on the textarea
 			textarea.focus();
+			updateCharacterCount();
 		});
+
+		var textarea = document.getElementById("message-input");
+		var charCount = document.getElementById("charCount");
+		function updateCharacterCount() {
+			var count = textarea.value.length;
+			// Display the character count
+			charCount.textContent = count + "/275";
+			// Limit the input to 275 characters
+			if (count >= 275) {
+				textarea.value = textarea.value.slice(0, 275);
+				count = 275;
+				charCount.textContent = count + "/275";
+			}
+		};
+
+		// Call the function initially to display the character count
+		updateCharacterCount();
+
+		// Update the character count whenever there is an input event
+		textarea.addEventListener("input", updateCharacterCount);
 
 		// button is clicked to pause scraping
 		document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
