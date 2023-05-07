@@ -17,6 +17,9 @@ chrome.runtime.onConnect.addListener(function(port) {
     async function scrape() {
       if (!isStopped) {
         if (!isPaused) {
+          // await waitForWindowToLoad();
+          // console.log("Page Loaded");
+    
           // Wait for 2 seconds before checking if page is loaded
           await new Promise(resolve => setTimeout(resolve, 2000));
           // for every iteration, we scrape one page
@@ -25,17 +28,14 @@ chrome.runtime.onConnect.addListener(function(port) {
           await scroll();
           await goToNextPage();
 
-          await waitForWindowToLoad();
-          console.log("Page Loaded");
-
-          // // Wait for 5 seconds before checking if page is loaded
-          // await new Promise(resolve => setTimeout(resolve, 5000)); 
-          // // Wait for the page to finish loading before calling scraping()
-          // const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
-          // const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
-          // await Promise.race([loaded, timeout])
-          //   .then(() => console.log('Page loaded'))
-          //   .catch(() => console.log('Page load timed out'));
+          // Wait for 5 seconds before checking if page is loaded
+          await new Promise(resolve => setTimeout(resolve, 5000)); 
+          // Wait for the page to finish loading before calling scraping()
+          const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
+          const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
+          await Promise.race([loaded, timeout])
+            .then(() => console.log('Page loaded'))
+            .catch(() => console.log('Page load timed out'));
 
           // Recursively call the scrape function
           await scrape();
@@ -112,14 +112,18 @@ chrome.runtime.onConnect.addListener(function(port) {
 // function to wait until window has loaded
 async function waitForWindowToLoad() {
   return new Promise((resolve) => {
-    if (document.readyState === 'complete') {
-      // If the window has already finished loading, resolve the promise immediately
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      // If the DOM is already interactive or complete, resolve the promise immediately
       resolve();
     } else {
-      // Otherwise, wait for the window to finish loading
-      window.onload = () => {
+      // Otherwise, wait for the DOM to become interactive or for the window to finish loading
+      document.addEventListener('DOMContentLoaded', () => {
         resolve();
-      };
+      }, { once: true });
+
+      window.addEventListener('load', () => {
+        resolve();
+      }, { once: true });
     }
   });
 }
@@ -131,7 +135,6 @@ async function scraping(scrapedData) {
   let leads = document.querySelectorAll('.entity-result');
 
   for (let i = 0; i < leads.length; i++) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
 
     if (leads[i].querySelector('.artdeco-button__text').innerText == 'Connect') {
 
@@ -208,9 +211,9 @@ async function goToNextPage() {
 
 async function sendInvites(leadData, messageTemplate) {
   
-  // put the rest of your code here
+  console.log("loaded lead's profile");
   await new Promise(resolve => setTimeout(resolve, 5000));
-  console.log("click on user profile");
+  
   // click on the connect btn
   const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
   connectBtn.click();
