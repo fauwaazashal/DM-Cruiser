@@ -392,6 +392,21 @@ if (window.location.href.includes("home.html")) {
 		}
 	})();
 
+	// clicks on create campaign btn
+	document.querySelector("#create-campaign").addEventListener("click", () => {
+		const preScrapePort = chrome.runtime.connect({ name: "pre scrape url check" });
+
+		preScrapePort.postMessage({ action: "is user on the right page to scrape" });
+		preScrapePort.onMessage.addListener( async function(response) {
+			if (response.message === "user is on the right page") {
+				window.location.href = "newsearch.html";
+			}
+			else if (response.message === "user is not on the right page") {
+				alert("set your filter before scraping");
+			}
+		});
+	});
+
 	// button is clicked to close the popup
 	const closeButtonHome = document.querySelector(".close-btn");
 	closeButtonHome.addEventListener("click", function() {

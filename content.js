@@ -3,6 +3,9 @@
 let scrapedData = [];
 let isPaused = false;
 let isStopped = false;
+const minDelay = 5000; // minimum delay in milliseconds
+const maxDelay = 8000; // maximum delay in milliseconds
+const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
 
 //----------------------------------------Listening to Port requests----------------------------------------------------
 
@@ -29,10 +32,10 @@ chrome.runtime.onConnect.addListener(function(port) {
           await goToNextPage();
 
           // Wait for 5 seconds before checking if page is loaded
-          await new Promise(resolve => setTimeout(resolve, 5000)); 
+          await new Promise(resolve => setTimeout(resolve, randomDelay)); 
           // Wait for the page to finish loading before calling scraping()
           const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
-          const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
+          const timeout = new Promise(resolve => setTimeout(resolve, randomDelay)); // Wait for 5 seconds before timing out
           await Promise.race([loaded, timeout])
             .then(() => console.log('Page loaded'))
             .catch(() => console.log('Page load timed out'));
@@ -212,13 +215,13 @@ async function goToNextPage() {
 async function sendInvites(leadData, messageTemplate) {
   
   console.log("loaded lead's profile");
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  await new Promise(resolve => setTimeout(resolve, randomDelay));
   
   // click on the connect btn
   const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
   connectBtn.click();
   console.log("clicked on connect btn");
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  await new Promise(resolve => setTimeout(resolve, randomDelay));
 
 
   if (messageTemplate.length > 0) {
@@ -226,7 +229,7 @@ async function sendInvites(leadData, messageTemplate) {
     const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view.mr1");
     addNoteBtn.click();
     console.log("clicked on add note btn");
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, randomDelay));
     
 
     // enter text from msg template onot the text box
@@ -243,7 +246,7 @@ async function sendInvites(leadData, messageTemplate) {
     const inputEvent = new Event('input');
     textBox.dispatchEvent(inputEvent);
     console.log("injected msg onto text box");
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, randomDelay));
   }
 
 
@@ -251,7 +254,7 @@ async function sendInvites(leadData, messageTemplate) {
   const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1");
   //sendBtn.click();
   console.log("clicked send btn");
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  await new Promise(resolve => setTimeout(resolve, randomDelay));
   
 }
 

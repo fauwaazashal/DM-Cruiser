@@ -1,3 +1,15 @@
+//-----------------------------------------------global variables----------------------------------------------------
+
+const minDelay = 5000; // minimum delay in milliseconds
+const maxDelay = 8000; // maximum delay in milliseconds
+const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+let isStopped = false;
+let campaignName = "";
+
+//----------------------------------------------listening for requests----------------------------------------------------
+
+
+
 // Listens for when the extension icon in the toolbar is clicked
 chrome.action.onClicked.addListener(function () {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -27,11 +39,34 @@ chrome.action.onClicked.addListener(function () {
 });
 
 
-let isStopped = false;
-let campaignName = "";
-
+// Listens for requests from the popup script
 chrome.runtime.onConnect.addListener(function(port) {
   console.log("background port detected");
+
+  // port for checking if the user is on the right page before initiating scraping
+  if (port.name === "pre scrape url check") {
+    port.onMessage.addListener(async function(request) {
+      if (request.action == "is user on the right page to scrape") {
+        chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+          let currentTab = tabs[0];
+          let currentUrl = currentTab.url;
+          let targetUrl = "https://www.linkedin.com/search/results/people";
+    
+          if (currentUrl.startsWith(targetUrl)) {
+            port.postMessage({ message: "user is on the right page" });
+          }
+    
+          else {
+            await navigate(targetUrl);
+            port.postMessage({ message: "user is not on the right page" });
+          }
+        });
+      } 
+    });
+    
+  }
+
+  // port for automating invites to leads
   if (port.name === "load leads profiles") {
     console.log("established connection with port to load users' profiles one by one");
 
