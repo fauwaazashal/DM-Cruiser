@@ -27,6 +27,156 @@ chrome.action.onClicked.addListener(function () {
 });
 
 
+let isStopped = false;
+let campaignName = "";
+
+chrome.runtime.onConnect.addListener(function(port) {
+  console.log("background port detected");
+  if (port.name === "load leads profiles") {
+    console.log("established connection with port to load users' profiles one by one");
+
+    async function navigateSendInvites(campaignName) {
+
+      while (!isStopped) {
+        let campaignData = await retrieveCampaignData(campaignName);
+        let leadsData = campaignData.scrapedData;
+        let messageTemplate = campaignData.messageTemplate;
+        console.log(leadsData);
+
+        let pendingCount = 0;
+        for (let i = 0; i < leadsData.length; i++) {
+          if (leadsData[i].status == "pending") ++pendingCount;
+        }
+
+        if (pendingCount != 0) {
+          console.log(leadsData[0].profileLink);
+          // loads leads's profile onto webpage
+          await navigate(leadsData[0].profileLink);
+          console.log("profile page loaded");
+
+
+          if (!isStopped) {
+            // calls function to send invite to lead
+            await sendInvite(campaignName, leadsData[0], messageTemplate);
+            console.log("sent invite to one lead");
+            port.postMessage({ message: "invite sent and updated data in storage" });
+          }
+
+          else break;
+        }
+
+        else {
+          isStopped = true;
+          console.log("sent invites to all leads");
+        }
+        
+      }
+    }
+
+    port.onMessage.addListener(async function(request) {
+      if (request.action === "Start Sending Invites") {
+        console.log("receieved request from popup to load users' profiles");
+        campaignName = request.campaignName;
+
+        navigateSendInvites(campaignName);
+      }
+
+      else if (request.action === "Stop Sending Invites") {
+        console.log('receieved request from popup to stop sending invites');
+        isStopped = true;
+        port.postMessage({ message: "stopped sending invites" });
+      }
+    });
+  }
+});
+
+
+
+//-----------------------------------------------functions ()----------------------------------------------------
+
+
+
+// function to retrieve selected campaign's data
+async function retrieveCampaignData(campaignName) {
+  let campaignData = await new Promise((resolve) => {
+		chrome.storage.local.get([campaignName], (result) => {
+		  	console.log(campaignName);
+		  	resolve(result[campaignName]);
+		});
+	});
+	return campaignData;
+}
+
+
+// function reload the web page with the lead's profile link
+async function navigate(profileLink) {
+  return new Promise(resolve => {
+    chrome.tabs.update({ url: profileLink }, function(tab) {
+      chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+        if (tabId === tab.id && changeInfo.status === "complete") {
+          chrome.tabs.onUpdated.removeListener(listener);
+          setTimeout(() => resolve(true), 3000);
+        }
+      });
+    });
+  });
+}
+
+
+// function to create port and send request to content script to send invite to lead
+async function sendInvite(campaignName, leadData, messageTemplate) {
+  return new Promise((resolve) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+      console.log(tabs);
+
+      const invitePort = chrome.tabs.connect(tabs[0].id, { name: "send invites" });
+      console.log("sent request from background script to content script to send invite to a lead")
+      invitePort.postMessage({ 
+        action: "Start Sending Invites", 
+        leadData: leadData,
+        messageTemplate: messageTemplate
+      });
+
+      invitePort.onMessage.addListener(async function(response) {
+        if (response.message === "invite sent") {
+          await updateCampaignData(campaignName);
+
+          resolve();
+        }
+      });
+    });
+  });
+}
+
+
+// function for updating the message template and/or campaign name of selected campaign
+async function updateCampaignData(campaignName) {
+  let campaignData = await new Promise((resolve) => {
+		chrome.storage.local.get([campaignName], (result) => {
+		  	console.log(result[campaignName]);
+		  	resolve(result[campaignName]);
+		});
+	})
+
+  let firstItem = campaignData.scrapedData.shift();
+  firstItem.status = "sent";
+  campaignData.scrapedData.push(firstItem);
+
+  return new Promise((resolve) => {
+		chrome.storage.local.set({ 
+			[campaignName]: { 
+				scrapedData: campaignData.scrapedData,
+				messageTemplate: campaignData.messageTemplate,
+				date: campaignData.date
+			} 
+		}, () => {resolve();}
+		);
+	});
+}
+
+
+
+
 // // Saves the last visited popup's data when the popup is closed
 // chrome.windows.onRemoved.addListener(function(windowId) {
 //   // Check if the closed window was the popup window

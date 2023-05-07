@@ -1,10 +1,52 @@
+//---------------------------------------------global variables--------------------------------------------------
+
 let scrapedData = [];
 let isPaused = false;
 let isStopped = false;
 
+//----------------------------------------Listening to Port requests----------------------------------------------------
+
+
+
 chrome.runtime.onConnect.addListener(function(port) {
+
   if (port.name === "scrape leads") {
     console.log("established connection with port to scrape leads");
+
+    // function to call other functions to carry out the scraping
+    async function scrape() {
+      if (!isStopped) {
+        if (!isPaused) {
+          // Wait for 2 seconds before checking if page is loaded
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          // for every iteration, we scrape one page
+          scrapedData = await scraping(scrapedData);
+          port.postMessage({ message: "Scraped one page", data: scrapedData });
+          await scroll();
+          await goToNextPage();
+
+          // Wait for 5 seconds before checking if page is loaded
+          await new Promise(resolve => setTimeout(resolve, 5000)); 
+          // Wait for the page to finish loading before calling scraping()
+          const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
+          const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
+          await Promise.race([loaded, timeout])
+            .then(() => console.log('Page loaded'))
+            .catch(() => console.log('Page load timed out'));
+
+          // Recursively call the scrape function
+          await scrape();
+        } 
+        else {
+          console.log('scraping is paused');
+          await new Promise(resolve => setTimeout(resolve, 2000));
+
+          // Recursively call the scrape function
+          await scrape();
+        }
+      } 
+    }
+
     port.onMessage.addListener(async function(request) {
       if (request.action === "Start Scraping") {
         console.log('receieved request from popup to begin scraping');
@@ -12,29 +54,9 @@ chrome.runtime.onConnect.addListener(function(port) {
         scrapedData = [];
         isPaused = false;
         isStopped = false;
-  
-        while (!isStopped) {
-          if (!isPaused) {
-            // for every iteration, we scrape one page
-            scrapedData = await scraping(scrapedData);
-            port.postMessage({ message: "Scraped one page", data: scrapedData });
-            await scroll();
-            await goToNextPage();
 
-            // Wait for 5 seconds before checking if page is loaded
-            await new Promise(resolve => setTimeout(resolve, 5000)); 
-            // Wait for the page to finish loading before calling scraping()
-            const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
-            const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
-            await Promise.race([loaded, timeout])
-              .then(() => console.log('Page loaded'))
-              .catch(() => console.log('Page load timed out'));
-          } 
-          else {
-            console.log('scraping is paused');
-            await new Promise(resolve => setTimeout(resolve, 2000));
-          }
-        }
+        // Start the scraping process
+        scrape().then(() => console.log('scraping complete'));
       }
 
       else if (request.action === "Pause Scraping") {
@@ -53,6 +75,11 @@ chrome.runtime.onConnect.addListener(function(port) {
         isPaused = false;
         isStopped = false;
         port.postMessage({ message: "Resuming Scraping", data: scrapedData });
+
+        // Wait for 5 seconds before calling the scrape function to ensure that the page is loaded
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        // Start the scraping process
+        scrape().then(() => console.log('scraping resumed'));
       }
     });
   }
@@ -62,66 +89,21 @@ chrome.runtime.onConnect.addListener(function(port) {
     port.onMessage.addListener(async function(request) {
       if (request.action === "Start Sending Invites") {
         console.log('receieved request from popup to start sending invites');
-        scrapedData = request.data;
-        await sendInvites(scrapedData); 
+        let leadData = request.leadData;
+        let messageTemplate = request.messageTemplate;
 
-        // scrapedData = request.data;
-        // while (true) {
-        //   await sendInvites(scrapedData); 
-        //   port.postMessage({ message: "", updatedData:  });
-        // }
-        
-      }
+        await sendInvites(leadData, messageTemplate);
 
-      else if (request.action === "Stop Sending Invites") {
-        console.log('receieved request from popup to stop sending invites');
-        isStopped = true;
-        port.postMessage({ message: "", data: scrapedData });
+        port.postMessage({ message: "invite sent" });
       }
     });
   }
 });
 
-// // Send the scraped data to the background script and handle any errors
-// chrome.runtime.sendMessage({ requestType: "storeData", data: scrapedData, keyName: "campaign 1" }, function(response) {
-//   console.log("Request sent to background script to store data");
 
-//   // receiving a response from the background script as a confirmation that the data has been stored in the local storage
-//   console.log(response.message);
 
-//   // sending response back to popup script confirming that the data has been scraped and stored in the local storage  
-//   sendResponse({ message: "Data scraped and stored successfully" });        
-// });
+//-----------------------------------------------functions ()----------------------------------------------------
 
-// let isPaused = false;
-// let isStopped = false;
-// let scrapedData =[];
-
-// chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
-//   if (request.requestType === "scrapeLeads") {
-//     console.log('receieved request from popup to begin scraping');
-    
-//     scrapedData = await scraping(scrapedData);
-//     sendResponse({ message: "scraped one page", data: scrapedData });
-//     await scroll();
-//     await goToNextPage();
-//   }
-//   else if (request.requestType === "pauseScraping") {
-//     console.log('receieved request from popup to pause scraping');
-//     isPaused = true; // 
-//   }
-//   else if (request.requestType === "stopScraping") {
-//     console.log('receieved request from popup to stop scraping');
-//     isStopped = true;
-//     sendResponse({ message: "scraping completed" });
-//   }
-//   else if (request.requestType === "resumeScraping") {
-//     console.log('receieved request from popup to resume scraping');
-//     isPaused = false;
-//     scraping(scrapedData);
-//   }
-//   return true;
-// });
 
 
 // function to wait until window has loaded
@@ -215,35 +197,98 @@ async function goToNextPage() {
 
 
 
-async function sendInvites(data) {
+async function sendInvites(leadData, messageTemplate) {
   
-  // wait for 5 seconds or until window loads
-  window.location.href = data.profileLink;
+  // put the rest of your code here
   await new Promise(resolve => setTimeout(resolve, 5000));
-
+  console.log("click on user profile");
   // click on the connect btn
-  const connectBtn = document.querySelector(".artdeco-button artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+  const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
   connectBtn.click();
+  console.log("clicked on connect btn");
   await new Promise(resolve => setTimeout(resolve, 3000));
 
-  // click on the add a note btn
-  const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view mr1");
-  addNoteBtn.click();
-  await new Promise(resolve => setTimeout(resolve, 3000));
 
-  // enter text from msg template onot the text box
-  const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
-  textBox.value = data.messageTemplate;
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  if (messageTemplate.length > 0) {
+    // click on the add a note btn
+    const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view.mr1");
+    addNoteBtn.click();
+    console.log("clicked on add note btn");
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    
+
+    // enter text from msg template onot the text box
+    const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
+    
+    let customMessage = messageTemplate
+      .replace(/{first_name}/g, leadData.firstName)
+      .replace(/{last_name}/g, leadData.lastName)
+      .replace(/{full_name}/g, leadData.fullName)
+      .replace(/{job_title}/g, leadData.jobTitle);
+
+    textBox.value = customMessage;
+    // Manually trigger the input event on the text box
+    const inputEvent = new Event('input');
+    textBox.dispatchEvent(inputEvent);
+    console.log("injected msg onto text box");
+    await new Promise(resolve => setTimeout(resolve, 3000));
+  }
+
 
   // click on the send btn
-  const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.artdeco-button--disabled.ember-view.ml1");
-  sendBtn.classList.remove(".artdeco-button--disabled");
-  sendBtn.removeAttribute("disabled");
-  sendBtn.click();
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1");
+  //sendBtn.click();
+  console.log("clicked send btn");
+  await new Promise(resolve => setTimeout(resolve, 5000));
   
 }
+
+
+
+//-------------------------------------------------previous drafts----------------------------------------------------
+
+
+
+// // Send the scraped data to the background script and handle any errors
+// chrome.runtime.sendMessage({ requestType: "storeData", data: scrapedData, keyName: "campaign 1" }, function(response) {
+//   console.log("Request sent to background script to store data");
+
+//   // receiving a response from the background script as a confirmation that the data has been stored in the local storage
+//   console.log(response.message);
+
+//   // sending response back to popup script confirming that the data has been scraped and stored in the local storage  
+//   sendResponse({ message: "Data scraped and stored successfully" });        
+// });
+
+// let isPaused = false;
+// let isStopped = false;
+// let scrapedData =[];
+
+// chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
+//   if (request.requestType === "scrapeLeads") {
+//     console.log('receieved request from popup to begin scraping');
+    
+//     scrapedData = await scraping(scrapedData);
+//     sendResponse({ message: "scraped one page", data: scrapedData });
+//     await scroll();
+//     await goToNextPage();
+//   }
+//   else if (request.requestType === "pauseScraping") {
+//     console.log('receieved request from popup to pause scraping');
+//     isPaused = true; // 
+//   }
+//   else if (request.requestType === "stopScraping") {
+//     console.log('receieved request from popup to stop scraping');
+//     isStopped = true;
+//     sendResponse({ message: "scraping completed" });
+//   }
+//   else if (request.requestType === "resumeScraping") {
+//     console.log('receieved request from popup to resume scraping');
+//     isPaused = false;
+//     scraping(scrapedData);
+//   }
+//   return true;
+// });
 
 
 
