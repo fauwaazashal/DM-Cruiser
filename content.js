@@ -25,14 +25,17 @@ chrome.runtime.onConnect.addListener(function(port) {
           await scroll();
           await goToNextPage();
 
-          // Wait for 5 seconds before checking if page is loaded
-          await new Promise(resolve => setTimeout(resolve, 5000)); 
-          // Wait for the page to finish loading before calling scraping()
-          const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
-          const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
-          await Promise.race([loaded, timeout])
-            .then(() => console.log('Page loaded'))
-            .catch(() => console.log('Page load timed out'));
+          await waitForWindowToLoad();
+          console.log("Page Loaded");
+
+          // // Wait for 5 seconds before checking if page is loaded
+          // await new Promise(resolve => setTimeout(resolve, 5000)); 
+          // // Wait for the page to finish loading before calling scraping()
+          // const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
+          // const timeout = new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before timing out
+          // await Promise.race([loaded, timeout])
+          //   .then(() => console.log('Page loaded'))
+          //   .catch(() => console.log('Page load timed out'));
 
           // Recursively call the scrape function
           await scrape();
@@ -109,9 +112,15 @@ chrome.runtime.onConnect.addListener(function(port) {
 // function to wait until window has loaded
 async function waitForWindowToLoad() {
   return new Promise((resolve) => {
-    window.onload = () => {
+    if (document.readyState === 'complete') {
+      // If the window has already finished loading, resolve the promise immediately
       resolve();
-    };
+    } else {
+      // Otherwise, wait for the window to finish loading
+      window.onload = () => {
+        resolve();
+      };
+    }
   });
 }
 
