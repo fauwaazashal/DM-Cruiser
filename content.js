@@ -120,10 +120,9 @@ async function waitForWindowToLoad() {
 async function scraping(scrapedData) {
 
   let leads = document.querySelectorAll('.entity-result');
-  console.log("below is a number of leads on this page");
-  console.log(leads);
 
   for (let i = 0; i < leads.length; i++) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     if (leads[i].querySelector('.artdeco-button__text').innerText == 'Connect') {
 
