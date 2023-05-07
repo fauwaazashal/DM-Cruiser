@@ -119,8 +119,9 @@ async function waitForWindowToLoad() {
 // function to scraped leads from the current page 
 async function scraping(scrapedData) {
 
-  
   let leads = document.querySelectorAll('.entity-result');
+  console.log("below is a number of leads on this page");
+  console.log(leads);
 
   for (let i = 0; i < leads.length; i++) {
 
