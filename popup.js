@@ -940,9 +940,11 @@ async function deleteLead(campaignName, indexToDelete) {
 
 	let campaignData = await chrome.storage.local.get(campaignName);
 	let data = campaignData[campaignName].scrapedData;
-	
-	if (pendingCount > 0) document.querySelector(".pending .number").textContent = --pendingCount;
-	if (sentCount > 0) document.querySelector(".sent .number").textContent = --sentCount;
+
+	if (data[indexToDelete].status === "pending") 
+		document.querySelector(".pending .number").textContent = --pendingCount;
+	else 
+		document.querySelector(".sent .number").textContent = --sentCount;
 
 	// Remove the item at selected index postion
 	data.splice(indexToDelete, 1);
