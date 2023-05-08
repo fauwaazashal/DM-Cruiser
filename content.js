@@ -101,7 +101,6 @@ chrome.runtime.onConnect.addListener(function(port) {
         let messageTemplate = request.messageTemplate;
 
         await sendInvites(leadData, messageTemplate);
-
         port.postMessage({ message: "invite sent" });
       }
     });

@@ -117,7 +117,7 @@ chrome.runtime.onConnect.addListener(function(port) {
       }
 
       else if (request.action === "Stop Sending Invites") {
-        console.log('receieved request from popup to stop sending invites');
+        console.log("receieved request from popup to stop sending invites");
         isStopped = true;
         port.postMessage({ message: "stopped sending invites" });
       }
