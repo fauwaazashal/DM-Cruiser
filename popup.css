@@ -433,6 +433,16 @@ h6 {
 #heading-message {
 	margin-left: 50px;
 }
+
+#charCountMessage {
+	position: absolute;
+	bottom: 240px;
+	right: 55px;
+	color: gray;
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: white;
+}
+
 /* 
 .right-arrow-btn-message-footer {
 	position: absolute;
@@ -607,6 +617,7 @@ h6 {
 	right: 55px;
 	color: gray;
 	font-family: Arial, Helvetica, sans-serif;
+	background-color: white;
 }
 
 .activity-heading-section,.people-top-section {
