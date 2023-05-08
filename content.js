@@ -5,7 +5,7 @@ let isPaused = false;
 let isStopped = false;
 const minDelay = 5000; // minimum delay in milliseconds
 const maxDelay = 8000; // maximum delay in milliseconds
-const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+let randomDelay = 0;
 
 //----------------------------------------Listening to Port requests----------------------------------------------------
 
@@ -32,9 +32,11 @@ chrome.runtime.onConnect.addListener(function(port) {
           await goToNextPage();
 
           // Wait for 5 seconds before checking if page is loaded
+          randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
           await new Promise(resolve => setTimeout(resolve, randomDelay)); 
           // Wait for the page to finish loading before calling scraping()
           const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
+          randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
           const timeout = new Promise(resolve => setTimeout(resolve, randomDelay)); // Wait for 5 seconds before timing out
           await Promise.race([loaded, timeout])
             .then(() => console.log('Page loaded'))
@@ -215,12 +217,14 @@ async function goToNextPage() {
 async function sendInvites(leadData, messageTemplate) {
   
   console.log("loaded lead's profile");
+  randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
   await new Promise(resolve => setTimeout(resolve, randomDelay));
   
   // click on the connect btn
   const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
   connectBtn.click();
   console.log("clicked on connect btn");
+  randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
   await new Promise(resolve => setTimeout(resolve, randomDelay));
 
 
@@ -229,6 +233,7 @@ async function sendInvites(leadData, messageTemplate) {
     const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view.mr1");
     addNoteBtn.click();
     console.log("clicked on add note btn");
+    randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
     await new Promise(resolve => setTimeout(resolve, randomDelay));
     
 
@@ -246,6 +251,7 @@ async function sendInvites(leadData, messageTemplate) {
     const inputEvent = new Event('input');
     textBox.dispatchEvent(inputEvent);
     console.log("injected msg onto text box");
+    randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
     await new Promise(resolve => setTimeout(resolve, randomDelay));
   }
 
@@ -254,6 +260,7 @@ async function sendInvites(leadData, messageTemplate) {
   const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1");
   //sendBtn.click();
   console.log("clicked send btn");
+  randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
   await new Promise(resolve => setTimeout(resolve, randomDelay));
   
 }
