@@ -401,9 +401,6 @@ if (window.location.href.includes("home.html")) {
 			if (response.message === "user is on the right page") {
 				window.location.href = "newsearch.html";
 			}
-			else if (response.message === "user is not on the right page") {
-				alert("set your filter before scraping");
-			}
 		});
 	});
 

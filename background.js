@@ -52,14 +52,8 @@ chrome.runtime.onConnect.addListener(function(port) {
           let currentUrl = currentTab.url;
           let targetUrl = "https://www.linkedin.com/search/results/people";
     
-          if (currentUrl.startsWith(targetUrl)) {
-            port.postMessage({ message: "user is on the right page" });
-          }
-    
-          else {
-            await navigate(targetUrl);
-            port.postMessage({ message: "user is not on the right page" });
-          }
+          if (!currentUrl.startsWith(targetUrl)) await navigate(targetUrl);
+          port.postMessage({ message: "user is on the right page" });
         });
       } 
     });
