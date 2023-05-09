@@ -764,10 +764,6 @@ async function injectOntoHome() {
 	const campaignsSection = document.querySelector(".campaigns-section");
 
 	for (let i = 0; i < campaignKeys.length; i++) {
-		// const result = await new Promise(resolve => {
-		// 	chrome.storage.local.get([campaignKeys[i]], resolve);
-		// });
-
 		let scrapedData = campaignStorage.Campaigns[campaignKeys[i]].scrapedData;
 		let date = campaignStorage.Campaigns[campaignKeys[i]].date;
 		let sentCount = 0;
@@ -775,9 +771,6 @@ async function injectOntoHome() {
 		for (let i = 0; i < scrapedData.length; i++) {
 			if (scrapedData[i].status === "sent") ++sentCount;
 		}
-
-		// let storedScrapedData = result[campaignKeys[i]].scrapedData;
-		// let storedDate = result[campaignKeys[i]].date;
 	
 		// create new div element for newly created campaign
 		const campaignDiv = document.createElement("div");
@@ -834,80 +827,6 @@ async function injectOntoHome() {
 	
 		campaignsSection.appendChild(campaignDiv);
 	}
-
-
-
-	// const items = await new Promise(resolve => {
-	// 	chrome.storage.local.get(null, resolve);
-	// });
-	
-	// const keys = Object.keys(items);
-
-	// const campaigns = document.querySelector(".campaigns-section");
-
-	// for (let i = 0; i < keys.length; i++) {
-	// 	const result = await new Promise(resolve => {
-	// 		chrome.storage.local.get([keys[i]], resolve);
-	// 	});
-
-	// 	let storedScrapedData = result[keys[i]].scrapedData;
-	// 	let storedDate = result[keys[i]].date;
-	
-	// 	// create new div element for newly created campaign
-	// 	const campaignDiv = document.createElement("div");
-	// 	campaignDiv.classList.add("campaign-box");
-	
-	// 	// create campaign info (name + status) element and add to campaignDiv
-	// 	const campaignInfo = document.createElement("div");
-	// 	campaignInfo.classList.add("campaign-info");
-	// 	// create campaign name element and add to campaignInfo
-	// 	const campName = document.createElement("div");
-	// 	campName.classList.add("campaign-name");
-	// 	campName.innerText = keys[i];
-	// 	campaignInfo.appendChild(campName);
-	// 	// create activity status element and add to campaignInfo
-	// 	const campaignStatus = document.createElement("div");
-	// 	campaignStatus.classList.add("activity-status");
-	// 	campaignStatus.innerText = `1 of ${storedScrapedData.length}`;
-	// 	campaignInfo.appendChild(campaignStatus);
-	// 	// appending campaign info (name + status) to campaignDiv
-	// 	campaignDiv.appendChild(campaignInfo);
-	
-	// 	// create date element and add it to campaignDiv
-	// 	const campaignDate = document.createElement("div");
-	// 	campaignDate.classList.add("date");
-	// 	campaignDate.innerText = storedDate;
-	// 	campaignDiv.appendChild(campaignDate);
-
-	// 	// create cancel delete button and add it to campaignDiv
-	// 	const cancelDelete = document.createElement("div");
-	// 	cancelDelete.classList.add("cancel-delete-btn", "hide");
-	// 	const cancelDeleteImage = document.createElement("img");
-	// 	cancelDeleteImage.classList.add("cancel-delete-btn-img");
-	// 	cancelDeleteImage.setAttribute("src", "assets/Close-icon.png");
-	// 	cancelDelete.appendChild(cancelDeleteImage);
-	// 	campaignDiv.appendChild(cancelDelete);
-	
-	// 	// create delete button and add it to campaignDiv
-	// 	const deleteCampaign = document.createElement("div");
-	// 	deleteCampaign.classList.add("delete-campaign-btn");
-	// 	const deleteBtnImage = document.createElement("img");
-	// 	deleteBtnImage.classList.add("delete-campaign-btn-img");
-	// 	deleteBtnImage.setAttribute("src", "assets/delete-icon.png");
-	// 	deleteCampaign.appendChild(deleteBtnImage);
-	// 	campaignDiv.appendChild(deleteCampaign);
-
-	// 	// create confirm delete button and add it to campaignDiv
-	// 	const confirmDelete = document.createElement("div");
-	// 	confirmDelete.classList.add("confirm-delete-btn", "hide");
-	// 	const confirmDeleteImage = document.createElement("img");
-	// 	confirmDeleteImage.classList.add("confirm-delete-btn-img");
-	// 	confirmDeleteImage.setAttribute("src", "assets/right-tick-icon.png");
-	// 	confirmDelete.appendChild(confirmDeleteImage);
-	// 	campaignDiv.appendChild(confirmDelete);
-	
-	// 	campaigns.appendChild(campaignDiv);
-	// }
 	console.log("injected all created campaigns onto home.html");
 } 
 
@@ -970,9 +889,6 @@ async function injectOntoActivityTab(campaignName) {
 
 // function for injecting selected campaign's name and mesg template onto msg tab of activity.html
 async function injectOntoMessageTab(campaignName) {
-	// let campaignData = await chrome.storage.local.get(campaignName);
-	// let message = campaignData[campaignName].messageTemplate;
-
 	let campaignStorage = await chrome.storage.local.get("Campaigns");
 	let message = campaignStorage.Campaigns[campaignName].messageTemplate;
 
@@ -986,9 +902,6 @@ async function injectOntoMessageTab(campaignName) {
 async function injectOntoPeopleTab(campaignName) {
 	let pendingCount = 0;
 	let sentCount = 0;
-
-	// let campaignData = await chrome.storage.local.get(campaignName);
-	// let data = campaignData[campaignName].scrapedData;
 
 	let campaignStorage = await chrome.storage.local.get("Campaigns");
 	let data = campaignStorage["Campaigns"][campaignName].scrapedData;
@@ -1050,9 +963,6 @@ async function injectOntoPeopleTab(campaignName) {
 
 // function to inject lead at the bottom of the leads-section
 async function injectLeadAtBottom(campaignName) {
-	// let campaignData = await chrome.storage.local.get(campaignName);
-	// let data = campaignData[campaignName].scrapedData;
-
 	let campaignStorage = await chrome.storage.local.get("Campaigns");
 	let data = campaignStorage.Campaigns[campaignName].scrapedData;
 
@@ -1119,9 +1029,6 @@ async function injectRemove() {
 
 // function to store created campaign's data in local storage
 async function storeCampaignData(campaignName, scrapedData, messageTemplate, date){
-	// storing data in local storage
-	// chrome.storage.local.set({ [campaignName]: { scrapedData, messageTemplate, date } });
-
 	// Define the data for the new campaign
 	let newCampaignData = {
 		scrapedData: scrapedData,
@@ -1132,25 +1039,11 @@ async function storeCampaignData(campaignName, scrapedData, messageTemplate, dat
 	let campaignStorage = await chrome.storage.local.get('Campaigns');
 	campaignStorage.Campaigns[campaignName]= newCampaignData;
 	await chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns });
-	
-	// // Read the current data from the storage
-	// chrome.storage.local.get(null, function(data) {
-	// 	// Check if the Campaigns key exists
-	// 	if (!data.Campaigns) {
-	// 	// If it doesn't exist, create it as an empty object
-	// 	data.Campaigns = {};
-	// 	}
-	// 	// Add the new campaign data to the Campaigns object
-	// 	data.Campaigns[campaignName] = newCampaignData;
-	// 	// Save the modified data to the storage
-	// 	chrome.storage.local.set(data);
-	// });
 }
 
 
 // function to delete selected campaign's data from local storage
 async function deleteCampaignData(campaignName){
-	// await chrome.storage.local.remove(`Campaigns.${campaignName}`);
 	let campaignStorage = await chrome.storage.local.get('Campaigns');
 	delete campaignStorage.Campaigns[campaignName];
 	await chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns })
@@ -1171,55 +1064,10 @@ async function updateCampaignData(oldCampaignName, newCampaignName, newMessageTe
 	delete campaignStorage.Campaigns[oldCampaignName];
 	campaignStorage.Campaigns[newCampaignName] = updatedCampaignData;
 	await chrome.storage.local.set({Campaigns: campaignStorage.Campaigns});
-
-	// return new Promise((resolve, reject) => {
-	// 	chrome.storage.local.get(oldCampaignName, function(data) {
-	// 		const existingData = data[oldCampaignName];
-	// 		if (!existingData) {
-	// 			reject(`Data for campaign ${oldCampaignName} not found in storage`);
-	// 			return;
-	// 		}
-	
-	// 		const newData = {
-	// 			scrapedData: existingData.scrapedData,
-	// 			messageTemplate: newMessageTemplate,
-	// 			date: existingData.date
-	// 		};
-	
-	// 		chrome.storage.local.remove(oldCampaignName, function() {
-	// 			chrome.storage.local.set({ [newCampaignName]: newData }, function() {
-	// 				resolve(`Campaign data updated successfully. New campaign name: ${newCampaignName}`);
-	// 			});
-	// 		});
-	// 	});
-	// });
 }
 
 // function to delete a lead's data from local storage
 async function deleteLead(campaignName, indexToDelete) {
-	// let pendingCount = document.querySelector(".pending .number").textContent;
-	// let sentCount = document.querySelector(".sent .number").textContent;
-
-	// let campaignData = await chrome.storage.local.get(campaignName);
-	// let data = campaignData[campaignName].scrapedData;
-
-	// if (data[indexToDelete].status === "pending") 
-	// 	document.querySelector(".pending .number").textContent = --pendingCount;
-	// else 
-	// 	document.querySelector(".sent .number").textContent = --sentCount;
-
-	// // Remove the item at selected index postion
-	// data.splice(indexToDelete, 1);
-
-	// // Save the updated data back to local storage
-	// await chrome.storage.local.set({
-	// 	[campaignName]: {
-	// 	  scrapedData: campaignData[campaignName].scrapedData,
-	// 	  messageTemplate: campaignData[campaignName].messageTemplate,
-	// 	  date: campaignData[campaignName].date,
-	// 	},
-	//   });
-
 	let pendingCount = document.querySelector(".pending .number").textContent;
 	let sentCount = document.querySelector(".sent .number").textContent;
 
