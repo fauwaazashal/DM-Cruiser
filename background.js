@@ -10,6 +10,22 @@ let campaignName = "";
 
 
 
+// Stores pre-requisite data upon installation of extension
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.local.get(function(data) {
+    if (!data || !data.Campaigns) {
+      chrome.storage.local.set({
+        Campaigns: {},
+        messageTemplates: {},
+        lastVisitedState: ""
+      }, function() {
+        console.log("Data saved");
+      });
+    }
+  });
+});
+
+
 // Listens for when the extension icon in the toolbar is clicked
 chrome.action.onClicked.addListener(function () {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -127,12 +143,19 @@ chrome.runtime.onConnect.addListener(function(port) {
 
 // function to retrieve selected campaign's data
 async function retrieveCampaignData(campaignName) {
+  // let campaignData = await new Promise((resolve) => {
+	// 	chrome.storage.local.get([campaignName], (result) => {
+	// 	  	console.log(campaignName);
+	// 	  	resolve(result[campaignName]);
+	// 	});
+	// });
   let campaignData = await new Promise((resolve) => {
-		chrome.storage.local.get([campaignName], (result) => {
+		chrome.storage.local.get('Campaigns', (result) => {
 		  	console.log(campaignName);
-		  	resolve(result[campaignName]);
+		  	resolve(result.Campaigns[campaignName]);
 		});
 	});
+
 	return campaignData;
 }
 
@@ -180,27 +203,33 @@ async function sendInvite(campaignName, leadData, messageTemplate) {
 
 // function for updating the message template and/or campaign name of selected campaign
 async function updateCampaignData(campaignName) {
-  let campaignData = await new Promise((resolve) => {
-		chrome.storage.local.get([campaignName], (result) => {
-		  	console.log(result[campaignName]);
-		  	resolve(result[campaignName]);
-		});
-	})
+  // let campaignData = await new Promise((resolve) => {
+	// 	chrome.storage.local.get('Campaigns', (result) => {
+	// 	  	console.log(result[campaignName]);
+	// 	  	resolve(result.Campaigns[campaignName]);
+	// 	});
+	// })
+  let campaignStorage = await chrome.storage.local.get('Campaigns');
 
-  let firstItem = campaignData.scrapedData.shift();
+  let firstItem = campaignStorage.Campaigns[campaignName].scrapedData.shift();
   firstItem.status = "sent";
-  campaignData.scrapedData.push(firstItem);
+  campaignStorage.Campaigns[campaignName].scrapedData.push(firstItem);
 
   return new Promise((resolve) => {
-		chrome.storage.local.set({ 
-			[campaignName]: { 
-				scrapedData: campaignData.scrapedData,
-				messageTemplate: campaignData.messageTemplate,
-				date: campaignData.date
-			} 
-		}, () => {resolve();}
+		chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns }, () => {resolve();}
 		);
 	});
+
+  // return new Promise((resolve) => {
+	// 	chrome.storage.local.set({ 
+	// 		[campaignName]: { 
+	// 			scrapedData: campaignData.scrapedData,
+	// 			messageTemplate: campaignData.messageTemplate,
+	// 			date: campaignData.date
+	// 		} 
+	// 	}, () => {resolve();}
+	// 	);
+	// });
 }
 
 
