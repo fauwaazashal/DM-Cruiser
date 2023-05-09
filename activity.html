@@ -57,10 +57,19 @@
                 </form>
                 <form id="message">
                     <h5>Connection Request Message</h5>
-                    <textarea id="message-input" rows="6" cols="30" placeholder="Enter your message here" form="Default Message"></textarea>
+                    <!-- <input type="text" placeholder="Enter your message here" maxlength="300"> -->
+                    <textarea id="message-input" rows="8" cols="35" placeholder="Enter your message here" class="sizing" form="Default Message" maxlength="275"></textarea>
+                    <div id="charCountMessage"></div>
                 </form>
+                <div class="placeholders">
+                    <p>Placeholders Available:</p>
+                    <button class="placeholder-button" id="firstName">First Name</button>
+                    <button class="placeholder-button" id="lastName">Last Name</button>
+                    <button class="placeholder-button" id="fullName">Full Name</button>
+                    <br>
+                    <button class="placeholder-button" id="jobTitle">Job Title</button>
+                </div>
             </div>
-
             <div class="message-footer">
                 <button id="save-update-msg-campname-btn">Save Changes</button>
             </div>

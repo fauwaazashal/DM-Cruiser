@@ -232,7 +232,7 @@ if (window.location.href.includes("newsearch.html")) {
 		};
 
 		// Call the function initially to display the character count
-		updateCharacterCount();
+		// updateCharacterCount();
 
 		// Update the character count whenever there is an input event
 		textarea.addEventListener("input", updateCharacterCount);
@@ -450,7 +450,135 @@ if (window.location.href.includes("activity.html")) {
 
 				//await injectRemove();
 				await injectOntoMessageTab(campaignName);
+				// updateCharacterCount();
+
+				// placeholder buttons functionality
+				//first name
+				document.querySelector("#firstName").addEventListener("click", () => {
+					var textarea = document.getElementById("message-input");
+					var textToAdd = "{first_name}";
+					var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+					// Check if there is enough space for the full string
+					if (remainingSpace >= textToAdd.length) {
+						// Get the current cursor position
+						var startPos = textarea.selectionStart;
+						var endPos = textarea.selectionEnd;
+						// Insert the text at the cursor position
+						textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+						// Move the cursor to the end of the inserted text
+						textarea.selectionStart = startPos + textToAdd.length;
+						textarea.selectionEnd = startPos + textToAdd.length;
+						// Scroll to the position of the cursor
+						var cursorPos = textarea.selectionStart;
+						var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+						var linesAbove = Math.floor(cursorPos / textarea.cols);
+						textarea.scrollTop = lineHeight * linesAbove;
+						// Set focus on the textarea
+						textarea.focus();
+					}
+					updateCharacterCount();
+				});
+
+				//last name
+				document.querySelector("#lastName").addEventListener("click", () => {
+					var textarea = document.getElementById("message-input");
+					var textToAdd = "{last_name}";
+					var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+					// Check if there is enough space for the full string
+					if (remainingSpace >= textToAdd.length) {
+						// Get the current cursor position
+						var startPos = textarea.selectionStart;
+						var endPos = textarea.selectionEnd;
+						// Insert the text at the cursor position
+						textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+						// Move the cursor to the end of the inserted text
+						textarea.selectionStart = startPos + textToAdd.length;
+						textarea.selectionEnd = startPos + textToAdd.length;
+						// Scroll to the position of the cursor
+						var cursorPos = textarea.selectionStart;
+						var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+						var linesAbove = Math.floor(cursorPos / textarea.cols);
+						textarea.scrollTop = lineHeight * linesAbove;
+						// Set focus on the textarea
+						textarea.focus();
+					}
+					updateCharacterCount();
+				});
+
+				//full name
+				document.querySelector("#fullName").addEventListener("click", () => {
+					var textarea = document.getElementById("message-input");
+					var textToAdd = "{full_name}";
+					var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+					// Check if there is enough space for the full string
+					if (remainingSpace >= textToAdd.length) {
+						// Get the current cursor position
+						var startPos = textarea.selectionStart;
+						var endPos = textarea.selectionEnd;
+						// Insert the text at the cursor position
+						textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+						// Move the cursor to the end of the inserted text
+						textarea.selectionStart = startPos + textToAdd.length;
+						textarea.selectionEnd = startPos + textToAdd.length;
+						// Scroll to the position of the cursor
+						var cursorPos = textarea.selectionStart;
+						var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+						var linesAbove = Math.floor(cursorPos / textarea.cols);
+						textarea.scrollTop = lineHeight * linesAbove;
+						// Set focus on the textarea
+						textarea.focus();
+					}
+					updateCharacterCount();
+				});
+
+				//job title
+				document.querySelector("#jobTitle").addEventListener("click", () => {
+					var textarea = document.getElementById("message-input");
+					var textToAdd = "{job_title}";
+					var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+					// Check if there is enough space for the full string
+					if (remainingSpace >= textToAdd.length) {
+						// Get the current cursor position
+						var startPos = textarea.selectionStart;
+						var endPos = textarea.selectionEnd;
+						// Insert the text at the cursor position
+						textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+						// Move the cursor to the end of the inserted text
+						textarea.selectionStart = startPos + textToAdd.length;
+						textarea.selectionEnd = startPos + textToAdd.length;
+						// Scroll to the position of the cursor
+						var cursorPos = textarea.selectionStart;
+						var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+						var linesAbove = Math.floor(cursorPos / textarea.cols);
+						textarea.scrollTop = lineHeight * linesAbove;
+						// Set focus on the textarea
+						textarea.focus();
+					}
+					updateCharacterCount();
+				});
+
+				var textarea = document.getElementById("message-input");
+				var charCount = document.getElementById("charCountMessage");
+				function updateCharacterCount() {
+					var count = textarea.value.length;
+					// Display the character count
+					charCount.textContent = count + "/275";
+					// Limit the input to 275 characters
+					if (count >= 275) {
+						textarea.value = textarea.value.slice(0, 275);
+						count = 275;
+						charCount.textContent = count + "/275";
+					}
+				};
+
+				// Call the function initially to display the character count
+				updateCharacterCount();
+
+				// Update the character count whenever there is an input event
+				textarea.addEventListener("input", updateCharacterCount);
 			}
+
+			
 
 			// clicks on btn to save changes made to campaign name and/or message template
 			document.querySelector("#save-update-msg-campname-btn").addEventListener("click", async () => {
