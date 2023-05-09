@@ -787,7 +787,7 @@ async function injectOntoHome() {
 // function for injecting selected campaign's data onto activity tab of activity.html
 async function injectOntoActivityTab(campaignName) {
 	let campaignStorage = await chrome.storage.local.get("Campaigns");
-	let data = campaignStorage["Campaigns"][campaignName].scrapedData;
+	let data = campaignStorage.Campaigns[campaignName].scrapedData;
 
 	// let campaignData = await chrome.storage.local.get(campaignName);
 	// let data = campaignData[campaignName].scrapedData;
