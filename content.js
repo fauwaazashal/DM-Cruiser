@@ -141,7 +141,7 @@ async function scraping(scrapedData) {
 
 	for (let i = 0; i < leads.length; i++) {
 
-		if (leads[i].querySelector('.artdeco-button__text').innerText == 'Connect') {
+		if (leads[i].querySelector('.artdeco-button__text')?.innerText == 'Connect') {
 
 			let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
 			let leadFirstName = leadName.split(' ')[0];
