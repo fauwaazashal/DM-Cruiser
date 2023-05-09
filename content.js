@@ -138,30 +138,32 @@ async function waitForWindowToLoad() {
 async function scraping(scrapedData) {
 
 	let leads = document.querySelectorAll('.entity-result');
+	
+	if (leads) {
+		for (let i = 0; i < leads.length; i++) {
 
-	for (let i = 0; i < leads.length; i++) {
-
-		if (leads[i].querySelector('.artdeco-button__text')?.innerText == 'Connect') {
-
-			let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
-			let leadFirstName = leadName.split(' ')[0];
-			let leadLastName = leadName.split(' ').pop();
-			let leadJobTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
-			let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
-			let leadImageElement = leads[i].querySelector('.presence-entity.presence-entity--size-3 img');
-			let leadImage = leadImageElement ? leadImageElement.getAttribute('src') : '';
-
-			let leadData = {
-				fullName: leadName,
-				firstName: leadFirstName,
-				lastName: leadLastName,
-				jobTitle: leadJobTitle,
-				profileLink: leadProfileLink,
-				image: leadImage,
-				status: "pending"
-			};
-
-			scrapedData.push(leadData);
+			if (leads[i].querySelector('.artdeco-button__text')?.innerText == 'Connect') {
+	
+				let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
+				let leadFirstName = leadName.split(' ')[0];
+				let leadLastName = leadName.split(' ').pop();
+				let leadJobTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
+				let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
+				let leadImageElement = leads[i].querySelector('.presence-entity.presence-entity--size-3 img');
+				let leadImage = leadImageElement ? leadImageElement.getAttribute('src') : '';
+	
+				let leadData = {
+					fullName: leadName,
+					firstName: leadFirstName,
+					lastName: leadLastName,
+					jobTitle: leadJobTitle,
+					profileLink: leadProfileLink,
+					image: leadImage,
+					status: "pending"
+				};
+	
+				scrapedData.push(leadData);
+			}
 		}
 	}
 	console.log(scrapedData);

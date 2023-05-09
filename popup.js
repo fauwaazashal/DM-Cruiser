@@ -66,10 +66,12 @@ if (window.location.href.includes("newsearch.html")) {
 					// obtaining the length of the data (from reverse) that is to be injected
 					injectDataLength = scrapedData.length - prevIterationData;
 					// updating the data that needs to be injected in this iteration
-					injectData = scrapedData.slice(-injectDataLength);
-					console.log(injectData);
-					// inject response.data onto popup
-					await injectOntoNewsearch(injectData);
+					if (injectDataLength != 0) {
+						injectData = scrapedData.slice(-injectDataLength);
+						console.log(injectData);
+						// inject response.data onto popup
+						await injectOntoNewsearch(injectData);
+					}
 					
 					// scrolls to bottom of leads section to show latest list of leads that were scraped
 					setTimeout(() => {
@@ -99,21 +101,12 @@ if (window.location.href.includes("newsearch.html")) {
 
 			scrapePort.onMessage.addListener(async function(response) {
 				if (response.message === "Stopped Scraping") {
-					let data = await chrome.storage.local.get('Campaigns');
-					let campaignKeys = Object.keys(data["Campaigns"]);
+					let campaignStorage = await chrome.storage.local.get('Campaigns');
+					let campaignKeys = Object.keys(campaignStorage["Campaigns"]);
 					let campaignCount = campaignKeys.length;
 					newmessageTemplateDiv.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
 					newmessageTemplateDiv.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
-					updateCharacterCount();
-
-					// chrome.storage.local.get(null, async (items) => {
-					// 	campaignCount = Object.keys(items).length;
-					// 	console.log(Object.keys(items).length);
-
-					// 	newmessageTemplateDiv.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
-					// 	newmessageTemplateDiv.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
-					// 	updateCharacterCount();
-					// });					  
+					updateCharacterCount();					  
 				}
 			});
 		})
