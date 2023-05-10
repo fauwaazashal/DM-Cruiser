@@ -112,6 +112,7 @@ if (window.location.href.includes("newsearch.html")) {
 			});
 		})
 
+		// Campaign Name Error Message
 		const textbox = document.getElementById('campaign-name');
 		const errorMessage = document.getElementById('error-message');
 
