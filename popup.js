@@ -90,6 +90,7 @@ if (window.location.href.includes("newsearch.html")) {
 		
 		// button is clicked to stop scraping and now user has to create messsage template & campaign name
 		document.querySelector("#stop-search-btn").addEventListener("click", () => {
+			document.querySelector(".remove-btn").disabled = false;
 			pauseScrapeFooter.classList.add("hide");
 			resumeScrapeFooter.classList.remove("hide");
 			loadingContainer.classList.add("hide");
@@ -250,6 +251,17 @@ if (window.location.href.includes("newsearch.html")) {
 					
 				}
 			});
+			// button is clicked to remove any selected leads before saving the campaign
+			document.querySelector(".remove-btn").addEventListener("click", () => {
+				let leads = document.querySelectorAll(".leads-scraped");
+				let removeBtns = document.querySelectorAll(".remove-btn");
+				for (let i = 0; i < removeBtns.length; i++) {
+					removeBtns[i].addEventListener("click", async () => {
+						scrapedData.splice(i, 1);
+						leads[i].remove();
+					});
+				}
+			})
 		})
 	
 		// button is clicked to resume scraping
@@ -300,6 +312,18 @@ if (window.location.href.includes("newsearch.html")) {
 		newmessageTemplateDiv.querySelector(".back").addEventListener("click", () => {
 			newsearchDiv.classList.remove("hide");
 			newmessageTemplateDiv.classList.add("hide");
+
+			// button is clicked to remove any selected leads before saving the campaign
+			document.querySelector(".remove-btn").addEventListener("click", () => {
+				let leads = document.querySelectorAll(".leads-scraped");
+				let removeBtns = document.querySelectorAll(".remove-btn");
+				for (let i = 0; i < removeBtns.length; i++) {
+					removeBtns[i].addEventListener("click", async () => {
+						scrapedData.splice(i, 1);
+						leads[i].remove();
+					});
+				}
+			})
 		})
 
 		// button is clicked to go from newsearch page back to home page
@@ -427,6 +451,11 @@ if (window.location.href.includes("activity.html")) {
 		const startInviteFooter = document.querySelector(".start-invite-activity-footer");
 		const stopInviteFooter = document.querySelector(".stop-invite-activity-footer");
 		const inputElement = document.querySelector("#campaign-name");
+		const startScrapeFooter = document.querySelector(".start-search-footer");
+		const stopScrapeFooter = document.querySelector(".stop-search-footer");
+		const pauseScrapeFooter = document.querySelector(".pause-search");
+		const resumeScrapeFooter = document.querySelector(".resume-search");
+		const loadingContainer = document.querySelector(".loading-container");
 		const closeButtonActivity = document.querySelector(".close-btn");
 
 		// retrieve campaignName from session storage
@@ -450,132 +479,133 @@ if (window.location.href.includes("activity.html")) {
 				//await injectRemove();
 				await injectOntoMessageTab(campaignName);
 				// updateCharacterCount();
-
-				// placeholder buttons functionality
-				//first name
-				document.querySelector("#firstName").addEventListener("click", () => {
-					var textarea = document.getElementById("message-input");
-					var textToAdd = "{first_name}";
-					var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
-					// Check if there is enough space for the full string
-					if (remainingSpace >= textToAdd.length) {
-						// Get the current cursor position
-						var startPos = textarea.selectionStart;
-						var endPos = textarea.selectionEnd;
-						// Insert the text at the cursor position
-						textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-						// Move the cursor to the end of the inserted text
-						textarea.selectionStart = startPos + textToAdd.length;
-						textarea.selectionEnd = startPos + textToAdd.length;
-						// Scroll to the position of the cursor
-						var cursorPos = textarea.selectionStart;
-						var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-						var linesAbove = Math.floor(cursorPos / textarea.cols);
-						textarea.scrollTop = lineHeight * linesAbove;
-						// Set focus on the textarea
-						textarea.focus();
-					}
-					updateCharacterCount();
-				});
-
-				//last name
-				document.querySelector("#lastName").addEventListener("click", () => {
-					var textarea = document.getElementById("message-input");
-					var textToAdd = "{last_name}";
-					var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
-					// Check if there is enough space for the full string
-					if (remainingSpace >= textToAdd.length) {
-						// Get the current cursor position
-						var startPos = textarea.selectionStart;
-						var endPos = textarea.selectionEnd;
-						// Insert the text at the cursor position
-						textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-						// Move the cursor to the end of the inserted text
-						textarea.selectionStart = startPos + textToAdd.length;
-						textarea.selectionEnd = startPos + textToAdd.length;
-						// Scroll to the position of the cursor
-						var cursorPos = textarea.selectionStart;
-						var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-						var linesAbove = Math.floor(cursorPos / textarea.cols);
-						textarea.scrollTop = lineHeight * linesAbove;
-						// Set focus on the textarea
-						textarea.focus();
-					}
-					updateCharacterCount();
-				});
-
-				//full name
-				document.querySelector("#fullName").addEventListener("click", () => {
-					var textarea = document.getElementById("message-input");
-					var textToAdd = "{full_name}";
-					var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
-					// Check if there is enough space for the full string
-					if (remainingSpace >= textToAdd.length) {
-						// Get the current cursor position
-						var startPos = textarea.selectionStart;
-						var endPos = textarea.selectionEnd;
-						// Insert the text at the cursor position
-						textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-						// Move the cursor to the end of the inserted text
-						textarea.selectionStart = startPos + textToAdd.length;
-						textarea.selectionEnd = startPos + textToAdd.length;
-						// Scroll to the position of the cursor
-						var cursorPos = textarea.selectionStart;
-						var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-						var linesAbove = Math.floor(cursorPos / textarea.cols);
-						textarea.scrollTop = lineHeight * linesAbove;
-						// Set focus on the textarea
-						textarea.focus();
-					}
-					updateCharacterCount();
-				});
-
-				//job title
-				document.querySelector("#jobTitle").addEventListener("click", () => {
-					var textarea = document.getElementById("message-input");
-					var textToAdd = "{job_title}";
-					var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
-					// Check if there is enough space for the full string
-					if (remainingSpace >= textToAdd.length) {
-						// Get the current cursor position
-						var startPos = textarea.selectionStart;
-						var endPos = textarea.selectionEnd;
-						// Insert the text at the cursor position
-						textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-						// Move the cursor to the end of the inserted text
-						textarea.selectionStart = startPos + textToAdd.length;
-						textarea.selectionEnd = startPos + textToAdd.length;
-						// Scroll to the position of the cursor
-						var cursorPos = textarea.selectionStart;
-						var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-						var linesAbove = Math.floor(cursorPos / textarea.cols);
-						textarea.scrollTop = lineHeight * linesAbove;
-						// Set focus on the textarea
-						textarea.focus();
-					}
-					updateCharacterCount();
-				});
-
-				var textarea = document.getElementById("message-input");
-				var charCount = document.getElementById("charCountMessage");
-				function updateCharacterCount() {
-					var count = textarea.value.length;
-					// Display the character count
-					charCount.textContent = count + "/275";
-					// Limit the input to 275 characters
-					if (count >= 275) {
-						textarea.value = textarea.value.slice(0, 275);
-						count = 275;
-						charCount.textContent = count + "/275";
-					}
-				};
-
-				// Call the function initially to display the character count
-				updateCharacterCount();
-
-				// Update the character count whenever there is an input event
-				textarea.addEventListener("input", updateCharacterCount);
 			}
+
+
+			// placeholder buttons functionality
+			//first name
+			document.querySelector("#firstName").addEventListener("click", () => {
+				var textarea = document.getElementById("message-input");
+				var textToAdd = "{first_name}";
+				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+				// Check if there is enough space for the full string
+				if (remainingSpace >= textToAdd.length) {
+					// Get the current cursor position
+					var startPos = textarea.selectionStart;
+					var endPos = textarea.selectionEnd;
+					// Insert the text at the cursor position
+					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+					// Move the cursor to the end of the inserted text
+					textarea.selectionStart = startPos + textToAdd.length;
+					textarea.selectionEnd = startPos + textToAdd.length;
+					// Scroll to the position of the cursor
+					var cursorPos = textarea.selectionStart;
+					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+					var linesAbove = Math.floor(cursorPos / textarea.cols);
+					textarea.scrollTop = lineHeight * linesAbove;
+					// Set focus on the textarea
+					textarea.focus();
+				}
+				updateCharacterCount();
+			});
+
+			//last name
+			document.querySelector("#lastName").addEventListener("click", () => {
+				var textarea = document.getElementById("message-input");
+				var textToAdd = "{last_name}";
+				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+				// Check if there is enough space for the full string
+				if (remainingSpace >= textToAdd.length) {
+					// Get the current cursor position
+					var startPos = textarea.selectionStart;
+					var endPos = textarea.selectionEnd;
+					// Insert the text at the cursor position
+					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+					// Move the cursor to the end of the inserted text
+					textarea.selectionStart = startPos + textToAdd.length;
+					textarea.selectionEnd = startPos + textToAdd.length;
+					// Scroll to the position of the cursor
+					var cursorPos = textarea.selectionStart;
+					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+					var linesAbove = Math.floor(cursorPos / textarea.cols);
+					textarea.scrollTop = lineHeight * linesAbove;
+					// Set focus on the textarea
+					textarea.focus();
+				}
+				updateCharacterCount();
+			});
+
+			//full name
+			document.querySelector("#fullName").addEventListener("click", () => {
+				var textarea = document.getElementById("message-input");
+				var textToAdd = "{full_name}";
+				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+				// Check if there is enough space for the full string
+				if (remainingSpace >= textToAdd.length) {
+					// Get the current cursor position
+					var startPos = textarea.selectionStart;
+					var endPos = textarea.selectionEnd;
+					// Insert the text at the cursor position
+					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+					// Move the cursor to the end of the inserted text
+					textarea.selectionStart = startPos + textToAdd.length;
+					textarea.selectionEnd = startPos + textToAdd.length;
+					// Scroll to the position of the cursor
+					var cursorPos = textarea.selectionStart;
+					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+					var linesAbove = Math.floor(cursorPos / textarea.cols);
+					textarea.scrollTop = lineHeight * linesAbove;
+					// Set focus on the textarea
+					textarea.focus();
+				}
+				updateCharacterCount();
+			});
+
+			//job title
+			document.querySelector("#jobTitle").addEventListener("click", () => {
+				var textarea = document.getElementById("message-input");
+				var textToAdd = "{job_title}";
+				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+				// Check if there is enough space for the full string
+				if (remainingSpace >= textToAdd.length) {
+					// Get the current cursor position
+					var startPos = textarea.selectionStart;
+					var endPos = textarea.selectionEnd;
+					// Insert the text at the cursor position
+					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+					// Move the cursor to the end of the inserted text
+					textarea.selectionStart = startPos + textToAdd.length;
+					textarea.selectionEnd = startPos + textToAdd.length;
+					// Scroll to the position of the cursor
+					var cursorPos = textarea.selectionStart;
+					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+					var linesAbove = Math.floor(cursorPos / textarea.cols);
+					textarea.scrollTop = lineHeight * linesAbove;
+					// Set focus on the textarea
+					textarea.focus();
+				}
+				updateCharacterCount();
+			});
+
+			var textarea = document.getElementById("message-input");
+			var charCount = document.getElementById("charCountMessage");
+			function updateCharacterCount() {
+				var count = textarea.value.length;
+				// Display the character count
+				charCount.textContent = count + "/275";
+				// Limit the input to 275 characters
+				if (count >= 275) {
+					textarea.value = textarea.value.slice(0, 275);
+					count = 275;
+					charCount.textContent = count + "/275";
+				}
+			};
+
+			// Call the function initially to display the character count
+			updateCharacterCount();
+
+			// Update the character count whenever there is an input event
+			textarea.addEventListener("input", updateCharacterCount);
 
 			
 
@@ -617,9 +647,9 @@ if (window.location.href.includes("activity.html")) {
 			let removeBtns = document.querySelectorAll(".remove-btn");
 			for (let i = 0; i < removeBtns.length; i++) {
 				removeBtns[i].addEventListener("click", async () => {
-					let indexToDelete = i;
+					let leadName = leads[i].querySelector(".lead-name").innerText;
 
-					await deleteLead(campaignName, indexToDelete);
+					await deleteLead(campaignName, leadName);
 					leads[i].remove();
 				});
 			}
@@ -1060,20 +1090,24 @@ async function updateCampaignData(oldCampaignName, newCampaignName, newMessageTe
 }
 
 // function to delete a lead's data from local storage
-async function deleteLead(campaignName, indexToDelete) {
+async function deleteLead(campaignName, leadName) {
 	let pendingCount = document.querySelector(".pending .number").textContent;
 	let sentCount = document.querySelector(".sent .number").textContent;
 
 	let campaignStorage = await chrome.storage.local.get('Campaigns');
 	let data = campaignStorage.Campaigns[campaignName].scrapedData;
 
-	if (data[indexToDelete].status === "pending") 
-		document.querySelector(".pending .number").textContent = --pendingCount;
-	else 
-		document.querySelector(".sent .number").textContent = --sentCount;
+	for (let i = 0; i < data.length; i++) {
+		if (data[i].fullName == leadName) {
+			if (data[i].status === "pending") 
+			document.querySelector(".pending .number").textContent = --pendingCount;
+		else 
+			document.querySelector(".sent .number").textContent = --sentCount;
 
-	// Remove the item at selected index postion
-	data.splice(indexToDelete, 1);
+		// Remove the item at selected index postion
+		data.splice(i, 1);
+		}
+	}
 
 	// Save the updated data back to local storage
 	await chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns });
