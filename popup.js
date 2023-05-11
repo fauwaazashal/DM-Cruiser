@@ -621,7 +621,6 @@ async function injectOntoNewsearch(data) {
 		leadDeleteImage.setAttribute("src", "assets/red-delete-icon.png");
 		leadDelete.appendChild(leadDeleteImage);
 		leadDiv.appendChild(leadDelete);
-
 		leads.appendChild(leadDiv);
 	}	
 }
