@@ -21,7 +21,6 @@ let date = "";
 let campaignName = "";
 let messageTemplate = "";
 let activityStatus = "";
-let campaignCount = 0;
 let pendingCount = 0;
 let sentCount = 0;
 
@@ -67,10 +66,12 @@ if (window.location.href.includes("newsearch.html")) {
 					// obtaining the length of the data (from reverse) that is to be injected
 					injectDataLength = scrapedData.length - prevIterationData;
 					// updating the data that needs to be injected in this iteration
-					injectData = scrapedData.slice(-injectDataLength);
-					console.log(injectData);
-					// inject response.data onto popup
-					await injectOntoNewsearch(injectData);
+					if (injectDataLength != 0) {
+						injectData = scrapedData.slice(-injectDataLength);
+						console.log(injectData);
+						// inject response.data onto popup
+						await injectOntoNewsearch(injectData);
+					}
 					
 					// scrolls to bottom of leads section to show latest list of leads that were scraped
 					setTimeout(() => {
@@ -98,16 +99,14 @@ if (window.location.href.includes("newsearch.html")) {
 			console.log("sent request to content script to stop scraping");
 			scrapePort.postMessage({ action: "Stop Scraping" });
 
-			scrapePort.onMessage.addListener(function(response) {
+			scrapePort.onMessage.addListener(async function(response) {
 				if (response.message === "Stopped Scraping") {
-					chrome.storage.local.get(null, async (items) => {
-						campaignCount = Object.keys(items).length;
-						console.log(Object.keys(items).length);
-
-						newmessageTemplateDiv.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
-						newmessageTemplateDiv.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
-						updateCharacterCount();
-					});					  
+					let campaignStorage = await chrome.storage.local.get('Campaigns');
+					let campaignKeys = Object.keys(campaignStorage["Campaigns"]);
+					let campaignCount = campaignKeys.length;
+					newmessageTemplateDiv.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
+					newmessageTemplateDiv.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
+					updateCharacterCount();					  
 				}
 			});
 		})
@@ -232,7 +231,7 @@ if (window.location.href.includes("newsearch.html")) {
 		};
 
 		// Call the function initially to display the character count
-		updateCharacterCount();
+		// updateCharacterCount();
 
 		// Update the character count whenever there is an input event
 		textarea.addEventListener("input", updateCharacterCount);
@@ -251,6 +250,17 @@ if (window.location.href.includes("newsearch.html")) {
 					
 				}
 			});
+			// button is clicked to remove any selected leads before saving the campaign
+			document.querySelector(".remove-btn").addEventListener("click", () => {
+				let leads = document.querySelectorAll(".leads-scraped");
+				let removeBtns = document.querySelectorAll(".remove-btn");
+				for (let i = 0; i < removeBtns.length; i++) {
+					removeBtns[i].addEventListener("click", async () => {
+						scrapedData.splice(i, 1);
+						leads[i].remove();
+					});
+				}
+			})
 		})
 	
 		// button is clicked to resume scraping
@@ -279,7 +289,7 @@ if (window.location.href.includes("newsearch.html")) {
 			messageTemplate = newmessageTemplateDiv.querySelector("#message-input").value;
 			date = new Date().toLocaleDateString("en-IN");
 
-			await storeCampaignData(scrapedData, campaignName, messageTemplate, date);
+			await storeCampaignData(campaignName, scrapedData, messageTemplate, date);
 
 			newmessageTemplateDiv.classList.add("hide");
 			newsearchDiv.classList.remove("hide");
@@ -301,6 +311,18 @@ if (window.location.href.includes("newsearch.html")) {
 		newmessageTemplateDiv.querySelector(".back").addEventListener("click", () => {
 			newsearchDiv.classList.remove("hide");
 			newmessageTemplateDiv.classList.add("hide");
+
+			// button is clicked to remove any selected leads before saving the campaign
+			document.querySelector(".remove-btn").addEventListener("click", () => {
+				let leads = document.querySelectorAll(".leads-scraped");
+				let removeBtns = document.querySelectorAll(".remove-btn");
+				for (let i = 0; i < removeBtns.length; i++) {
+					removeBtns[i].addEventListener("click", async () => {
+						scrapedData.splice(i, 1);
+						leads[i].remove();
+					});
+				}
+			})
 		})
 
 		// button is clicked to go from newsearch page back to home page
@@ -341,12 +363,12 @@ if (window.location.href.includes("home.html")) {
 		console.log(document.querySelectorAll(".campaign-box"));
 
 		// button is clicked to open the activity page of selected campaign
-		let campaigns = document.querySelectorAll(".campaign-box");
-		for (let i = 0; i < campaigns.length; i++) {
-			campaigns[i].addEventListener("click", (event) => {
+		let campaignDivs = document.querySelectorAll(".campaign-box");
+		for (let i = 0; i < campaignDivs.length; i++) {
+			campaignDivs[i].addEventListener("click", (event) => {
 				// Check if the delete button was clicked
 				if (!event.target.classList.contains("delete-campaign-btn")) {
-				campaignName = campaigns[i].querySelector(".campaign-name").innerText;
+				campaignName = campaignDivs[i].querySelector(".campaign-name").innerText;
 				// store campaignName in session storage so that it accessible even on activity.html
 				sessionStorage.setItem("campaignName", campaignName);
 				window.location.href = "activity.html";
@@ -354,12 +376,12 @@ if (window.location.href.includes("home.html")) {
 			});
 
 			// storing refernces of the delete btn, cancel delete btn and confirm delete btn
-			let deleteCampaignBtn = campaigns[i].querySelector(".delete-campaign-btn");
-			let confirmDeleteBtn = campaigns[i].querySelector(".confirm-delete-btn");
-			let cancelDeleteBtn = campaigns[i].querySelector(".cancel-delete-btn");
+			let deleteCampaignBtn = campaignDivs[i].querySelector(".delete-campaign-btn");
+			let confirmDeleteBtn = campaignDivs[i].querySelector(".confirm-delete-btn");
+			let cancelDeleteBtn = campaignDivs[i].querySelector(".cancel-delete-btn");
 
 			// Add click event listener to the delete button
-			campaigns[i].querySelector(".delete-campaign-btn").addEventListener("click", async (event) => {
+			campaignDivs[i].querySelector(".delete-campaign-btn").addEventListener("click", async (event) => {
 				// Stop the event propagation to prevent the parent div's click event from being triggered
 				event.stopPropagation();
 				
@@ -369,19 +391,19 @@ if (window.location.href.includes("home.html")) {
 			});
 
 			// btn is clicked to confirm the deleting of the campaign
-			campaigns[i].querySelector(".confirm-delete-btn").addEventListener("click", async (event) => {
+			campaignDivs[i].querySelector(".confirm-delete-btn").addEventListener("click", async (event) => {
 				// Stop the event propagation to prevent the parent div's click event from being triggered
 				event.stopPropagation();
 
-				campaignName = campaigns[i].querySelector(".campaign-name").innerText;
+				campaignName = campaignDivs[i].querySelector(".campaign-name").innerText;
 				// call function to delete selected campaign
 				await deleteCampaignData(campaignName);
 				// Delete the parent div
-				campaigns[i].remove();
+				campaignDivs[i].remove();
 			});
 			
 			// btn is clicked to cancel the deleting of the campaign
-			campaigns[i].querySelector(".cancel-delete-btn").addEventListener("click", async (event) => {
+			campaignDivs[i].querySelector(".cancel-delete-btn").addEventListener("click", async (event) => {
 				// Stop the event propagation to prevent the parent div's click event from being triggered
 				event.stopPropagation();
 				
@@ -428,6 +450,13 @@ if (window.location.href.includes("activity.html")) {
 		const startInviteFooter = document.querySelector(".start-invite-activity-footer");
 		const stopInviteFooter = document.querySelector(".stop-invite-activity-footer");
 		const inputElement = document.querySelector("#campaign-name");
+		const startScrapeFooter = document.querySelector(".start-search-footer");
+		const stopScrapeFooter = document.querySelector(".stop-search-footer");
+		const pauseScrapeFooter = document.querySelector(".pause-search");
+		const resumeScrapeFooter = document.querySelector(".resume-search");
+		const loadingContainer = document.querySelector(".loading-container");
+		const newsearchDiv = document.querySelector(".newsearch-popup");
+		const activityPopup = document.querySelector(".activity-popup");
 		const closeButtonActivity = document.querySelector(".close-btn");
 
 		// retrieve campaignName from session storage
@@ -440,6 +469,8 @@ if (window.location.href.includes("activity.html")) {
 		console.log("created port between popup & background scripts to load leads' profiles in order to send invites");
 
 		await injectOntoActivityTab(campaignName);
+
+		// message tab section
 		
 		// clicks on message tab
 		document.querySelector("#message-btn").addEventListener("click", async () => {
@@ -450,7 +481,136 @@ if (window.location.href.includes("activity.html")) {
 
 				//await injectRemove();
 				await injectOntoMessageTab(campaignName);
+				// updateCharacterCount();
 			}
+
+
+			// placeholder buttons functionality
+			//first name
+			document.querySelector("#firstName").addEventListener("click", () => {
+				var textarea = document.getElementById("message-input");
+				var textToAdd = "{first_name}";
+				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+				// Check if there is enough space for the full string
+				if (remainingSpace >= textToAdd.length) {
+					// Get the current cursor position
+					var startPos = textarea.selectionStart;
+					var endPos = textarea.selectionEnd;
+					// Insert the text at the cursor position
+					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+					// Move the cursor to the end of the inserted text
+					textarea.selectionStart = startPos + textToAdd.length;
+					textarea.selectionEnd = startPos + textToAdd.length;
+					// Scroll to the position of the cursor
+					var cursorPos = textarea.selectionStart;
+					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+					var linesAbove = Math.floor(cursorPos / textarea.cols);
+					textarea.scrollTop = lineHeight * linesAbove;
+					// Set focus on the textarea
+					textarea.focus();
+				}
+				updateCharacterCount();
+			});
+
+			//last name
+			document.querySelector("#lastName").addEventListener("click", () => {
+				var textarea = document.getElementById("message-input");
+				var textToAdd = "{last_name}";
+				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+				// Check if there is enough space for the full string
+				if (remainingSpace >= textToAdd.length) {
+					// Get the current cursor position
+					var startPos = textarea.selectionStart;
+					var endPos = textarea.selectionEnd;
+					// Insert the text at the cursor position
+					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+					// Move the cursor to the end of the inserted text
+					textarea.selectionStart = startPos + textToAdd.length;
+					textarea.selectionEnd = startPos + textToAdd.length;
+					// Scroll to the position of the cursor
+					var cursorPos = textarea.selectionStart;
+					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+					var linesAbove = Math.floor(cursorPos / textarea.cols);
+					textarea.scrollTop = lineHeight * linesAbove;
+					// Set focus on the textarea
+					textarea.focus();
+				}
+				updateCharacterCount();
+			});
+
+			//full name
+			document.querySelector("#fullName").addEventListener("click", () => {
+				var textarea = document.getElementById("message-input");
+				var textToAdd = "{full_name}";
+				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+				// Check if there is enough space for the full string
+				if (remainingSpace >= textToAdd.length) {
+					// Get the current cursor position
+					var startPos = textarea.selectionStart;
+					var endPos = textarea.selectionEnd;
+					// Insert the text at the cursor position
+					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+					// Move the cursor to the end of the inserted text
+					textarea.selectionStart = startPos + textToAdd.length;
+					textarea.selectionEnd = startPos + textToAdd.length;
+					// Scroll to the position of the cursor
+					var cursorPos = textarea.selectionStart;
+					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+					var linesAbove = Math.floor(cursorPos / textarea.cols);
+					textarea.scrollTop = lineHeight * linesAbove;
+					// Set focus on the textarea
+					textarea.focus();
+				}
+				updateCharacterCount();
+			});
+
+			//job title
+			document.querySelector("#jobTitle").addEventListener("click", () => {
+				var textarea = document.getElementById("message-input");
+				var textToAdd = "{job_title}";
+				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+				// Check if there is enough space for the full string
+				if (remainingSpace >= textToAdd.length) {
+					// Get the current cursor position
+					var startPos = textarea.selectionStart;
+					var endPos = textarea.selectionEnd;
+					// Insert the text at the cursor position
+					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+					// Move the cursor to the end of the inserted text
+					textarea.selectionStart = startPos + textToAdd.length;
+					textarea.selectionEnd = startPos + textToAdd.length;
+					// Scroll to the position of the cursor
+					var cursorPos = textarea.selectionStart;
+					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+					var linesAbove = Math.floor(cursorPos / textarea.cols);
+					textarea.scrollTop = lineHeight * linesAbove;
+					// Set focus on the textarea
+					textarea.focus();
+				}
+				updateCharacterCount();
+			});
+
+			var textarea = document.getElementById("message-input");
+			var charCount = document.getElementById("charCountMessage");
+			function updateCharacterCount() {
+				var count = textarea.value.length;
+				// Display the character count
+				charCount.textContent = count + "/275";
+				// Limit the input to 275 characters
+				if (count >= 275) {
+					textarea.value = textarea.value.slice(0, 275);
+					count = 275;
+					charCount.textContent = count + "/275";
+				}
+			};
+
+			// Call the function initially to display the character count
+			updateCharacterCount();
+
+			// Update the character count whenever there is an input event
+			textarea.addEventListener("input", updateCharacterCount);
+
+			
 
 			// clicks on btn to save changes made to campaign name and/or message template
 			document.querySelector("#save-update-msg-campname-btn").addEventListener("click", async () => {
@@ -471,6 +631,8 @@ if (window.location.href.includes("activity.html")) {
 			});
 		});
 
+		// people tab section
+
 		// clicks on people tab
 		document.querySelector("#people-btn").addEventListener("click", async () => {
 			if (peopleSection.classList.contains("hide")) {
@@ -490,13 +652,148 @@ if (window.location.href.includes("activity.html")) {
 			let removeBtns = document.querySelectorAll(".remove-btn");
 			for (let i = 0; i < removeBtns.length; i++) {
 				removeBtns[i].addEventListener("click", async () => {
-					let indexToDelete = i;
+					let leadName = leads[i].querySelector(".lead-name").innerText;
 
-					await deleteLead(campaignName, indexToDelete);
+					await deleteLead(campaignName, leadName);
 					leads[i].remove();
 				});
 			}
 		})
+
+		// clicks on add more people btn to add/scrape more lead to the existing campaign
+		document.querySelector("#add-people").addEventListener("click", async () => {
+			await injectRemove();
+			activityPopup.classList.add("hide");
+			newsearchDiv.classList.remove("hide");
+
+			const preScrapePort = chrome.runtime.connect({ name: "pre scrape url check" });
+
+			preScrapePort.postMessage({ action: "is user on the right page to scrape" });
+			preScrapePort.onMessage.addListener( async function(response) {
+				// if (response.message === "user is on the right page") {
+					
+				// }
+			});
+		})
+
+		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+			const scrapePort = chrome.tabs.connect(tabs[0].id, { name: "scrape leads" });
+			console.log("created port between popup & content scripts to scrape leads");
+
+			// button is clicked to start scraping
+			document.querySelector("#start-search-btn").addEventListener("click", () => {
+				startScrapeFooter.classList.add("hide");
+				stopScrapeFooter.classList.remove("hide");
+				pauseScrapeFooter.classList.remove("hide");
+				loadingContainer.classList.remove("hide");
+
+				console.log("sent request to content script to start scraping");
+				scrapePort.postMessage({ action: "Start Scraping" });
+
+				scrapePort.onMessage.addListener(async function(response) {
+					if (response.message === "Scraped one page") {
+						console.log(response.data);
+						
+						// length of the data scraped thus far
+						prevIterationData = scrapedData.length;
+						// storing all scraped data in this variable
+						scrapedData = response.data; 
+						// obtaining the length of the data (from reverse) that is to be injected
+						injectDataLength = scrapedData.length - prevIterationData;
+						// updating the data that needs to be injected in this iteration
+						if (injectDataLength != 0) {
+							injectData = scrapedData.slice(-injectDataLength);
+							console.log(injectData);
+							// inject response.data onto popup
+							await injectOntoNewsearch(injectData);
+						}
+						
+						// scrolls to bottom of leads section to show latest list of leads that were scraped
+						setTimeout(() => {
+							const section = document.querySelector(".leads-section");
+							section.scrollTo({
+								top: section.scrollHeight,
+								behavior: "smooth"
+							});
+						}, 1000);
+
+						// displays the numbers of leads that have been scraped
+						document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
+					}
+				});
+			})
+
+			// button is clicked to pause scraping
+			document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
+				pauseScrapeFooter.classList.add("hide");
+				resumeScrapeFooter.classList.remove("hide");
+				loadingContainer.classList.add("hide");
+				
+				console.log("sent request to content script to pause scraping");
+				scrapePort.postMessage({ action: "Pause Scraping" });
+
+				scrapePort.onMessage.addListener(function(response) {
+					if (response.message === "Paused Scraping") {
+						
+					}
+				});
+
+				// button is clicked to remove any selected leads before saving the campaign
+				document.querySelector(".remove-btn").addEventListener("click", () => {
+					let leads = document.querySelectorAll(".leads-scraped");
+					let removeBtns = document.querySelectorAll(".remove-btn");
+					for (let i = 0; i < removeBtns.length; i++) {
+						removeBtns[i].addEventListener("click", async () => {
+							scrapedData.splice(i, 1);
+							leads[i].remove();
+						});
+					}
+				})
+			})
+		
+			// button is clicked to resume scraping
+			document.querySelector("#resume-scrape-btn").addEventListener("click", () => {
+				pauseScrapeFooter.classList.remove("hide");
+				resumeScrapeFooter.classList.add("hide");
+				loadingContainer.classList.remove("hide");
+				
+				scrapePort.postMessage({ action: "Resume Scraping" });
+
+				scrapePort.onMessage.addListener(function(response) {
+					if (response.message === "Resumed Scraping") {
+						
+					}
+				});
+			})
+
+			// button is clicked to stop scraping and now user has to create messsage template & campaign name
+			document.querySelector("#stop-search-btn").addEventListener("click", () => {
+				pauseScrapeFooter.classList.add("hide");
+				resumeScrapeFooter.classList.add("hide");
+				startScrapeFooter.classList.remove("hide");
+				stopScrapeFooter.classList.add("hide");
+				loadingContainer.classList.add("hide");
+				newsearchDiv.classList.add("hide");
+				activityPopup.classList.remove("hide");
+				document.querySelector(".collected h6").innerText = "Collected: 0";
+				injectRemove();
+		
+				console.log("sent request to content script to stop scraping");
+				scrapePort.postMessage({ action: "Stop Scraping" });
+
+				scrapePort.onMessage.addListener(async function(response) {
+					if (response.message === "Stopped Scraping") {
+						await addLeadsToCampaignData(campaignName, scrapedData);
+						await injectOntoPeopleTab(campaignName);
+						// scrapePort.disconnect();
+						// console.log("disconnected port connection");
+					}
+				});
+			})
+		});
+
+
+		// activity tab section
 
 		// clicks on activity tab
 		document.querySelector("#activity-btn").addEventListener("click", async () => {
@@ -611,16 +908,11 @@ async function injectOntoNewsearch(data) {
 
 		// creating delete button element and adding to leadDiv
 		const leadDelete = document.createElement("div");
-		// leadDelete.classList.add("remove-btn");
-		// leadDelete.innerText = "Remove";
-		// leadDelete.disabled = true;
-		// leadDiv.appendChild(leadDelete);
-
-		const leadDeleteImage = document.createElement("img");
-		leadDeleteImage.classList.add("remove-btn");
-		leadDeleteImage.setAttribute("src", "assets/red-delete-icon.png");
-		leadDelete.appendChild(leadDeleteImage);
+		leadDelete.classList.add("remove-btn");
+		leadDelete.innerText = "Remove";
+		leadDelete.disabled = true;
 		leadDiv.appendChild(leadDelete);
+
 		leads.appendChild(leadDiv);
 	}	
 }
@@ -628,21 +920,20 @@ async function injectOntoNewsearch(data) {
 
 // function for injecting a button of the newly created campaign onto home.html  
 async function injectOntoHome() {
-	const items = await new Promise(resolve => {
-		chrome.storage.local.get(null, resolve);
-	});
-	
-	const keys = Object.keys(items);
+	let campaignStorage = await chrome.storage.local.get('Campaigns');
+	let campaignKeys = Object.keys(campaignStorage["Campaigns"]);
 
-	const campaigns = document.querySelector(".campaigns-section");
 
-	for (let i = 0; i < keys.length; i++) {
-		const result = await new Promise(resolve => {
-			chrome.storage.local.get([keys[i]], resolve);
-		});
+	const campaignsSection = document.querySelector(".campaigns-section");
 
-		let storedScrapedData = result[keys[i]].scrapedData;
-		let storedDate = result[keys[i]].date;
+	for (let i = 0; i < campaignKeys.length; i++) {
+		let scrapedData = campaignStorage.Campaigns[campaignKeys[i]].scrapedData;
+		let date = campaignStorage.Campaigns[campaignKeys[i]].date;
+		let sentCount = 0;
+
+		for (let i = 0; i < scrapedData.length; i++) {
+			if (scrapedData[i].status === "sent") ++sentCount;
+		}
 	
 		// create new div element for newly created campaign
 		const campaignDiv = document.createElement("div");
@@ -654,12 +945,12 @@ async function injectOntoHome() {
 		// create campaign name element and add to campaignInfo
 		const campName = document.createElement("div");
 		campName.classList.add("campaign-name");
-		campName.innerText = keys[i];
+		campName.innerText = campaignKeys[i];
 		campaignInfo.appendChild(campName);
 		// create activity status element and add to campaignInfo
 		const campaignStatus = document.createElement("div");
 		campaignStatus.classList.add("activity-status");
-		campaignStatus.innerText = `1 of ${storedScrapedData.length}`;
+		campaignStatus.innerText = `${sentCount} of ${scrapedData.length} sent`;
 		campaignInfo.appendChild(campaignStatus);
 		// appending campaign info (name + status) to campaignDiv
 		campaignDiv.appendChild(campaignInfo);
@@ -667,7 +958,7 @@ async function injectOntoHome() {
 		// create date element and add it to campaignDiv
 		const campaignDate = document.createElement("div");
 		campaignDate.classList.add("date");
-		campaignDate.innerText = storedDate;
+		campaignDate.innerText = date;
 		campaignDiv.appendChild(campaignDate);
 
 		// create cancel delete button and add it to campaignDiv
@@ -697,7 +988,7 @@ async function injectOntoHome() {
 		confirmDelete.appendChild(confirmDeleteImage);
 		campaignDiv.appendChild(confirmDelete);
 	
-		campaigns.appendChild(campaignDiv);
+		campaignsSection.appendChild(campaignDiv);
 	}
 	console.log("injected all created campaigns onto home.html");
 } 
@@ -705,8 +996,11 @@ async function injectOntoHome() {
 
 // function for injecting selected campaign's data onto activity tab of activity.html
 async function injectOntoActivityTab(campaignName) {
-	let campaignData = await chrome.storage.local.get(campaignName);
-	let data = campaignData[campaignName].scrapedData;
+	let campaignStorage = await chrome.storage.local.get("Campaigns");
+	let data = campaignStorage.Campaigns[campaignName].scrapedData;
+
+	// let campaignData = await chrome.storage.local.get(campaignName);
+	// let data = campaignData[campaignName].scrapedData;
 
 	let leads = document.querySelector(".activity-leads-section");
 
@@ -758,8 +1052,8 @@ async function injectOntoActivityTab(campaignName) {
 
 // function for injecting selected campaign's name and mesg template onto msg tab of activity.html
 async function injectOntoMessageTab(campaignName) {
-	let campaignData = await chrome.storage.local.get(campaignName);
-	let message = campaignData[campaignName].messageTemplate;
+	let campaignStorage = await chrome.storage.local.get("Campaigns");
+	let message = campaignStorage.Campaigns[campaignName].messageTemplate;
 
 	let messageTemplateDiv = document.querySelector(".message-template");
 	messageTemplateDiv.querySelector("#campaign-name").value = campaignName;
@@ -772,8 +1066,8 @@ async function injectOntoPeopleTab(campaignName) {
 	let pendingCount = 0;
 	let sentCount = 0;
 
-	let campaignData = await chrome.storage.local.get(campaignName);
-	let data = campaignData[campaignName].scrapedData;
+	let campaignStorage = await chrome.storage.local.get("Campaigns");
+	let data = campaignStorage["Campaigns"][campaignName].scrapedData;
 
 	for (i = 0; i < data.length; i++) {
 		if (data[i].status == "pending") ++pendingCount;
@@ -832,8 +1126,8 @@ async function injectOntoPeopleTab(campaignName) {
 
 // function to inject lead at the bottom of the leads-section
 async function injectLeadAtBottom(campaignName) {
-	let campaignData = await chrome.storage.local.get(campaignName);
-	let data = campaignData[campaignName].scrapedData;
+	let campaignStorage = await chrome.storage.local.get("Campaigns");
+	let data = campaignStorage.Campaigns[campaignName].scrapedData;
 
 	let lastPos = data.length - 1 ;
 
@@ -897,69 +1191,83 @@ async function injectRemove() {
 
 
 // function to store created campaign's data in local storage
-async function storeCampaignData(scrapedData, campaignName, messageTemplate, date){
-	// storing data in local storage
-	chrome.storage.local.set({ [campaignName]: { scrapedData, messageTemplate, date } });
+async function storeCampaignData(campaignName, scrapedData, messageTemplate, date){
+	// Define the data for the new campaign
+	let newCampaignData = {
+		scrapedData: scrapedData,
+		messageTemplate: messageTemplate,
+		date: date
+	};
+
+	let campaignStorage = await chrome.storage.local.get('Campaigns');
+	campaignStorage.Campaigns[campaignName]= newCampaignData;
+	await chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns });
+}
+
+
+// function to add more leads to the storage of an existing campaign\
+async function addLeadsToCampaignData(campaignName, newData) {
+	let campaignStorage = await chrome.storage.local.get('Campaigns');
+	let existingData = campaignStorage.Campaigns[campaignName].scrapedData;
+	campaignStorage.Campaigns[campaignName].scrapedData = [...existingData, ...newData];
+	
+	await chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns });
 }
 
 
 // function to delete selected campaign's data from local storage
 async function deleteCampaignData(campaignName){
-	// deleting data from local storage
-	chrome.storage.local.remove(campaignName);
+	let campaignStorage = await chrome.storage.local.get('Campaigns');
+	delete campaignStorage.Campaigns[campaignName];
+	await chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns });
 }
 
 
 // function for updating the message template and/or campaign name of selected campaign
 async function updateCampaignData(oldCampaignName, newCampaignName, newMessageTemplate) {
-	return new Promise((resolve, reject) => {
-		chrome.storage.local.get(oldCampaignName, function(data) {
-			const existingData = data[oldCampaignName];
-			if (!existingData) {
-				reject(`Data for campaign ${oldCampaignName} not found in storage`);
-				return;
-			}
-	
-			const newData = {
-				scrapedData: existingData.scrapedData,
-				messageTemplate: newMessageTemplate,
-				date: existingData.date
-			};
-	
-			chrome.storage.local.remove(oldCampaignName, function() {
-				chrome.storage.local.set({ [newCampaignName]: newData }, function() {
-					resolve(`Campaign data updated successfully. New campaign name: ${newCampaignName}`);
-				});
-			});
-		});
-	});
+	let campaignStorage = await chrome.storage.local.get('Campaigns');
+	let existingData = campaignStorage.Campaigns[oldCampaignName];
+
+	let updatedCampaignData = {
+		scrapedData: existingData.scrapedData,
+		messageTemplate: newMessageTemplate,
+		date: existingData.date
+	};
+
+	delete campaignStorage.Campaigns[oldCampaignName];
+	campaignStorage.Campaigns[newCampaignName] = updatedCampaignData;
+	await chrome.storage.local.set({Campaigns: campaignStorage.Campaigns});
 }
 
 // function to delete a lead's data from local storage
-async function deleteLead(campaignName, indexToDelete) {
+async function deleteLead(campaignName, leadName) {
 	let pendingCount = document.querySelector(".pending .number").textContent;
 	let sentCount = document.querySelector(".sent .number").textContent;
 
-	let campaignData = await chrome.storage.local.get(campaignName);
-	let data = campaignData[campaignName].scrapedData;
+	let campaignStorage = await chrome.storage.local.get('Campaigns');
+	let data = campaignStorage.Campaigns[campaignName].scrapedData;
 
-	if (data[indexToDelete].status === "pending") 
-		document.querySelector(".pending .number").textContent = --pendingCount;
-	else 
-		document.querySelector(".sent .number").textContent = --sentCount;
+	for (let i = 0; i < data.length; i++) {
+		if (data[i].fullName == leadName) {
+			if (data[i].status === "pending") 
+			document.querySelector(".pending .number").textContent = --pendingCount;
+		else 
+			document.querySelector(".sent .number").textContent = --sentCount;
 
-	// Remove the item at selected index postion
-	data.splice(indexToDelete, 1);
+		// Remove the item at selected index postion
+		data.splice(i, 1);
+		}
+	}
 
 	// Save the updated data back to local storage
-	await chrome.storage.local.set({
-		[campaignName]: {
-		  scrapedData: campaignData[campaignName].scrapedData,
-		  messageTemplate: campaignData[campaignName].messageTemplate,
-		  date: campaignData[campaignName].date,
-		},
-	  });
+	await chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns });
+}
 
+
+// function to retriev campaign data
+async function retrieveCampaignData() {
+	campaignStorage = await chrome.storage.local.get('Campaigns');
+	return campaignStorage.Campaigns;
 }
 
 
