@@ -90,7 +90,6 @@ if (window.location.href.includes("newsearch.html")) {
 		
 		// button is clicked to stop scraping and now user has to create messsage template & campaign name
 		document.querySelector("#stop-search-btn").addEventListener("click", () => {
-			document.querySelector(".remove-btn").disabled = false;
 			pauseScrapeFooter.classList.add("hide");
 			resumeScrapeFooter.classList.remove("hide");
 			loadingContainer.classList.add("hide");
@@ -456,6 +455,8 @@ if (window.location.href.includes("activity.html")) {
 		const pauseScrapeFooter = document.querySelector(".pause-search");
 		const resumeScrapeFooter = document.querySelector(".resume-search");
 		const loadingContainer = document.querySelector(".loading-container");
+		const newsearchDiv = document.querySelector(".newsearch-popup");
+		const activityPopup = document.querySelector(".activity-popup");
 		const closeButtonActivity = document.querySelector(".close-btn");
 
 		// retrieve campaignName from session storage
@@ -468,6 +469,8 @@ if (window.location.href.includes("activity.html")) {
 		console.log("created port between popup & background scripts to load leads' profiles in order to send invites");
 
 		await injectOntoActivityTab(campaignName);
+
+		// message tab section
 		
 		// clicks on message tab
 		document.querySelector("#message-btn").addEventListener("click", async () => {
@@ -628,6 +631,8 @@ if (window.location.href.includes("activity.html")) {
 			});
 		});
 
+		// people tab section
+
 		// clicks on people tab
 		document.querySelector("#people-btn").addEventListener("click", async () => {
 			if (peopleSection.classList.contains("hide")) {
@@ -654,6 +659,141 @@ if (window.location.href.includes("activity.html")) {
 				});
 			}
 		})
+
+		// clicks on add more people btn to add/scrape more lead to the existing campaign
+		document.querySelector("#add-people").addEventListener("click", async () => {
+			await injectRemove();
+			activityPopup.classList.add("hide");
+			newsearchDiv.classList.remove("hide");
+
+			const preScrapePort = chrome.runtime.connect({ name: "pre scrape url check" });
+
+			preScrapePort.postMessage({ action: "is user on the right page to scrape" });
+			preScrapePort.onMessage.addListener( async function(response) {
+				// if (response.message === "user is on the right page") {
+					
+				// }
+			});
+		})
+
+		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+			const scrapePort = chrome.tabs.connect(tabs[0].id, { name: "scrape leads" });
+			console.log("created port between popup & content scripts to scrape leads");
+
+			// button is clicked to start scraping
+			document.querySelector("#start-search-btn").addEventListener("click", () => {
+				startScrapeFooter.classList.add("hide");
+				stopScrapeFooter.classList.remove("hide");
+				pauseScrapeFooter.classList.remove("hide");
+				loadingContainer.classList.remove("hide");
+
+				console.log("sent request to content script to start scraping");
+				scrapePort.postMessage({ action: "Start Scraping" });
+
+				scrapePort.onMessage.addListener(async function(response) {
+					if (response.message === "Scraped one page") {
+						console.log(response.data);
+						
+						// length of the data scraped thus far
+						prevIterationData = scrapedData.length;
+						// storing all scraped data in this variable
+						scrapedData = response.data; 
+						// obtaining the length of the data (from reverse) that is to be injected
+						injectDataLength = scrapedData.length - prevIterationData;
+						// updating the data that needs to be injected in this iteration
+						if (injectDataLength != 0) {
+							injectData = scrapedData.slice(-injectDataLength);
+							console.log(injectData);
+							// inject response.data onto popup
+							await injectOntoNewsearch(injectData);
+						}
+						
+						// scrolls to bottom of leads section to show latest list of leads that were scraped
+						setTimeout(() => {
+							const section = document.querySelector(".leads-section");
+							section.scrollTo({
+								top: section.scrollHeight,
+								behavior: "smooth"
+							});
+						}, 1000);
+
+						// displays the numbers of leads that have been scraped
+						document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
+					}
+				});
+			})
+
+			// button is clicked to pause scraping
+			document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
+				pauseScrapeFooter.classList.add("hide");
+				resumeScrapeFooter.classList.remove("hide");
+				loadingContainer.classList.add("hide");
+				
+				console.log("sent request to content script to pause scraping");
+				scrapePort.postMessage({ action: "Pause Scraping" });
+
+				scrapePort.onMessage.addListener(function(response) {
+					if (response.message === "Paused Scraping") {
+						
+					}
+				});
+
+				// button is clicked to remove any selected leads before saving the campaign
+				document.querySelector(".remove-btn").addEventListener("click", () => {
+					let leads = document.querySelectorAll(".leads-scraped");
+					let removeBtns = document.querySelectorAll(".remove-btn");
+					for (let i = 0; i < removeBtns.length; i++) {
+						removeBtns[i].addEventListener("click", async () => {
+							scrapedData.splice(i, 1);
+							leads[i].remove();
+						});
+					}
+				})
+			})
+		
+			// button is clicked to resume scraping
+			document.querySelector("#resume-scrape-btn").addEventListener("click", () => {
+				pauseScrapeFooter.classList.remove("hide");
+				resumeScrapeFooter.classList.add("hide");
+				loadingContainer.classList.remove("hide");
+				
+				scrapePort.postMessage({ action: "Resume Scraping" });
+
+				scrapePort.onMessage.addListener(function(response) {
+					if (response.message === "Resumed Scraping") {
+						
+					}
+				});
+			})
+
+			// button is clicked to stop scraping and now user has to create messsage template & campaign name
+			document.querySelector("#stop-search-btn").addEventListener("click", () => {
+				pauseScrapeFooter.classList.add("hide");
+				resumeScrapeFooter.classList.add("hide");
+				startScrapeFooter.classList.remove("hide");
+				stopScrapeFooter.classList.add("hide");
+				loadingContainer.classList.add("hide");
+				newsearchDiv.classList.add("hide");
+				activityPopup.classList.remove("hide");
+				document.querySelector(".collected h6").innerText = "Collected: 0";
+				injectRemove();
+		
+				console.log("sent request to content script to stop scraping");
+				scrapePort.postMessage({ action: "Stop Scraping" });
+
+				scrapePort.onMessage.addListener(async function(response) {
+					if (response.message === "Stopped Scraping") {
+						await addLeadsToCampaignData(campaignName, scrapedData);
+						await injectOntoPeopleTab(campaignName);
+						// scrapePort.disconnect();
+						// console.log("disconnected port connection");
+					}
+				});
+			})
+		});
+
+
+		// activity tab section
 
 		// clicks on activity tab
 		document.querySelector("#activity-btn").addEventListener("click", async () => {
@@ -1065,11 +1205,21 @@ async function storeCampaignData(campaignName, scrapedData, messageTemplate, dat
 }
 
 
+// function to add more leads to the storage of an existing campaign\
+async function addLeadsToCampaignData(campaignName, newData) {
+	let campaignStorage = await chrome.storage.local.get('Campaigns');
+	let existingData = campaignStorage.Campaigns[campaignName].scrapedData;
+	campaignStorage.Campaigns[campaignName].scrapedData = [...existingData, ...newData];
+	
+	await chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns });
+}
+
+
 // function to delete selected campaign's data from local storage
 async function deleteCampaignData(campaignName){
 	let campaignStorage = await chrome.storage.local.get('Campaigns');
 	delete campaignStorage.Campaigns[campaignName];
-	await chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns })
+	await chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns });
 }
 
 
