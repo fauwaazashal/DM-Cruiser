@@ -13,98 +13,98 @@ let randomDelay = 0;
 
 chrome.runtime.onConnect.addListener(function(port) {
 
-  if (port.name === "scrape leads") {
-    console.log("established connection with port to scrape leads");
+	if (port.name === "scrape leads") {
+		console.log("established connection with port to scrape leads");
 
-    // function to call other functions to carry out the scraping
-    async function scrape() {
-      if (!isStopped) {
-        if (!isPaused) {
-          // await waitForWindowToLoad();
-          // console.log("Page Loaded");
-    
-          // Wait for 2 seconds before checking if page is loaded
-          await new Promise(resolve => setTimeout(resolve, 2000));
-          // for every iteration, we scrape one page
-          scrapedData = await scraping(scrapedData);
-          port.postMessage({ message: "Scraped one page", data: scrapedData });
-          await scroll();
-          await goToNextPage();
+		// function to call other functions to carry out the scraping
+		async function scrape() {
+			if (!isStopped) {
+				if (!isPaused) {
+				// await waitForWindowToLoad();
+				// console.log("Page Loaded");
+			
+				// Wait for 2 seconds before checking if page is loaded
+				await new Promise(resolve => setTimeout(resolve, 2000));
+				// for every iteration, we scrape one page
+				scrapedData = await scraping(scrapedData);
+				port.postMessage({ message: "Scraped one page", data: scrapedData });
+				await scroll();
+				await goToNextPage();
 
-          // Wait for 5 seconds before checking if page is loaded
-          randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-          await new Promise(resolve => setTimeout(resolve, randomDelay)); 
-          // Wait for the page to finish loading before calling scraping()
-          const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
-          randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-          const timeout = new Promise(resolve => setTimeout(resolve, randomDelay)); // Wait for 5 seconds before timing out
-          await Promise.race([loaded, timeout])
-            .then(() => console.log('Page loaded'))
-            .catch(() => console.log('Page load timed out'));
+				// Wait for 5 seconds before checking if page is loaded
+				randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+				await new Promise(resolve => setTimeout(resolve, randomDelay)); 
+				// Wait for the page to finish loading before calling scraping()
+				const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
+				randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+				const timeout = new Promise(resolve => setTimeout(resolve, randomDelay)); // Wait for 5 seconds before timing out
+				await Promise.race([loaded, timeout])
+					.then(() => console.log('Page loaded'))
+					.catch(() => console.log('Page load timed out'));
 
-          // Recursively call the scrape function
-          await scrape();
-        } 
-        else {
-          console.log('scraping is paused');
-          await new Promise(resolve => setTimeout(resolve, 2000));
+				// Recursively call the scrape function
+				await scrape();
+				} 
+				else {
+				console.log('scraping is paused');
+				await new Promise(resolve => setTimeout(resolve, 2000));
 
-          // Recursively call the scrape function
-          await scrape();
-        }
-      } 
-    }
+				// Recursively call the scrape function
+				await scrape();
+				}
+			} 
+		}
 
-    port.onMessage.addListener(async function(request) {
-      if (request.action === "Start Scraping") {
-        console.log('receieved request from popup to begin scraping');
+		port.onMessage.addListener(async function(request) {
+			if (request.action === "Start Scraping") {
+				console.log('receieved request from popup to begin scraping');
 
-        scrapedData = [];
-        isPaused = false;
-        isStopped = false;
+				scrapedData = [];
+				isPaused = false;
+				isStopped = false;
 
-        // Start the scraping process
-        scrape().then(() => console.log('scraping complete'));
-      }
+				// Start the scraping process
+				scrape().then(() => console.log('scraping complete'));
+			}
 
-      else if (request.action === "Pause Scraping") {
-        console.log('receieved request from popup to pause scraping');
-        isPaused = true;
-      }
+			else if (request.action === "Pause Scraping") {
+				console.log('receieved request from popup to pause scraping');
+				isPaused = true;
+			}
 
-      else if (request.action === "Stop Scraping") {
-        console.log('receieved request from popup to stop scraping');
-        isStopped = true;
-        port.postMessage({ message: "Stopped Scraping", data: scrapedData });
-      }
+			else if (request.action === "Stop Scraping") {
+				console.log('receieved request from popup to stop scraping');
+				isStopped = true;
+				port.postMessage({ message: "Stopped Scraping", data: scrapedData });
+			}
 
-      else if (request.action === "Resume Scraping") {
-        console.log('receieved request from popup to resume scraping');
-        isPaused = false;
-        isStopped = false;
-        port.postMessage({ message: "Resuming Scraping", data: scrapedData });
+			else if (request.action === "Resume Scraping") {
+				console.log('receieved request from popup to resume scraping');
+				isPaused = false;
+				isStopped = false;
+				port.postMessage({ message: "Resuming Scraping", data: scrapedData });
 
-        // Wait for 5 seconds before calling the scrape function to ensure that the page is loaded
-        await new Promise(resolve => setTimeout(resolve, 5000));
-        // Start the scraping process
-        scrape().then(() => console.log('scraping resumed'));
-      }
-    });
-  }
+				// Wait for 5 seconds before calling the scrape function to ensure that the page is loaded
+				await new Promise(resolve => setTimeout(resolve, 5000));
+				// Start the scraping process
+				scrape().then(() => console.log('scraping resumed'));
+			}
+		});
+	}
 
-  if (port.name === "send invites") {
-    console.log("established connection with port to send invites");
-    port.onMessage.addListener(async function(request) {
-      if (request.action === "Start Sending Invites") {
-        console.log('receieved request from popup to start sending invites');
-        let leadData = request.leadData;
-        let messageTemplate = request.messageTemplate;
+	if (port.name === "send invites") {
+		console.log("established connection with port to send invites");
+		port.onMessage.addListener(async function(request) {
+			if (request.action === "Start Sending Invites") {
+				console.log('receieved request from popup to start sending invites');
+				let leadData = request.leadData;
+				let messageTemplate = request.messageTemplate;
 
-        await sendInvites(leadData, messageTemplate);
-        port.postMessage({ message: "invite sent" });
-      }
-    });
-  }
+				await sendInvites(leadData, messageTemplate);
+				port.postMessage({ message: "invite sent" });
+			}
+		});
+  	}
 });
 
 
@@ -115,152 +115,155 @@ chrome.runtime.onConnect.addListener(function(port) {
 
 // function to wait until window has loaded
 async function waitForWindowToLoad() {
-  return new Promise((resolve) => {
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      // If the DOM is already interactive or complete, resolve the promise immediately
-      resolve();
-    } else {
-      // Otherwise, wait for the DOM to become interactive or for the window to finish loading
-      document.addEventListener('DOMContentLoaded', () => {
-        resolve();
-      }, { once: true });
+	return new Promise((resolve) => {
+		if (document.readyState === 'complete' || document.readyState === 'interactive') {
+			// If the DOM is already interactive or complete, resolve the promise immediately
+			resolve();
+		} 
+		else {
+			// Otherwise, wait for the DOM to become interactive or for the window to finish loading
+			document.addEventListener('DOMContentLoaded', () => {
+				resolve();
+			}, { once: true });
 
-      window.addEventListener('load', () => {
-        resolve();
-      }, { once: true });
-    }
-  });
+			window.addEventListener('load', () => {
+				resolve();
+			}, { once: true });
+		}
+	});
 }
 
 
 // function to scraped leads from the current page 
 async function scraping(scrapedData) {
 
-  let leads = document.querySelectorAll('.entity-result');
+	let leads = document.querySelectorAll('.entity-result');
+	
+	if (leads) {
+		for (let i = 0; i < leads.length; i++) {
 
-  for (let i = 0; i < leads.length; i++) {
-
-    if (leads[i].querySelector('.artdeco-button__text').innerText == 'Connect') {
-
-      let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
-      let leadFirstName = leadName.split(' ')[0];
-      let leadLastName = leadName.split(' ').pop();
-      let leadJobTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
-      let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
-      let leadImageElement = leads[i].querySelector('.presence-entity.presence-entity--size-3 img');
-      let leadImage = leadImageElement ? leadImageElement.getAttribute('src') : '';
-
-      let leadData = {
-        fullName: leadName,
-        firstName: leadFirstName,
-        lastName: leadLastName,
-        jobTitle: leadJobTitle,
-        profileLink: leadProfileLink,
-        image: leadImage,
-        status: "pending"
-      };
-
-      scrapedData.push(leadData);
-    }
-  }
-  console.log(scrapedData);
-  return Promise.resolve(scrapedData);
+			if (leads[i].querySelector('.artdeco-button__text')?.innerText == 'Connect') {
+	
+				let leadName = leads[i].querySelector('.app-aware-link > span > span').innerText;
+				let leadFirstName = leadName.split(' ')[0];
+				let leadLastName = leadName.split(' ').pop();
+				let leadJobTitle = leads[i].querySelector('.entity-result__primary-subtitle.t-14.t-black.t-normal').innerText;
+				let leadProfileLink = leads[i].querySelector('.app-aware-link').href;
+				let leadImageElement = leads[i].querySelector('.presence-entity.presence-entity--size-3 img');
+				let leadImage = leadImageElement ? leadImageElement.getAttribute('src') : '';
+	
+				let leadData = {
+					fullName: leadName,
+					firstName: leadFirstName,
+					lastName: leadLastName,
+					jobTitle: leadJobTitle,
+					profileLink: leadProfileLink,
+					image: leadImage,
+					status: "pending"
+				};
+	
+				scrapedData.push(leadData);
+			}
+		}
+	}
+	console.log(scrapedData);
+	return Promise.resolve(scrapedData);
 }
 
 
 
 async function scroll() {
-  return new Promise(resolve => {
-    // Wait for 3 seconds before scrolling down to the bottom of the page
-    setTimeout(function() {
-      // Scroll down to the bottom of the page smoothly
-      document.body.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
-    }, 2000);
+	return new Promise(resolve => {
+		// Wait for 3 seconds before scrolling down to the bottom of the page
+		setTimeout(function() {
+			// Scroll down to the bottom of the page smoothly
+			document.body.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+		}, 2000);
 
-    // Wait for 6 seconds before scrolling back to the top of the page
-    setTimeout(function() {
-      // Scroll back to the top of the page smoothly
-      document.body.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+		// Wait for 6 seconds before scrolling back to the top of the page
+		setTimeout(function() {
+			// Scroll back to the top of the page smoothly
+			document.body.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
 
-      // Resolve the promise after the scrolling animation has completed
-      resolve();
-    }, 4000);
-  });
+			// Resolve the promise after the scrolling animation has completed
+			resolve();
+		}, 4000);
+  	});
 }
 
 
 
 async function goToNextPage() {
-  return new Promise(resolve => {
-    // Wait for 3 seconds before clicking the button
-    setTimeout(function() {
-      let nextPage = document.querySelector('.artdeco-pagination__button.artdeco-pagination__button--next.artdeco-button.artdeco-button--muted.artdeco-button--icon-right.artdeco-button--1.artdeco-button--tertiary.ember-view');
+	return new Promise(resolve => {
+		// Wait for 3 seconds before clicking the button
+		setTimeout(function() {
+			let nextPage = document.querySelector('.artdeco-pagination__button.artdeco-pagination__button--next.artdeco-button.artdeco-button--muted.artdeco-button--icon-right.artdeco-button--1.artdeco-button--tertiary.ember-view');
 
-      // Check if the button is disabled
-      if (nextPage.disabled) {
-        console.log("Cannot click to go to next page");
-        // Resolve the promise anyway, since we're not actually clicking the button
-        resolve();
-      } 
-      else {
-        nextPage.click();
-        // Resolve the promise after the button has been clicked
-        resolve();
-      }
-    }, 3000);
-  });
+			// Check if the button is disabled
+			if (nextPage.disabled) {
+				console.log("Cannot click to go to next page");
+				// Resolve the promise anyway, since we're not actually clicking the button
+				resolve();
+			} 
+			else {
+				nextPage.click();
+				// Resolve the promise after the button has been clicked
+				resolve();
+			}
+		}, 3000);
+	});
 }
 
 
 
 async function sendInvites(leadData, messageTemplate) {
   
-  console.log("loaded lead's profile");
-  randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-  await new Promise(resolve => setTimeout(resolve, randomDelay));
-  
-  // click on the connect btn
-  const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
-  connectBtn.click();
-  console.log("clicked on connect btn");
-  randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-  await new Promise(resolve => setTimeout(resolve, randomDelay));
+	console.log("loaded lead's profile");
+	randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+	await new Promise(resolve => setTimeout(resolve, randomDelay));
+	
+	// click on the connect btn
+	const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+	connectBtn.click();
+	console.log("clicked on connect btn");
+	randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+	await new Promise(resolve => setTimeout(resolve, randomDelay));
 
 
-  if (messageTemplate.length > 0) {
-    // click on the add a note btn
-    const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view.mr1");
-    addNoteBtn.click();
-    console.log("clicked on add note btn");
-    randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-    await new Promise(resolve => setTimeout(resolve, randomDelay));
-    
+	if (messageTemplate.length > 0) {
+		// click on the add a note btn
+		const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view.mr1");
+		addNoteBtn.click();
+		console.log("clicked on add note btn");
+		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+		await new Promise(resolve => setTimeout(resolve, randomDelay));
+		
 
-    // enter text from msg template onot the text box
-    const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
-    
-    let customMessage = messageTemplate
-      .replace(/{first_name}/g, leadData.firstName)
-      .replace(/{last_name}/g, leadData.lastName)
-      .replace(/{full_name}/g, leadData.fullName)
-      .replace(/{job_title}/g, leadData.jobTitle);
+		// enter text from msg template onot the text box
+		const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
+		
+		let customMessage = messageTemplate
+		.replace(/{first_name}/g, leadData.firstName)
+		.replace(/{last_name}/g, leadData.lastName)
+		.replace(/{full_name}/g, leadData.fullName)
+		.replace(/{job_title}/g, leadData.jobTitle);
 
-    textBox.value = customMessage;
-    // Manually trigger the input event on the text box
-    const inputEvent = new Event('input');
-    textBox.dispatchEvent(inputEvent);
-    console.log("injected msg onto text box");
-    randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-    await new Promise(resolve => setTimeout(resolve, randomDelay));
-  }
+		textBox.value = customMessage;
+		// Manually trigger the input event on the text box
+		const inputEvent = new Event('input');
+		textBox.dispatchEvent(inputEvent);
+		console.log("injected msg onto text box");
+		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+		await new Promise(resolve => setTimeout(resolve, randomDelay));
+  	}
 
 
-  // click on the send btn
-  const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1");
-  //sendBtn.click();
-  console.log("clicked send btn");
-  randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-  await new Promise(resolve => setTimeout(resolve, randomDelay));
+	// click on the send btn
+	const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1");
+	//sendBtn.click();
+	console.log("clicked send btn");
+	randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+	await new Promise(resolve => setTimeout(resolve, randomDelay));
   
 }
 
