@@ -55,7 +55,23 @@ body {
 	margin-top: -8px; */
 	font-size: 17px;
 }
-
+.people-section{
+	display: flex;
+	color: #fff;
+	font-family: 'Prompt', sans-serif;
+	font-weight: 400;
+	font-size: 10px;
+    justify-content: space-between;
+	margin-left: 10px;
+	margin-top: 10px;
+	margin-right: 10px;
+}
+.total-count{
+	font-family: 'Prompt', sans-serif;
+	font-weight: 600;
+	font-size: 13px;
+	margin-top: -3px;
+}
 .activity-header {
 	background-image: url(assets/background-image.png);
 	height: 84px;
@@ -280,8 +296,8 @@ h6 {
 
 .confirm-delete-btn-img {
 	position: absolute;
-	top: 10px;
-	right: 205px;
+	top: 22px;
+	left: 155px;
 	width: 30px;
 	height: 30px;
 }
@@ -294,8 +310,8 @@ h6 {
 
 .cancel-delete-btn-img {
 	position: absolute;
-	top: 19px;
-	right: 110px;
+	top: 31px;
+	left: 128px;
 	width: 13px;
 	height: 13px;
 }
@@ -451,7 +467,7 @@ h6 {
 .leads-section {
 	overflow: scroll;
 	overflow-x: hidden;
-	height: 250px;
+	height: 275px;
 }
 
 .loading-container {
@@ -460,7 +476,7 @@ h6 {
 	align-items: center;
 	justify-content: center;
 	font-size: 10px;
-	margin-top: -40px;
+	margin-top: -66px;
 }
 .loading-container h2{
 	color: #A4A4A4;
@@ -593,7 +609,7 @@ h6 {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-/* .activity-heading-section,
+/* .activity-heading-section,ctio
 .people-top-section {
 	display: flex;
 	background-color: rgb(144, 131, 216);
@@ -626,7 +642,7 @@ h6 {
 
 .placeholder-button {
 	border: 0;
-	border-radius: 10px;
+	border-radius: 5px;
 	font-family: Arial;
 	color: #ffffff;
 	font-size: 12px;
