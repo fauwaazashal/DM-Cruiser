@@ -351,10 +351,9 @@ h6 {
 
 .campaigns-section {
 	background-color: #1F2937;
-	overflow: hidden;
-	/* overflow: scroll;
+	overflow: scroll;
 	overflow-x: hidden;
-	overflow-y: hidden; */
+	overflow-y: hidden;
 	height: 360px;
 }
 
