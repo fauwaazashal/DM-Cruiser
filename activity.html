@@ -13,23 +13,23 @@
 <body>
 
     <div class="activity-popup">
-        <div class="activity-header">
-            <div class="activity-btn-section">
-                <img class="activity-back" src="assets/left arrow.png" alt="" width="15px" height="20px">
-                <h4 id="heading-activity">Campaign 1</h4>
-                <img class="activity-close-btn" src="assets/Close button.png" alt="" width="18px" height="18px">
+        <div class="activity-header" id="activity-header">
+            <div class="activity-btn-section" id="activity-btn-section">
+                <img class="activity-back" id="activity-back" src="assets/left arrow.png" alt="" width="15px" height="20px">
+                <h4 id="heading-activity" class="heading-activity">Campaign 1</h4>
+                <img class="activity-close-btn" id="activity-close-btn" src="assets/Close button.png" alt="" width="18px" height="18px">
             </div>
 
-            <div class="activity-heading-section">
-                <button id="activity-btn">ACTIVITY</button>
-                <button id="message-btn">MESSAGE</button>
-                <button id="people-btn">PEOPLE</button>
+            <div class="activity-heading-section" id="activity-heading-section">
+                <button id="activity-btn" class="activity-btn">ACTIVITY</button>
+                <button id="message-btn" class="message-btn">MESSAGE</button>
+                <button id="people-btn" class="people-btn">PEOPLE</button>
             </div>
         </div>
 
-        <div class="activity-section">
-            <div class="trial">
-                <div class="trial-bar">
+        <div class="activity-section" id="activity-section">
+            <div class="trial" id="trial">
+                <div class="trial-bar" id="trial-bar">
                     <div>Daily Limits:</div>
                     <input type="number" class="size-36" value="10" min="1" max="99" step="1">
                     <span>connections</span>
@@ -38,58 +38,58 @@
                 </div>
             </div>
 
-            <div class="process-box">
+            <div class="process-box" id="process-box">
                 <div>Today's Queue:</div>
-                <div class="queue-num">0 connections</div>
+                <div class="queue-num" id="queue-num">0 connections</div>
             </div>
 
-            <div class="activity-leads-section"></div>
+            <div class="activity-leads-section" id="activity-leads-section"></div>
 
-            <div class="start-invite-activity-footer">
-                <button id="start-invite-btn">Start Sending Invites</button>
+            <div class="start-invite-activity-footer" id="start-invite-activity-footer">
+                <button id="start-invite-btn" class="start-invite-btn">Start Sending Invites</button>
             </div>
-            <div class="stop-invite-activity-footer hide">
-                <button id="stop-invite-btn">Stop Sending Invites</button>
+            <div class="stop-invite-activity-footer hide" id="stop-invite-activity-footer">
+                <button id="stop-invite-btn" class="stop-invite-btn">Stop Sending Invites</button>
             </div>
         </div>
 
 
-        <div class="message-section hide">
-            <div class="message-template">
-                <form id="message-form">
+        <div class="message-section hide" id="message-section">
+            <div class="message-template" id="message-template">
+                <form id="message-form" class="message-form">
                     <h5>Create a Campaign name</h5>
-                    <input id="campaign-name" type="text" placeholder="Enter your Campaign's Name" minlength="3"
+                    <input id="campaign-name" class="ampaign-name" type="text" placeholder="Enter your Campaign's Name" minlength="3"
                         maxlength="12">
                 </form>
-                <form id="message">
+                <form id="message" class="message">
                     <h5>Connection Request Message</h5>
-                    <textarea id="message-input" rows="6" cols="30" placeholder="Enter your message here"
+                    <textarea id="message-input" class="message-input" rows="6" cols="30" placeholder="Enter your message here"
                         form="Default Message"></textarea>
                 </form>
             </div>
 
-            <div class="message-footer">
-                <button id="save-update-msg-campname-btn">Save Changes</button>
+            <div class="message-footer" id="message-footer">
+                <button id="save-update-msg-campname-btn" class="save-update-msg-campname-btn">Save Changes</button>
             </div>
         </div>
 
 
-        <div class="people-section hide">
-            <div class="data-box">
-                <div class="pending">
-                    <div class="number">0</div>
-                    <div class="text-desc">Pending</div>
+        <div class="people-section hide" id="people-section">
+            <div class="data-box" id="data-box">
+                <div class="pending" id="pending">
+                    <div class="number" id="number">0</div>
+                    <div class="text-desc" id="text-desc">Pending</div>
                 </div>
-                <div class="sent">
-                    <div class="number">0</div>
-                    <div class="text-desc">Sent</div>
+                <div class="sent" id="sent">
+                    <div class="number" id="number">0</div>
+                    <div class="text-desc" id="text-desc">Sent</div>
                 </div>
             </div>
 
-            <div class="people-leads-section"></div>
+            <div class="people-leads-section" id="people-leads-section"></div>
 
-            <div class="people-footer">
-                <button id="add-people">Add More People</button>
+            <div class="people-footer" id="people-footer">
+                <button id="add-people" class="add-people">Add More People</button>
             </div>
         </div>
 

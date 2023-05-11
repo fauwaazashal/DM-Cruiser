@@ -12,25 +12,25 @@
 
 <body>
     <!-- newsearch page -->
-    <div class="newsearch-popup">
-        <div class="header">
-            <img class="back" src="assets/left arrow.png" alt="" width="15px" height="24px">
-            <h4 id="heading-search">Add People</h4>
-            <img class="close-btn" src="assets/Close button.png" alt="" width="20px" height="20px">
+    <div class="newsearch-popup" id="newsearch-popup">
+        <div class="header" id="header">
+            <img class="back" id="back" src="assets/left arrow.png" alt="" width="15px" height="24px">
+            <h4 id="heading-search" class="heading-search">Add People</h4>
+            <img class="close-btn" id="close-btn" src="assets/Close button.png" alt="" width="20px" height="20px">
         </div>
-        <div class="search-Campaign">
-            <div class="collected">
+        <div class="search-Campaign" id="search-Campaign">
+            <div class="collected" id="collected">
                 <h6>Collected: 0</h6>
             </div>
 
-            <div class="resume-search hide">
-                <button id="resume-scrape-btn">Resume</button>
+            <div class="resume-search hide" id="resume-search">
+                <button id="resume-scrape-btn" class="resume-scrape-btn">Resume</button>
             </div>
-            <div class="pause-search hide">
-                <button id="pause-scrape-btn">Pause</button>
+            <div class="pause-search hide" id="pause-search">
+                <button id="pause-scrape-btn" class="pause-scrape-btn">Pause</button>
             </div>
         </div>
-        <div class="loading-container hide">
+        <div class="loading-container hide" id="loading-container">
             <h2>Searching...</h2>
             <div class="loading-dots">
                 <div class="dot"></div>
@@ -39,38 +39,38 @@
                 <div class="dot"></div>
             </div>
         </div>
-        <div class="leads-section"></div>
+        <div class="leads-section" id="leads-section"></div>
 
-        <div class="start-search-footer">
-            <button id="start-search-btn">Start Search</button>
-            <img class="right-arrow-btn-start-search" src="assets/right arrow.png" alt="" width="10px" height="13px">
+        <div class="start-search-footer" id="start-search-footer">
+            <button id="start-search-btn" class="start-search-btn">Start Search</button>
+            <img class="right-arrow-btn-start-search" id="right-arrow-btn-start-search" src="assets/right arrow.png" alt="" width="10px" height="13px">
         </div>
-        <div class="stop-search-footer hide">
-            <button id="stop-search-btn">Stop Search</button>
-            <img class="right-arrow-btn-stop-search" src="assets/right arrow.png" alt="" width="10px" height="13px">
+        <div class="stop-search-footer hide" id="stop-search-footer">
+            <button id="stop-search-btn" class="stop-search-btn">Stop Search</button>
+            <img class="right-arrow-btn-stop-search" id="right-arrow-btn-stop-search" src="assets/right arrow.png" alt="" width="10px" height="13px">
         </div>
     </div>
 
 
     <!-- newmessage page -->
-    <div class="newmessage-popup hide">
-        <div class="header">
-            <img class="back" src="assets/left arrow.png" alt="" width="15px" height="24px">
-            <h4 id="heading-message">Set up Message</h4>
-            <img class="close-btn" src="assets/Close button.png" alt="" width="20px" height="20px">
+    <div class="newmessage-popup hide" id="newmessage-popup">
+        <div class="header" id="header">
+            <img class="back" id="back" src="assets/left arrow.png" alt="" width="15px" height="24px">
+            <h4 id="heading-message" class="heading-message">Set up Message</h4>
+            <img class="close-btn" id="close-btn" src="assets/Close button.png" alt="" width="20px" height="20px">
         </div>
-        <form id="message-form" class="message-header">
+        <form id="message-header" class="message-header">
             <h5>Create a Campaign name</h5>
-            <input id="campaign-name" type="text" class="sizing" placeholder="Enter your Campaign's Name" minlength="3"
+            <input id="sizing" type="text" class="sizing" placeholder="Enter your Campaign's Name" minlength="3"
                 maxlength="12">
             <!-- <textarea id="message-input" rows="1" cols="30" placeholder="Enter your message here" form="Default Campaign"></textarea> -->
         </form>
-        <form id="message" class="message-subheader">
+        <form id="message-subheader" class="message-subheader">
             <h5>Connection Request Message</h5>
             <!-- <input type="text" placeholder="Enter your message here" maxlength="300"> -->
-            <textarea id="message-input" rows="8" cols="35" placeholder="Enter your message here" class="sizing"
+            <textarea id="sizing" rows="8" cols="35" placeholder="Enter your message here" class="sizing"
                 form="Default Message" maxlength="275"></textarea>
-            <div id="charCount"></div>
+            <div id="charCount" class="charCount"></div>
         </form>
         <div class="placeholders">
             <p>Placeholders Available:</p>
@@ -80,8 +80,8 @@
             <br>
             <button class="placeholder-button" id="jobTitle">Job Title</button>
         </div>
-        <div class="newmessage-footer">
-            <button id="save-campaign">Save Campaign</button>
+        <div class="newmessage-footer" id="newmessage-footer">
+            <button id="save-campaign" class="save-campaign">Save Campaign</button>
         </div>
     </div>
 

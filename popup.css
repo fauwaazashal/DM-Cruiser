@@ -29,7 +29,7 @@
 
 
 body {
-	background-color: #e3e9f1;
+	background-color: #F3F2EF;
 }
 
 .heading1 {
@@ -303,7 +303,7 @@ h6 {
 .campaign-name {
 	font-family: 'Prompt', sans-serif;
 	color: #fff;
-	text-shadow: 0 0 4px #9333EA; /* horizontal-offset vertical-offset 'blur' colour */
+	/* text-shadow: 0 0 4px #9333EA;  */
 	text-overflow: ellipsis;
 	max-width: 15rem;
 	overflow: hidden;
@@ -319,7 +319,7 @@ h6 {
 	color: #fff;
 } */
 .bordered-text{
-	text-shadow: 0 0 4px #9333EA; 
+	/* text-shadow: 0 0 4px #9333EA;  */
 	font-size: 11px;
 	font-family: 'Prompt', sans-serif;
 	color: #fff;
@@ -376,6 +376,7 @@ h6 {
 	background-color:#26BC74;
 	border-radius: 5px;
 	padding: 5px 24px;
+	color: #fff;
 	border: none;
 	font-family: 'Prompt', sans-serif;
 
@@ -460,6 +461,9 @@ h6 {
 	justify-content: center;
 	font-size: 10px;
 	margin-top: -40px;
+}
+.loading-container h2{
+	color: #A4A4A4;
 }
 
 .loading-dots {
