@@ -56,17 +56,50 @@ body {
 	font-size: 17px;
 }
 
+.activity-header {
+	background-image: url(assets/background-image.png);
+	height: 84px;
+	border-top-left-radius: 24px;
+	border-top-right-radius: 24px;
+	/* margin-left: -8px;
+	margin-right: -8px; */
+}
+.activity-btn-section{
+	display: flex;
+	margin-bottom: 2px;
+}
+.activity-heading-section,
+.people-top-section {
+	display: flex;
+	gap: 47px;
+	padding-left: 10px;
+	margin: 0px -8px 0px -8px;
+
+}
+.activity-close-btn {
+	position: absolute;
+	left: 300px;
+	top: 29px;
+	cursor: pointer;
+}
+
+.activity-back {
+	position: absolute;
+	top: 29px;
+	left: 35px;
+	cursor: pointer;
+}
 .close-btn {
 	position: absolute;
 	left: 300px;
-	top: 35px;
+	top: 31px;
 	cursor: pointer;
 }
 
 .back {
 	position: absolute;
-	top: 22px;
-	left: 26px;
+	top: 35px;
+	left: 35px;
 	cursor: pointer;
 }
 
@@ -84,9 +117,10 @@ h6 {
 #Activity {
 	background-color: transparent;
 	border: transparent;
-	font-family: "Poppins variant0", Tofu;
-	font-size: 11px;
-	font-weight: bold;
+	font-family: 'Prompt', sans-serif;
+	color: #fff;
+	font-size: 15px;
+    font-weight: 600;
 	margin-bottom: 5px;
 	cursor: pointer;
 }
@@ -113,7 +147,7 @@ h6 {
 }
 
 
-.remove-btn {
+/* .remove-btn {
 	background-color: #0073b1;
 	color: #fff;
 	border: none;
@@ -121,10 +155,9 @@ h6 {
 	padding: 8px 16px;
 	font-size: 12px;
 	cursor: pointer;
-}
+} */
 
-.right-arrow-btn-start-search,
-.right-arrow-btn-stop-search,
+
 .right-arrow-btn-home,
 .right-arrow-btn-people,
 .right-arrow-btn-activity,
@@ -132,6 +165,11 @@ h6 {
 .right-arrow-btn-create {
 	position: absolute;
 	left: 260px;
+	bottom: 28px;
+}
+.right-arrow-btn-start-search,.right-arrow-btn-stop-search{
+	position: absolute;
+	left: 226px;
 	bottom: 28px;
 }
 .right-arrow-btn-camp {
@@ -143,26 +181,32 @@ h6 {
 #start-search-btn,
 #stop-search-btn,
 #activity-status,
-#save-update-msg-campname-btn {
-	background-color: rgb(144, 131, 216);
-	color: black;
+#save-update-msg-campname-btn,#save-campaign{
+	background-color: #9333EA;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #fff;
 	border: none;
-	font-family: "Poppins variant0", Tofu;
-	font-weight: 600;
-	padding: 12px 100px;
-	margin-left: 10px;
+	width: 302.52px;
+	height: 49.64px;
+	align-items: center;
+	font-family: 'Prompt', sans-serif;
+	font-weight: 400;
+	padding-left: 0px;
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
-	font-size: 15px;
+	font-size: 18px;
+	text-align: center;
 }
 
 #start-invite-btn,
 #stop-invite-btn {
 	background-color: rgb(144, 131, 216);
-	color: black;
+	color: #fff;
 	border: none;
-	font-family: "Poppins variant0", Tofu;
+	font-family: 'Poppins', sans-serif;
 	font-weight: 600;
 	padding: 12px 72px;
 	margin-left: 10px;
@@ -196,8 +240,6 @@ h6 {
 	font-family: 'Prompt', sans-serif;
 	font-weight: 400;
 	padding-left: 0px;
-	/* padding: 12px 75px; */
-	/* margin-left: 10px; */
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
@@ -304,36 +346,52 @@ h6 {
 
 
 #heading-search {
-	margin-left: 50px;
+	margin: 0%;
+	color: #fff;
+	font-size: 23.28px;
+	font-family: 'Poppins', sans-serif;
+	padding: 25px 0px 0px 55px;
+	font-size: 20px;
 }
 
 .search-Campaign {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 170px;
+	gap: 125px;
+	margin: 0px 0px 0px 0px;
 }
 
 .collected {
 	align-items: flex-start;
 	justify-content: flex-start;
 	display: flex;
-
+	color: #fff;
+	font-family: 'Poppins', sans-serif;
+    font-weight: 100;
 }
 
 
-#resume-scrape-btn,
-#pause-scrape-btn {
-	background-color: rgb(144, 131, 216);
-	border-radius: 10px;
-	padding: 5px 15px;
+#resume-scrape-btn{
+	background-color:#26BC74;
+	border-radius: 5px;
+	padding: 5px 24px;
 	border: none;
+	font-family: 'Prompt', sans-serif;
+
+}
+#pause-scrape-btn {
+	background-color:#DFAF34;
+	border-radius: 5px;
+	padding: 5px 30px;
+	border: none;
+	font-family: 'Prompt', sans-serif;
 }
 
 
 
 .leads-scraped {
-	box-shadow: 0 0 5px #ccc;
+	/* box-shadow: 0 0 5px #ccc; */
 	padding: 10px;
 	display: flex;
 	justify-content: space-between;
@@ -350,15 +408,18 @@ h6 {
 .lead-info {
 	text-align: left;
 	width: 175px;
-	height: 32px;
+	height: 45px;
+
 }
 
 .lead-name {
 	font-size: 14px;
-	font-weight: bold;
 	margin: 0;
 	margin-bottom: 5px;
 	text-align: left;
+	font-family: 'Poppins', sans-serif;
+	color: #fff;
+
 }
 
 .lead-title {
@@ -370,22 +431,26 @@ h6 {
 	overflow: hidden;
 	text-align: left;
 	white-space: nowrap;
+	font-family: 'Prompt', sans-serif;
+	color: #8A8A8A;
 }
 
 .remove-btn {
-	background-color: #0073b1;
+	/* background-color: #0073b1;
 	color: #fff;
 	border: none;
-	border-radius: 4px;
-	padding: 8px 16px;
 	font-size: 12px;
+	border-radius: 4px; */
+	/* padding: 8px 16px; */
+    width: 24px;
+	height: 26px;
 	cursor: pointer;
 }
 
 .leads-section {
 	overflow: scroll;
 	overflow-x: hidden;
-	height: 350px;
+	height: 250px;
 }
 
 .loading-container {
@@ -438,32 +503,58 @@ h6 {
 	background-color: #fff;
 	width: 350px;
 	height: 429px;
-	font-family: "Poppins variant0", Tofu;
+	font-family: 'Poppins', sans-serif;
 	text-align: center;
 }
 
 
 
 #heading-message {
-	margin-left: 50px;
+	margin: 23px 0px 0px 60px;
+	color: #fff;
+	font-size: 20px;
+	font-family: 'Poppins', sans-serif;
 }
-
 .sizing {
 	resize: vertical;
+	width: 260px;
+	margin: -20px;
+	background-color: #111827;
+	color: #fff;
+	border:1px solid #374151;
+	border-radius: 5px;
+	font-family: 'Prompt', sans-serif;
 }
-
-#save-campaign {
+.sizing:hover{
+	border:1px solid #9333EA;
+}
+.message-header h5 {
+	font-size: 15px;
+	color: #ccc;
+	font-family: 'Poppins', sans-serif;
+    margin: 15px 67px 15px 0px;
+}
+.message-subheader h5 {
+	font-size: 15px;
+	color: #ccc;
+	font-family: 'Poppins', sans-serif;
+	margin: 25px 38px 30px 0px;
+}
+.message-subheader textarea {
+	height: 122px;
+}
+/* #save-campaign {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-	font-family: "Poppins variant0", Tofu;
+		font-family: 'Poppins', sans-serif;
 	font-weight: 600;
 	padding: 12px 105px;
 	text-align: center;
 	cursor: pointer;
 	border-radius: 10px;
 	white-space: nowrap;
-}
+} */
 
 #Campaign1 {
 	margin-top: 20px;
@@ -471,7 +562,7 @@ h6 {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-	font-family: "Poppins variant0", Tofu;
+	font-family: 'Poppins', sans-serif;
 	font-weight: 600;
 	padding: 20px 100px;
 	cursor: pointer;
@@ -484,18 +575,21 @@ h6 {
 
 #heading-activity,
 #heading-people {
-	margin-left: 54px;
+	color: #fff;
+	font-size: 23.28px;
+	font-family: 'Poppins', sans-serif;
+	font-size: 20px;
 }
 
 #charCount {
 	position: absolute;
-	bottom: 260px;
-	right: 55px;
+	bottom: 200px;
+	right: 50px;
 	color: gray;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-.activity-heading-section,
+/* .activity-heading-section,
 .people-top-section {
 	display: flex;
 	background-color: rgb(144, 131, 216);
@@ -503,7 +597,7 @@ h6 {
 	margin-right: -8px;
 	gap: 78px;
 	padding-left: 10px;
-}
+} */
 
 .trial input {
 	font-size: 14px;
@@ -516,7 +610,14 @@ h6 {
 
 .placeholders {
 	text-align: left;
-	padding-left: 30px;
+	padding: 15px 0px 0px 35px;
+	font-size: 15px;
+	color: #ccc;
+	font-family: 'Poppins', sans-serif;
+	margin-bottom: 10px;
+}
+.placeholders p{
+	margin-bottom: 5px;
 }
 
 .placeholder-button {
@@ -525,21 +626,22 @@ h6 {
 	font-family: Arial;
 	color: #ffffff;
 	font-size: 12px;
-	background: #cfcfcf;
+	background: #1F2937;
 	padding: 4px 10px 4px 10px;
 	text-decoration: none;
-	margin: 5px;
+	margin: 0px 14px 5px 0px;
 }
 
 .placeholder-button:hover {
 	text-decoration: none;
 }
 
-#Activity:hover {
+.activity-heading-section,
+.people-top-section:hover {
 	text-decoration: underline;
+	text-decoration-color: #9333EA;
 	text-underline-offset: 0.4em;
 	text-decoration-thickness: 0.30em;
-
 }
 
 .data-box {
@@ -586,6 +688,9 @@ h6 {
 	text-align: left;
 	padding: 15px;
 	padding-left: 32px;
+	font-family: 'Poppins', sans-serif;
+	color: #fff;
+	font-size: 10px;
 }
 
 .lead-status {
@@ -605,9 +710,9 @@ h6 {
 }
 
 .trial {
-	background: #fff;
+	background:#1F2937;
 	padding: 15px;
-	margin: 0 -6px 0 -6px;
+	margin: 0px;
 	box-shadow: 0 1px 5px 0 rgba(0, 0, 0, .12), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
 }
 
@@ -620,6 +725,9 @@ h6 {
 .trial-bar {
 	margin-left: -8px;
 	margin-right: -8px;
+	font-family: 'Poppins', sans-serif;
+	color: #fff;
+	font-size: 10px;
 }
 
 ::-webkit-scrollbar {
@@ -639,7 +747,7 @@ h6 {
 	background-color: rgb(144, 131, 216);
 	color: black;
 	border: none;
-	font-family: "Poppins variant0", Tofu;
+	font-family: 'Poppins', sans-serif;
 	font-weight: 600;
 	padding: 12px 97px;
 	cursor: pointer;

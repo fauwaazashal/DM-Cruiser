@@ -611,9 +611,15 @@ async function injectOntoNewsearch(data) {
 
 		// creating delete button element and adding to leadDiv
 		const leadDelete = document.createElement("div");
-		leadDelete.classList.add("remove-btn");
-		leadDelete.innerText = "Remove";
-		leadDelete.disabled = true;
+		// leadDelete.classList.add("remove-btn");
+		// leadDelete.innerText = "Remove";
+		// leadDelete.disabled = true;
+		// leadDiv.appendChild(leadDelete);
+
+		const leadDeleteImage = document.createElement("img");
+		leadDeleteImage.classList.add("remove-btn");
+		leadDeleteImage.setAttribute("src", "assets/red-delete-icon.png");
+		leadDelete.appendChild(leadDeleteImage);
 		leadDiv.appendChild(leadDelete);
 
 		leads.appendChild(leadDiv);

@@ -4,22 +4,27 @@
 <head>
     <title>My Extension Popup</title>
     <link rel="stylesheet" type="text/css" href="popup.css">
+    <style>
+		@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Prompt&display=swap');
+	</style>
 </head>
 
 <body>
-    
+
     <div class="activity-popup">
+        <div class="activity-header">
+            <div class="activity-btn-section">
+                <img class="activity-back" src="assets/left arrow.png" alt="" width="15px" height="20px">
+                <h4 id="heading-activity">Campaign 1</h4>
+                <img class="activity-close-btn" src="assets/Close button.png" alt="" width="18px" height="18px">
+            </div>
 
-        <div class="header">
-            <img class="back" src="assets/left arrow.png" alt="" width="15px" height="20px">
-            <h4 id="heading-activity">Campaign 1</h4>
-            <img class="close-btn" src="assets/Close button.png" alt="" width="18px" height="18px">
-        </div>
-
-        <div class="activity-heading-section">
-            <button id="activity-btn">ACTIVITY</button>
-            <button id="message-btn">MESSAGE</button>
-            <button id="people-btn">PEOPLE</button>
+            <div class="activity-heading-section">
+                <button id="activity-btn">ACTIVITY</button>
+                <button id="message-btn">MESSAGE</button>
+                <button id="people-btn">PEOPLE</button>
+            </div>
         </div>
 
         <div class="activity-section">
@@ -53,11 +58,13 @@
             <div class="message-template">
                 <form id="message-form">
                     <h5>Create a Campaign name</h5>
-                    <input id="campaign-name" type="text" placeholder="Enter your Campaign's Name" minlength="3" maxlength="12">             
+                    <input id="campaign-name" type="text" placeholder="Enter your Campaign's Name" minlength="3"
+                        maxlength="12">
                 </form>
                 <form id="message">
                     <h5>Connection Request Message</h5>
-                    <textarea id="message-input" rows="6" cols="30" placeholder="Enter your message here" form="Default Message"></textarea>
+                    <textarea id="message-input" rows="6" cols="30" placeholder="Enter your message here"
+                        form="Default Message"></textarea>
                 </form>
             </div>
 
@@ -76,7 +83,7 @@
                 <div class="sent">
                     <div class="number">0</div>
                     <div class="text-desc">Sent</div>
-                </div> 
+                </div>
             </div>
 
             <div class="people-leads-section"></div>
@@ -84,8 +91,8 @@
             <div class="people-footer">
                 <button id="add-people">Add More People</button>
             </div>
-        </div>       
-        
+        </div>
+
     </div>
 
     <script src="popup.js"></script>
