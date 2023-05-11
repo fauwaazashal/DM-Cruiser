@@ -938,56 +938,72 @@ async function injectOntoHome() {
 		// create new div element for newly created campaign
 		const campaignDiv = document.createElement("div");
 		campaignDiv.classList.add("campaign-box");
-	
-		// create campaign info (name + status) element and add to campaignDiv
-		const campaignInfo = document.createElement("div");
-		campaignInfo.classList.add("campaign-info");
+		
+
+		// create campaignInfo1 (name + delete, confirm delete and cancel delete btn) element and add to campaignDiv
+		const campaignInfo1 = document.createElement("div");
+		campaignInfo1.classList.add("campaign-info");
+
 		// create campaign name element and add to campaignInfo
-		const campName = document.createElement("div");
+		const campName = document.createElement("p");
 		campName.classList.add("campaign-name");
 		campName.innerText = campaignKeys[i];
-		campaignInfo.appendChild(campName);
-		// create activity status element and add to campaignInfo
-		const campaignStatus = document.createElement("div");
-		campaignStatus.classList.add("activity-status");
-		campaignStatus.innerText = `${sentCount} of ${scrapedData.length} sent`;
-		campaignInfo.appendChild(campaignStatus);
-		// appending campaign info (name + status) to campaignDiv
-		campaignDiv.appendChild(campaignInfo);
-	
-		// create date element and add it to campaignDiv
-		const campaignDate = document.createElement("div");
-		campaignDate.classList.add("date");
-		campaignDate.innerText = date;
-		campaignDiv.appendChild(campaignDate);
+		campaignInfo1.appendChild(campName);
 
-		// create cancel delete button and add it to campaignDiv
+		// create cancel delete button and add it to campaignInfo1
 		const cancelDelete = document.createElement("div");
 		cancelDelete.classList.add("cancel-delete-btn", "hide");
 		const cancelDeleteImage = document.createElement("img");
 		cancelDeleteImage.classList.add("cancel-delete-btn-img");
 		cancelDeleteImage.setAttribute("src", "assets/Close-icon.png");
 		cancelDelete.appendChild(cancelDeleteImage);
-		campaignDiv.appendChild(cancelDelete);
-	
-		// create delete button and add it to campaignDiv
+		campaignInfo1.appendChild(cancelDelete);
+
+		// create delete button and add it to campaignInfo1
 		const deleteCampaign = document.createElement("div");
 		deleteCampaign.classList.add("delete-campaign-btn");
 		const deleteBtnImage = document.createElement("img");
 		deleteBtnImage.classList.add("delete-campaign-btn-img");
-		deleteBtnImage.setAttribute("src", "assets/delete-icon.png");
+		deleteBtnImage.setAttribute("src", "assets/red-delete-icon.png");
 		deleteCampaign.appendChild(deleteBtnImage);
-		campaignDiv.appendChild(deleteCampaign);
+		campaignInfo1.appendChild(deleteCampaign);
 
-		// create confirm delete button and add it to campaignDiv
+		// create confirm delete button and add it to campaignInfo1
 		const confirmDelete = document.createElement("div");
 		confirmDelete.classList.add("confirm-delete-btn", "hide");
 		const confirmDeleteImage = document.createElement("img");
 		confirmDeleteImage.classList.add("confirm-delete-btn-img");
 		confirmDeleteImage.setAttribute("src", "assets/right-tick-icon.png");
 		confirmDelete.appendChild(confirmDeleteImage);
-		campaignDiv.appendChild(confirmDelete);
+		campaignInfo1.appendChild(confirmDelete);
+		
+		campaignDiv.appendChild(campaignInfo1);
+
+
+		// create campaignInfo2 (campaign status + date) element and add to campaignDiv
+		const campaignInfo2 = document.createElement("div");
+		campaignInfo2.classList.add("campaign-info2");
+		
+		// create campoaign status and add it to campaignInfo2
+		const campaignStatus = document.createElement("p");
+		const campaignStatusText = document.createElement("span");
+		campaignStatusText.classList.add("bordered-text");
+		campaignStatusText.innerText = `${sentCount} of ${scrapedData.length} sent`;
+		campaignStatus.appendChild(campaignStatusText);
+		campaignInfo2.appendChild(campaignStatus);
 	
+		// create date element and add it to campaignInfo2
+		const campaignDate = document.createElement("ul");
+		campaignDate.classList.add("date");
+		const campaignDateText = document.createElement("li")
+		campaignDateText.innerText = date;
+		campaignDate.appendChild(campaignDateText);
+		campaignInfo2.appendChild(campaignDate);
+		
+		campaignDiv.appendChild(campaignInfo2);
+
+
+		// append created campaignDiv onto the campaignsSection div
 		campaignsSection.appendChild(campaignDiv);
 	}
 	console.log("injected all created campaigns onto home.html");
