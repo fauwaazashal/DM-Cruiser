@@ -194,30 +194,30 @@ if (window.location.href.includes("newsearch.html")) {
 		});
 
 		//job title
-		document.querySelector("#jobTitle").addEventListener("click", () => {
-			var textarea = document.getElementById("message-input");
-			var textToAdd = "{job_title}";
-			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
-			// Check if there is enough space for the full string
-			if (remainingSpace >= textToAdd.length) {
-				// Get the current cursor position
-				var startPos = textarea.selectionStart;
-				var endPos = textarea.selectionEnd;
-				// Insert the text at the cursor position
-				textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-				// Move the cursor to the end of the inserted text
-				textarea.selectionStart = startPos + textToAdd.length;
-				textarea.selectionEnd = startPos + textToAdd.length;
-				// Scroll to the position of the cursor
-				var cursorPos = textarea.selectionStart;
-				var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-				var linesAbove = Math.floor(cursorPos / textarea.cols);
-				textarea.scrollTop = lineHeight * linesAbove;
-				// Set focus on the textarea
-				textarea.focus();
-			}
-			updateCharacterCount();
-		});
+		// document.querySelector("#jobTitle").addEventListener("click", () => {
+		// 	var textarea = document.getElementById("message-input");
+		// 	var textToAdd = "{job_title}";
+		// 	var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+		// 	// Check if there is enough space for the full string
+		// 	if (remainingSpace >= textToAdd.length) {
+		// 		// Get the current cursor position
+		// 		var startPos = textarea.selectionStart;
+		// 		var endPos = textarea.selectionEnd;
+		// 		// Insert the text at the cursor position
+		// 		textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+		// 		// Move the cursor to the end of the inserted text
+		// 		textarea.selectionStart = startPos + textToAdd.length;
+		// 		textarea.selectionEnd = startPos + textToAdd.length;
+		// 		// Scroll to the position of the cursor
+		// 		var cursorPos = textarea.selectionStart;
+		// 		var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+		// 		var linesAbove = Math.floor(cursorPos / textarea.cols);
+		// 		textarea.scrollTop = lineHeight * linesAbove;
+		// 		// Set focus on the textarea
+		// 		textarea.focus();
+		// 	}
+		// 	updateCharacterCount();
+		// });
 
 		var textarea = document.getElementById("message-input");
 		var charCount = document.getElementById("charCount");
@@ -568,30 +568,30 @@ if (window.location.href.includes("activity.html")) {
 			});
 
 			//job title
-			document.querySelector("#jobTitle").addEventListener("click", () => {
-				var textarea = document.getElementById("message-input");
-				var textToAdd = "{job_title}";
-				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
-				// Check if there is enough space for the full string
-				if (remainingSpace >= textToAdd.length) {
-					// Get the current cursor position
-					var startPos = textarea.selectionStart;
-					var endPos = textarea.selectionEnd;
-					// Insert the text at the cursor position
-					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-					// Move the cursor to the end of the inserted text
-					textarea.selectionStart = startPos + textToAdd.length;
-					textarea.selectionEnd = startPos + textToAdd.length;
-					// Scroll to the position of the cursor
-					var cursorPos = textarea.selectionStart;
-					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-					var linesAbove = Math.floor(cursorPos / textarea.cols);
-					textarea.scrollTop = lineHeight * linesAbove;
-					// Set focus on the textarea
-					textarea.focus();
-				}
-				updateCharacterCount();
-			});
+			// document.querySelector("#jobTitle").addEventListener("click", () => {
+			// 	var textarea = document.getElementById("message-input");
+			// 	var textToAdd = "{job_title}";
+			// 	var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			// 	// Check if there is enough space for the full string
+			// 	if (remainingSpace >= textToAdd.length) {
+			// 		// Get the current cursor position
+			// 		var startPos = textarea.selectionStart;
+			// 		var endPos = textarea.selectionEnd;
+			// 		// Insert the text at the cursor position
+			// 		textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+			// 		// Move the cursor to the end of the inserted text
+			// 		textarea.selectionStart = startPos + textToAdd.length;
+			// 		textarea.selectionEnd = startPos + textToAdd.length;
+			// 		// Scroll to the position of the cursor
+			// 		var cursorPos = textarea.selectionStart;
+			// 		var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+			// 		var linesAbove = Math.floor(cursorPos / textarea.cols);
+			// 		textarea.scrollTop = lineHeight * linesAbove;
+			// 		// Set focus on the textarea
+			// 		textarea.focus();
+			// 	}
+			// 	updateCharacterCount();
+			// });
 
 			var textarea = document.getElementById("message-input");
 			var charCount = document.getElementById("charCountMessage");
@@ -643,8 +643,13 @@ if (window.location.href.includes("activity.html")) {
 				messageSection.classList.add("hide");
 				peopleSection.classList.remove("hide");
 
-				document.querySelector(".pending .number").textContent = pendingCount;
-				document.querySelector(".sent .number").textContent = sentCount;
+				// document.querySelector(".total-count > span").textContent = totalCount;
+				// document.querySelector(".people-page-pending > span").textContent = pendingCount;
+				// document.querySelector(".people-page-sent > span").textContent = sentCount;
+				// document.querySelector(".people-page-date").textContent = campaignStorage.Campaigns[campaignName].date;
+
+				// document.querySelector(".pending .number").textContent = pendingCount;
+				// document.querySelector(".sent .number").textContent = sentCount;
 
 				await injectRemove();
 				await injectOntoPeopleTab(campaignName);
@@ -664,136 +669,136 @@ if (window.location.href.includes("activity.html")) {
 		})
 
 		// clicks on add more people btn to add/scrape more lead to the existing campaign
-		document.querySelector("#add-people").addEventListener("click", async () => {
-			await injectRemove();
-			activityPopup.classList.add("hide");
-			newsearchDiv.classList.remove("hide");
+		// document.querySelector("#add-people").addEventListener("click", async () => {
+		// 	await injectRemove();
+		// 	activityPopup.classList.add("hide");
+		// 	newsearchDiv.classList.remove("hide");
 
-			const preScrapePort = chrome.runtime.connect({ name: "pre scrape url check" });
+		// 	const preScrapePort = chrome.runtime.connect({ name: "pre scrape url check" });
 
-			preScrapePort.postMessage({ action: "is user on the right page to scrape" });
-			preScrapePort.onMessage.addListener( async function(response) {
-				// if (response.message === "user is on the right page") {
+		// 	preScrapePort.postMessage({ action: "is user on the right page to scrape" });
+		// 	preScrapePort.onMessage.addListener( async function(response) {
+		// 		// if (response.message === "user is on the right page") {
 					
-				// }
-			});
-		})
+		// 		// }
+		// 	});
+		// })
 
-		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-			const scrapePort = chrome.tabs.connect(tabs[0].id, { name: "scrape leads" });
-			console.log("created port between popup & content scripts to scrape leads");
+		// chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+		// 	const scrapePort = chrome.tabs.connect(tabs[0].id, { name: "scrape leads" });
+		// 	console.log("created port between popup & content scripts to scrape leads");
 
-			// button is clicked to start scraping
-			document.querySelector("#start-search-btn").addEventListener("click", () => {
-				startScrapeFooter.classList.add("hide");
-				stopScrapeFooter.classList.remove("hide");
-				pauseScrapeFooter.classList.remove("hide");
-				loadingContainer.classList.remove("hide");
+		// 	// button is clicked to start scraping
+		// 	document.querySelector("#start-search-btn").addEventListener("click", () => {
+		// 		startScrapeFooter.classList.add("hide");
+		// 		stopScrapeFooter.classList.remove("hide");
+		// 		pauseScrapeFooter.classList.remove("hide");
+		// 		loadingContainer.classList.remove("hide");
 
-				console.log("sent request to content script to start scraping");
-				scrapePort.postMessage({ action: "Start Scraping" });
+		// 		console.log("sent request to content script to start scraping");
+		// 		scrapePort.postMessage({ action: "Start Scraping" });
 
-				scrapePort.onMessage.addListener(async function(response) {
-					if (response.message === "Scraped one page") {
-						console.log(response.data);
+		// 		scrapePort.onMessage.addListener(async function(response) {
+		// 			if (response.message === "Scraped one page") {
+		// 				console.log(response.data);
 						
-						// length of the data scraped thus far
-						prevIterationData = scrapedData.length;
-						// storing all scraped data in this variable
-						scrapedData = response.data; 
-						// obtaining the length of the data (from reverse) that is to be injected
-						injectDataLength = scrapedData.length - prevIterationData;
-						// updating the data that needs to be injected in this iteration
-						if (injectDataLength != 0) {
-							injectData = scrapedData.slice(-injectDataLength);
-							console.log(injectData);
-							// inject response.data onto popup
-							await injectOntoNewsearch(injectData);
-						}
+		// 				// length of the data scraped thus far
+		// 				prevIterationData = scrapedData.length;
+		// 				// storing all scraped data in this variable
+		// 				scrapedData = response.data; 
+		// 				// obtaining the length of the data (from reverse) that is to be injected
+		// 				injectDataLength = scrapedData.length - prevIterationData;
+		// 				// updating the data that needs to be injected in this iteration
+		// 				if (injectDataLength != 0) {
+		// 					injectData = scrapedData.slice(-injectDataLength);
+		// 					console.log(injectData);
+		// 					// inject response.data onto popup
+		// 					await injectOntoNewsearch(injectData);
+		// 				}
 						
-						// scrolls to bottom of leads section to show latest list of leads that were scraped
-						setTimeout(() => {
-							const section = document.querySelector(".leads-section");
-							section.scrollTo({
-								top: section.scrollHeight,
-								behavior: "smooth"
-							});
-						}, 1000);
+		// 				// scrolls to bottom of leads section to show latest list of leads that were scraped
+		// 				setTimeout(() => {
+		// 					const section = document.querySelector(".leads-section");
+		// 					section.scrollTo({
+		// 						top: section.scrollHeight,
+		// 						behavior: "smooth"
+		// 					});
+		// 				}, 1000);
 
-						// displays the numbers of leads that have been scraped
-						document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
-					}
-				});
-			})
+		// 				// displays the numbers of leads that have been scraped
+		// 				document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
+		// 			}
+		// 		});
+		// 	})
 
-			// button is clicked to pause scraping
-			document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
-				pauseScrapeFooter.classList.add("hide");
-				resumeScrapeFooter.classList.remove("hide");
-				loadingContainer.classList.add("hide");
+		// 	// button is clicked to pause scraping
+		// 	document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
+		// 		pauseScrapeFooter.classList.add("hide");
+		// 		resumeScrapeFooter.classList.remove("hide");
+		// 		loadingContainer.classList.add("hide");
 				
-				console.log("sent request to content script to pause scraping");
-				scrapePort.postMessage({ action: "Pause Scraping" });
+		// 		console.log("sent request to content script to pause scraping");
+		// 		scrapePort.postMessage({ action: "Pause Scraping" });
 
-				scrapePort.onMessage.addListener(function(response) {
-					if (response.message === "Paused Scraping") {
+		// 		scrapePort.onMessage.addListener(function(response) {
+		// 			if (response.message === "Paused Scraping") {
 						
-					}
-				});
+		// 			}
+		// 		});
 
-				// button is clicked to remove any selected leads before saving the campaign
-				document.querySelector(".remove-btn").addEventListener("click", () => {
-					let leads = document.querySelectorAll(".leads-scraped");
-					let removeBtns = document.querySelectorAll(".remove-btn");
-					for (let i = 0; i < removeBtns.length; i++) {
-						removeBtns[i].addEventListener("click", async () => {
-							scrapedData.splice(i, 1);
-							leads[i].remove();
-						});
-					}
-				})
-			})
+		// 		// button is clicked to remove any selected leads before saving the campaign
+		// 		document.querySelector(".remove-btn").addEventListener("click", () => {
+		// 			let leads = document.querySelectorAll(".leads-scraped");
+		// 			let removeBtns = document.querySelectorAll(".remove-btn");
+		// 			for (let i = 0; i < removeBtns.length; i++) {
+		// 				removeBtns[i].addEventListener("click", async () => {
+		// 					scrapedData.splice(i, 1);
+		// 					leads[i].remove();
+		// 				});
+		// 			}
+		// 		})
+		// 	})
 		
-			// button is clicked to resume scraping
-			document.querySelector("#resume-scrape-btn").addEventListener("click", () => {
-				pauseScrapeFooter.classList.remove("hide");
-				resumeScrapeFooter.classList.add("hide");
-				loadingContainer.classList.remove("hide");
+		// 	// button is clicked to resume scraping
+		// 	document.querySelector("#resume-scrape-btn").addEventListener("click", () => {
+		// 		pauseScrapeFooter.classList.remove("hide");
+		// 		resumeScrapeFooter.classList.add("hide");
+		// 		loadingContainer.classList.remove("hide");
 				
-				scrapePort.postMessage({ action: "Resume Scraping" });
+		// 		scrapePort.postMessage({ action: "Resume Scraping" });
 
-				scrapePort.onMessage.addListener(function(response) {
-					if (response.message === "Resumed Scraping") {
+		// 		scrapePort.onMessage.addListener(function(response) {
+		// 			if (response.message === "Resumed Scraping") {
 						
-					}
-				});
-			})
+		// 			}
+		// 		});
+		// 	})
 
-			// button is clicked to stop scraping and now user has to create messsage template & campaign name
-			document.querySelector("#stop-search-btn").addEventListener("click", () => {
-				pauseScrapeFooter.classList.add("hide");
-				resumeScrapeFooter.classList.add("hide");
-				startScrapeFooter.classList.remove("hide");
-				stopScrapeFooter.classList.add("hide");
-				loadingContainer.classList.add("hide");
-				newsearchDiv.classList.add("hide");
-				activityPopup.classList.remove("hide");
-				document.querySelector(".collected h6").innerText = "Collected: 0";
-				injectRemove();
+		// 	// button is clicked to stop scraping and now user has to create messsage template & campaign name
+		// 	document.querySelector("#stop-search-btn").addEventListener("click", () => {
+		// 		pauseScrapeFooter.classList.add("hide");
+		// 		resumeScrapeFooter.classList.add("hide");
+		// 		startScrapeFooter.classList.remove("hide");
+		// 		stopScrapeFooter.classList.add("hide");
+		// 		loadingContainer.classList.add("hide");
+		// 		newsearchDiv.classList.add("hide");
+		// 		activityPopup.classList.remove("hide");
+		// 		document.querySelector(".collected h6").innerText = "Collected: 0";
+		// 		injectRemove();
 		
-				console.log("sent request to content script to stop scraping");
-				scrapePort.postMessage({ action: "Stop Scraping" });
+		// 		console.log("sent request to content script to stop scraping");
+		// 		scrapePort.postMessage({ action: "Stop Scraping" });
 
-				scrapePort.onMessage.addListener(async function(response) {
-					if (response.message === "Stopped Scraping") {
-						await addLeadsToCampaignData(campaignName, scrapedData);
-						await injectOntoPeopleTab(campaignName);
-						// scrapePort.disconnect();
-						// console.log("disconnected port connection");
-					}
-				});
-			})
-		});
+		// 		scrapePort.onMessage.addListener(async function(response) {
+		// 			if (response.message === "Stopped Scraping") {
+		// 				await addLeadsToCampaignData(campaignName, scrapedData);
+		// 				await injectOntoPeopleTab(campaignName);
+		// 				// scrapePort.disconnect();
+		// 				// console.log("disconnected port connection");
+		// 			}
+		// 		});
+		// 	})
+		// });
 
 
 		// activity tab section
@@ -1075,7 +1080,7 @@ async function injectOntoMessageTab(campaignName) {
 	let campaignStorage = await chrome.storage.local.get("Campaigns");
 	let message = campaignStorage.Campaigns[campaignName].messageTemplate;
 
-	let messageTemplateDiv = document.querySelector(".message-template");
+	let messageTemplateDiv = document.querySelector(".message-section");
 	messageTemplateDiv.querySelector("#campaign-name").value = campaignName;
 	messageTemplateDiv.querySelector("#message-input").value = message;
 }
@@ -1083,18 +1088,22 @@ async function injectOntoMessageTab(campaignName) {
 
 // function for injecting selected campaign's data onto people tab of activity.html
 async function injectOntoPeopleTab(campaignName) {
-	let pendingCount = 0;
-	let sentCount = 0;
 
 	let campaignStorage = await chrome.storage.local.get("Campaigns");
 	let data = campaignStorage["Campaigns"][campaignName].scrapedData;
+
+	let pendingCount = 0;
+	let sentCount = 0;
+	let totalCount = data.length;
 
 	for (i = 0; i < data.length; i++) {
 		if (data[i].status == "pending") ++pendingCount;
 		else ++sentCount;
 	}
-	document.querySelector(".pending .number").textContent = pendingCount;
-	document.querySelector(".sent .number").textContent = sentCount;
+	document.querySelector(".total-count > span").textContent = totalCount;
+	document.querySelector(".people-page-pending > span").textContent = pendingCount;
+	document.querySelector(".people-page-sent > span").textContent = sentCount;
+	document.querySelector(".people-page-date").textContent = campaignStorage.Campaigns[campaignName].date;
 
 	let leads = document.querySelector(".people-leads-section");
 
@@ -1135,8 +1144,10 @@ async function injectOntoPeopleTab(campaignName) {
 
 		// creating delete button element and adding to leadDiv
 		const leadDelete = document.createElement("div");
-		leadDelete.classList.add("remove-btn");
-		leadDelete.innerText = "Remove";
+		const leadDeleteImage = document.createElement("img");
+		leadDeleteImage.classList.add("remove-btn");
+		leadDeleteImage.setAttribute("src", "assets/red-delete-icon.png");
+		leadDelete.appendChild(leadDeleteImage);
 		leadDiv.appendChild(leadDelete);
 
 		leads.appendChild(leadDiv);
