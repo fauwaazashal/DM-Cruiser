@@ -224,7 +224,7 @@ if (window.location.href.includes("newsearch.html")) {
 		});
 
 		var textarea = document.getElementById("message-input");
-		var charCount = document.getElementById("charCount");
+		var charCount = document.getElementById("charCountNewMessage");
 		function updateCharacterCount() {
 			var count = textarea.value.length;
 			// Display the character count
