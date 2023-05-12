@@ -77,14 +77,14 @@
         <div class="message-section hide" id="message-section">
             <form id="message-header" class="message-header">
                 <h5>Create a Campaign name</h5>
-                <input id="sizing" type="text" class="sizing" placeholder="Enter your Campaign's Name" minlength="3"
+                <input id="campaign-name" type="text" class="sizing" placeholder="Enter your Campaign's Name" minlength="3"
                     maxlength="12">
                 <!-- <textarea id="message-input" rows="1" cols="30" placeholder="Enter your message here" form="Default Campaign"></textarea> -->
             </form>
             <form id="message-subheader" class="message-subheader">
                 <h5>Connection Request Message</h5>
                 <!-- <input type="text" placeholder="Enter your message here" maxlength="300"> -->
-                <textarea id="sizing" rows="8" cols="35" placeholder="Enter your message here" class="sizing"
+                <textarea id="message-input" rows="8" cols="35" placeholder="Enter your message here" class="sizing"
                     form="Default Message" maxlength="275"></textarea>
                 <div id="charCount" class="charCount"></div>
             </form>
@@ -93,8 +93,8 @@
                 <button class="placeholder-button" id="firstName">First Name</button>
                 <button class="placeholder-button" id="lastName">Last Name</button>
                 <button class="placeholder-button" id="fullName">Full Name</button>
-                <br>
-                <button class="placeholder-button" id="jobTitle">Job Title</button>
+                <!-- <br>
+                <button class="placeholder-button" id="jobTitle">Job Title</button> -->
             </div>
             <div class="newmessage-footer" id="newmessage-footer">
                 <button id="save-campaign" class="save-campaign">Save Campaign</button>
@@ -112,16 +112,17 @@
                     <div class="number" id="number">0</div>
                     <div class="text-desc" id="text-desc">Sent</div>
                 </div> -->
-            <div class="total-count">Total:<span>10</span></div>
+            <div class="total-count">Total: <span></span></div>
             <div>
-                <li class="people-page-sent">Sent:<span>10</span></li>
+                <li class="people-page-sent">Sent: <span></span></li>
             </div>
             <div>
-                <li class="people-page-pending">Pending:<span>10</span></li>
+                <li class="people-page-pending">Pending: <span></span></li>
             </div>
             <div>
-                <li class="people-page-date">05/05/2023</li>
+                <li class="people-page-date"></li>
             </div>
+
             <div class="people-leads-section" id="people-leads-section"></div>
 
             <div class="people-footer" id="people-footer">
