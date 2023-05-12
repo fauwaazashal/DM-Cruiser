@@ -142,10 +142,6 @@ if (window.location.href.includes("newsearch.html")) {
 						errorMessage.style.display = 'block';  // Show the message
 						textbox.style.borderColor = 'red'; // Change the border color to red
 						saveBtn.disabled = true; // Disable the Save button
-					} else {
-						errorMessage.style.display = 'none';   // Hide the message
-						textbox.style.borderColor = '';     // Reset the border color
-						saveBtn.disabled = false;        // Enable the Save button
 					}
 				}
 			}
