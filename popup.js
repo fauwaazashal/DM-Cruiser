@@ -114,14 +114,34 @@ if (window.location.href.includes("newsearch.html")) {
 		// Campaign Name Error Message
 		const textbox = document.getElementById('campaign-name');
 		const errorMessage = document.getElementById('error-message');
+		const saveBtn = document.getElementById('save-campaign');
 
 		textbox.addEventListener('input', function() {
+			campAllName();
 			if (textbox.value === '') {
 				errorMessage.style.display = 'block';  // Show the message
 				textbox.style.borderColor = 'red'; // Change the border color to red
+				saveBtn.disabled = true; // Disable the Save button
 			} else {
 				errorMessage.style.display = 'none';   // Hide the message
 				textbox.style.borderColor = '';     // Reset the border color
+				saveBtn.disabled = false;        // Enable the Save button
+			}
+			async function campAllName(){
+				let campaignStorage = await chrome.storage.local.get("Campaigns");
+				let data = campaignStorage.Campaigns;
+				let campaignKeys = Object.keys(data);
+				for (let index = 0; index <= campaignKeys; index++) {
+					if (textbox.value === campaignKeys[index]) {
+						errorMessage.style.display = 'block';  // Show the message
+						textbox.style.borderColor = 'red'; // Change the border color to red
+						saveBtn.disabled = true; // Disable the Save button
+					} else {
+						errorMessage.style.display = 'none';   // Hide the message
+						textbox.style.borderColor = '';     // Reset the border color
+						saveBtn.disabled = false;        // Enable the Save button
+					}
+				}
 			}
 		});
 
