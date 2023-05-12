@@ -5,9 +5,9 @@
     <title>My Extension Popup</title>
     <link rel="stylesheet" type="text/css" href="popup.css">
     <style>
-		@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
-		@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Prompt&display=swap');
-	</style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Prompt&display=swap');
+    </style>
 </head>
 
 <body>
@@ -15,9 +15,11 @@
     <div class="activity-popup">
         <div class="activity-header" id="activity-header">
             <div class="activity-btn-section" id="activity-btn-section">
-                <img class="activity-back" id="activity-back" src="assets/left arrow.png" alt="" width="15px" height="20px">
+                <img class="activity-back" id="activity-back" src="assets/left arrow.png" alt="" width="15px"
+                    height="20px">
                 <h4 id="heading-activity" class="heading-activity">Campaign 1</h4>
-                <img class="activity-close-btn" id="activity-close-btn" src="assets/Close button.png" alt="" width="18px" height="18px">
+                <img class="activity-close-btn" id="activity-close-btn" src="assets/Close button.png" alt=""
+                    width="18px" height="18px">
             </div>
 
             <div class="activity-heading-section" id="activity-heading-section">
@@ -28,13 +30,29 @@
         </div>
 
         <div class="activity-section" id="activity-section">
-            <div class="trial" id="trial">
+            <!-- <div class="trial" id="trial">
                 <div class="trial-bar" id="trial-bar">
                     <div>Daily Limits:</div>
                     <input type="number" class="size-36" value="10" min="1" max="99" step="1">
                     <span>connections</span>
                     <input type="number" class="size-36" value="20" min="1" max="99" step="1">
                     <span>followups</span>
+                </div>
+            </div> -->
+            <div class="today-limit">Today's Limit</div>
+            <div class="status-box">
+                <div class="sender-count">
+                    <div>
+                        <img class="count-decrease-btn" src="assets/count-decrease-btn.png" alt="">
+                    </div>
+                    <div class="number-count"><span class="count">30</span></div>
+                    <div>
+                        <img class="count-increase-btn" src="assets/count-increase-btn.png" alt="">
+                    </div>
+                </div>
+                <div class="sending-status">
+                    <div class="activity-sent">Sent:<span> 30</span></div>
+                    <div class="activity-pending"><li>Pending:<span> 30</span></li></div>
                 </div>
             </div>
 
@@ -92,18 +110,24 @@
                     <div class="number" id="number">0</div>
                     <div class="text-desc" id="text-desc">Sent</div>
                 </div> -->
-                <div class="total-count">Total:<span>10</span></div>
-                <div><li>Sent:<span>10</span></li></div>
-                <div><li>Pending:<span>10</span></li></div>
-                <div><li>05/05/2023</li></div>
+            <div class="total-count">Total:<span>10</span></div>
+            <div>
+                <li>Sent:<span>10</span></li>
             </div>
-
-            <div class="people-leads-section" id="people-leads-section"></div>
-
-            <div class="people-footer" id="people-footer">
-                <button id="add-people" class="add-people">Add More People</button>
+            <div>
+                <li>Pending:<span>10</span></li>
+            </div>
+            <div>
+                <li>05/05/2023</li>
             </div>
         </div>
+
+        <div class="people-leads-section" id="people-leads-section"></div>
+
+        <div class="people-footer" id="people-footer">
+            <button id="add-people" class="add-people">Add More People</button>
+        </div>
+    </div>
 
     </div>
 
