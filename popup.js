@@ -521,6 +521,38 @@ if (window.location.href.includes("activity.html")) {
 				// updateCharacterCount();
 			}
 
+			// Campaign Name Error Message
+			const textbox = document.getElementById('campaign-name');
+			const errorMessage = document.getElementById('error-message');
+			const saveBtn = document.getElementById('save-update-msg-campname-btn');
+			const existingName = textbox.value;
+			// errorMessage.style.display = 'none';   // Hide the message
+			// textbox.style.borderColor = '';     // Reset the border color
+			// saveBtn.disabled = false;        // Enable the Save button
+			textbox.addEventListener('input', function() {
+				if (textbox.value === '') {
+					errorMessage.style.display = 'block';  // Show the message
+					textbox.style.borderColor = 'red'; // Change the border color to red
+					saveBtn.disabled = true; // Disable the Save button
+				} else {
+					errorMessage.style.display = 'none';   // Hide the message
+					textbox.style.borderColor = '';     // Reset the border color
+					saveBtn.disabled = false;        // Enable the Save button
+				}
+				async function campAllName(){
+					let campaignStorage = await chrome.storage.local.get("Campaigns");
+					let data = campaignStorage.Campaigns;
+					let campaignKeys = Object.keys(data);
+					for (let index = 0; index < campaignKeys.length; index++) {
+						if (textbox.value === campaignKeys[index] && existingName !== textbox.value) {
+							errorMessage.style.display = 'block';  // Show the message
+							textbox.style.borderColor = 'red'; // Change the border color to red
+							saveBtn.disabled = true; // Disable the Save button
+						}
+					}
+				}
+				campAllName();
+			});
 
 			// placeholder buttons functionality
 			//first name
