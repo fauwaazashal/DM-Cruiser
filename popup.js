@@ -111,6 +111,20 @@ if (window.location.href.includes("newsearch.html")) {
 			});
 		})
 
+		// Campaign Name Error Message
+		const textbox = document.getElementById('campaign-name');
+		const errorMessage = document.getElementById('error-message');
+
+		textbox.addEventListener('input', function() {
+			if (textbox.value === '') {
+				errorMessage.style.display = 'block';  // Show the message
+				textbox.style.borderColor = 'red'; // Change the border color to red
+			} else {
+				errorMessage.style.display = 'none';   // Hide the message
+				textbox.style.borderColor = '';     // Reset the border color
+			}
+		});
+
 		// placeholder buttons functionality
 		//first name
 		document.querySelector("#firstName").addEventListener("click", () => {
