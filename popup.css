@@ -645,9 +645,12 @@ h6 {
 	font-family: 'Prompt', sans-serif;
 }
 
-.sizing:hover {
+.sizing:hover,
+.sizing:focus {
 	border: 1px solid #9333EA;
+	outline: none;
 }
+
 .message-header h5 {
 	font-size: 15px;
 	color: #ccc;
