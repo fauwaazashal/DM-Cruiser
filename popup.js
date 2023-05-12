@@ -460,7 +460,7 @@ if (window.location.href.includes("activity.html")) {
 		const loadingContainer = document.querySelector(".loading-container");
 		const newsearchDiv = document.querySelector(".newsearch-popup");
 		const activityPopup = document.querySelector(".activity-popup");
-		const closeButtonActivity = document.querySelector(".close-btn");
+		const closeButtonActivity = document.querySelector("#activity-close-btn");
 
 		// retrieve campaignName from session storage
 		campaignName = sessionStorage.getItem("campaignName");
@@ -846,7 +846,7 @@ if (window.location.href.includes("activity.html")) {
 		});
 
 		// clicks on back btn to go back to home page
-		document.querySelector(".back").addEventListener("click", () => {
+		document.querySelector("#activity-back").addEventListener("click", () => {
 			activitySection.classList.remove("hide");
 			messageSection.classList.add("hide");
 			peopleSection.classList.add("hide");
@@ -916,7 +916,7 @@ async function injectOntoNewsearch(data) {
 		leadDeleteImage.setAttribute("src", "assets/red-delete-icon.png");
 		leadDelete.appendChild(leadDeleteImage);
 		leadDiv.appendChild(leadDelete);
-		
+
 		leads.appendChild(leadDiv);
 	}	
 }
