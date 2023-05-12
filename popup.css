@@ -131,11 +131,9 @@ body {
 	font-size: 17px;
 }
 
-.people-section {
-	display: flex;
-	gap: 10px;
+/* .people-section {
 	padding: 15px 0px 0px 20px;
-}
+} */
 
 .total-count {
 	font-family: 'Prompt', sans-serif;
@@ -526,6 +524,11 @@ h6 {
 	margin: 0;
 	margin-bottom: 5px;
 	text-align: left;
+	text-overflow: ellipsis;
+	max-width: 20rem;
+	max-height: 12rem;
+	overflow: hidden;
+	white-space: nowrap;
 	font-family: 'Poppins', sans-serif;
 	color: #fff;
 
@@ -915,5 +918,11 @@ h6 {
 .people-leads-section {
 	overflow: scroll;
 	overflow-x: hidden;
-	height: 0px;
+	height: 300px;
+}
+.campaign-status-data{
+	display: flex;
+	padding: 15px 0px 0px 20px;
+	gap: 10px;
+	background-color: #1F2937;
 }
