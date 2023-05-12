@@ -643,14 +643,6 @@ if (window.location.href.includes("activity.html")) {
 				messageSection.classList.add("hide");
 				peopleSection.classList.remove("hide");
 
-				// document.querySelector(".total-count > span").textContent = totalCount;
-				// document.querySelector(".people-page-pending > span").textContent = pendingCount;
-				// document.querySelector(".people-page-sent > span").textContent = sentCount;
-				// document.querySelector(".people-page-date").textContent = campaignStorage.Campaigns[campaignName].date;
-
-				// document.querySelector(".pending .number").textContent = pendingCount;
-				// document.querySelector(".sent .number").textContent = sentCount;
-
 				await injectRemove();
 				await injectOntoPeopleTab(campaignName);
 			}
@@ -1024,8 +1016,16 @@ async function injectOntoActivityTab(campaignName) {
 	let campaignStorage = await chrome.storage.local.get("Campaigns");
 	let data = campaignStorage.Campaigns[campaignName].scrapedData;
 
-	// let campaignData = await chrome.storage.local.get(campaignName);
-	// let data = campaignData[campaignName].scrapedData;
+	let pendingCount = 0;
+	let sentCount = 0;
+
+	for (i = 0; i < data.length; i++) {
+		if (data[i].status == "pending") ++pendingCount;
+		else ++sentCount;
+	}
+
+	document.querySelector(".activity-sent > span").textContent = sentCount;
+	document.querySelector(".activity-pending > li > span").textContent = pendingCount;
 
 	let leads = document.querySelector(".activity-leads-section");
 
@@ -1272,21 +1272,23 @@ async function updateCampaignData(oldCampaignName, newCampaignName, newMessageTe
 
 // function to delete a lead's data from local storage
 async function deleteLead(campaignName, leadName) {
-	let pendingCount = document.querySelector(".pending .number").textContent;
-	let sentCount = document.querySelector(".sent .number").textContent;
+	// let pendingCount = document.querySelector(".pending .number").textContent;
+	// let sentCount = document.querySelector(".sent .number").textContent;
+	let totalCount = document.querySelector(".total-count > span").textContent;
+	let pendingCount = document.querySelector(".people-page-pending > span").textContent;
+	let sentCount = document.querySelector(".people-page-sent > span").textContent;
 
 	let campaignStorage = await chrome.storage.local.get('Campaigns');
 	let data = campaignStorage.Campaigns[campaignName].scrapedData;
 
 	for (let i = 0; i < data.length; i++) {
-		if (data[i].fullName == leadName) {
-			if (data[i].status === "pending") 
-			document.querySelector(".pending .number").textContent = --pendingCount;
-		else 
-			document.querySelector(".sent .number").textContent = --sentCount;
+		if (data[i].fullName === leadName) {
+			document.querySelector(".total-count > span").textContent = --totalCount;
+			if (data[i].status === "pending") document.querySelector(".people-page-pending > span").textContent = --pendingCount;
+			else document.querySelector(".sent .number").textContent = --sentCount;
 
-		// Remove the item at selected index postion
-		data.splice(i, 1);
+			// Remove the item at selected index postion
+			data.splice(i, 1);
 		}
 	}
 
