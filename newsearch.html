@@ -58,13 +58,16 @@
         <form id="message-form">
             <h5>Create a Campaign name</h5>
             <input id="campaign-name" type="text"  class="sizing" placeholder="Enter your Campaign's Name" minlength="3" maxlength="12">
+            <div id="error-message">The Campaign name is either empty or repeated.</div>
             <!-- <textarea id="message-input" rows="1" cols="30" placeholder="Enter your message here" form="Default Campaign"></textarea> -->
         </form>
         <form id="message">
             <h5>Connection Request Message</h5>
             <!-- <input type="text" placeholder="Enter your message here" maxlength="300"> -->
-            <textarea id="message-input" rows="8" cols="35" placeholder="Enter your message here" class="sizing" form="Default Message" maxlength="275"></textarea>
-            <div id="charCount"></div>
+            <div id="theTextarea">
+                <textarea id="message-input" rows="8" cols="35" placeholder="Enter your message here" class="sizing" form="Default Message" maxlength="275"></textarea>
+                <span id="charCount"></span>
+            </div>
         </form>
         <div class="placeholders">
             <p>Placeholders Available:</p>
