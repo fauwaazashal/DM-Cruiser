@@ -2,7 +2,7 @@
 
 const minDelay = 5000; // minimum delay in milliseconds
 const maxDelay = 8000; // maximum delay in milliseconds
-const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay)) + minDelay + 1;
 let isStopped = false;
 let campaignName = "";
 
