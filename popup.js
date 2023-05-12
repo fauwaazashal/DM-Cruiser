@@ -467,14 +467,22 @@ if (window.location.href.includes("activity.html")) {
 		document.querySelector("#heading-activity").innerText = campaignName;
 		pendingCount = 0;
 		sentCount = 0;
+		let loadUrlPort;
 
-		const loadUrlPort = chrome.runtime.connect({ name: "load leads profiles" });
-		console.log("created port between popup & background scripts to load leads' profiles in order to send invites");
+		// creates port between popup and background script to send invites to leads
+		if (!activitySection.classList.contains("hide")) {
+			loadUrlPort = chrome.runtime.connect({ name: "load leads profiles" });
+			console.log("created port between popup & background scripts to load leads' profiles in order to send invites");
+		}
+
+		// creates port between popup and content script to aded more leads to existing campaign
+		// if (!peopleSection.classList.contains("hide")) {
+
+		// }
 
 		await injectOntoActivityTab(campaignName);
 
 		// message tab section
-		
 		// clicks on message tab
 		document.querySelector("#message-btn").addEventListener("click", async () => {
 			if (messageSection.classList.contains("hide")) {
@@ -635,7 +643,6 @@ if (window.location.href.includes("activity.html")) {
 		});
 
 		// people tab section
-
 		// clicks on people tab
 		document.querySelector("#people-btn").addEventListener("click", async () => {
 			if (peopleSection.classList.contains("hide")) {
@@ -794,7 +801,6 @@ if (window.location.href.includes("activity.html")) {
 
 
 		// activity tab section
-
 		// clicks on activity tab
 		document.querySelector("#activity-btn").addEventListener("click", async () => {
 			if (activitySection.classList.contains("hide")) {
@@ -823,6 +829,16 @@ if (window.location.href.includes("activity.html")) {
 					let leads = document.querySelectorAll(".leads-scraped");
 					leads[0].remove();
 					await injectLeadAtBottom(campaignName);
+					let pendingCount = 0;
+					let sentCount = 0;
+
+					for (i = 0; i < data.length; i++) {
+						if (data[i].status == "pending") ++pendingCount;
+						else ++sentCount;
+					}
+
+					document.querySelector(".activity-sent > span").textContent = sentCount;
+					document.querySelector(".activity-pending > li > span").textContent = pendingCount;
 				}
 			});
 		});
@@ -1068,6 +1084,8 @@ async function injectOntoActivityTab(campaignName) {
 		const leadStatus = document.createElement("div");
 		leadStatus.classList.add("lead-status");
 		leadStatus.innerText = data[i].status;
+		if (data[i].status === "pending") leadStatus.style.color = "#DFAF34";
+		else leadStatus.style.color = "#26BC74";
 		leadDiv.appendChild(leadStatus);
 
 		leads.appendChild(leadDiv);
@@ -1201,6 +1219,7 @@ async function injectLeadAtBottom(campaignName) {
 	const leadStatus = document.createElement("div");
 	leadStatus.classList.add("lead-status");
 	leadStatus.innerText = data[lastPos].status;
+	leadStatus.style.color = "#26BC74";
 	leadDiv.appendChild(leadStatus);
 
 	leads.appendChild(leadDiv);

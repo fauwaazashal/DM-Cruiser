@@ -235,10 +235,11 @@ h6 {
 }
 
 .campaigns-section {
-	overflow: scroll;
-	overflow-x: hidden;
-	overflow-y: hidden;
+	overflow-y: scroll;
 	height: 360px;
+}
+.campaigns-section::-webkit-scrollbar{
+    display: none;
 }
 
 .welcome {
