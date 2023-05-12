@@ -32,7 +32,7 @@ chrome.action.onClicked.addListener(function () {
 		let currentTab = tabs[0];
 		let currentUrl = currentTab.url;
 
-		chrome.storage.local.get("lastVisitedPopup", function (data) {
+		chrome.storage.local.get("lastVisitedState", function (data) {
 			let popupUrl = data.lastVisitedPopup ? data.lastVisitedPopup.url : "home.html";
 
 			// if the URL includes LinkedIn then no need for a redirect
@@ -208,7 +208,7 @@ async function updateCampaignData(campaignName) {
 
 
 
-// // Saves the last visited popup's data when the popup is closed
+// Saves the last visited popup's data when the popup is closed
 // chrome.windows.onRemoved.addListener(function(windowId) {
 //   // Check if the closed window was the popup window
 //   chrome.windows.getLastFocused({populate: true}, function (window) {
@@ -247,64 +247,3 @@ async function updateCampaignData(campaignName) {
 //   }
 // });
 
-
-
-//--------------------------------------storing data in local storage-------------------------------------------
-
-
-
-// Listens for message requests from content script
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-
-//   // request from content script to store scraped data
-//   if (request.requestType === "Store data") {
-//     console.log("Received request from content script to store scraped data");
-
-//     // finding out the position of the new Campaign whose data is about to be stored (For Example : Campaign 3)
-//     //let keyLength;
-//     chrome.storage.local.get(null, function (items) {
-//       let keyLength = Object.keys(items).length;
-//       console.log(items);
-
-
-//       let campaignName = request.keyName;
-//       const myData = request.data;
-//       // storing data in local storage
-//       chrome.storage.local.set({ [campaignName]: myData }, function () {
-//         console.log("Data stored in local storage");
-
-//         // sending response to content script confirming that the data has been stored successfully
-//         sendResponse({ message: `${campaignName} Data stored successfully` });
-//       });
-//     });
-
-//     // return true to keep the message port open until the response is received
-//     return true;
-//   }
-
-// });
-
-
-// // listens for requests from popup
-// chrome.runtime.onConnect.addListener(function(portPB) {
-//   if (portPB.name === "popup-to-background") {
-//     console.log("established connection with port");
-//     portPB.onMessage.addListener(async function(request) {
-//       if (request.action === "Start Scraping") {
-//         port.postMessage({ action: "Start Scraping" });
-//       }
-
-//       else if (request.action === "Pause Scraping") {
-//         port.postMessage({ action: "Pause Scraping" });
-//       }
-
-//       else if (request.action === "Stop Scraping") {
-//         port.postMessage({ action: "Stop Scraping" });
-//       }
-
-//       else if (request.action === "Resume Scraping") {
-//         port.postMessage({ action: "Resume Scraping" });
-//       }
-//     });
-//   }
-// });
