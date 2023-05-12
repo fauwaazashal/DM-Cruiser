@@ -107,7 +107,7 @@ h6 {
 #stop-search-btn,
 #activity-status,
 #save-update-msg-campname-btn,
-#save-campaign {
+#save-campaign-btn {
 	background-color: #9333EA;
 	display: flex;
 	justify-content: center;
@@ -126,6 +126,11 @@ h6 {
 	font-size: 18px;
 	text-align: center;
 }
+
+#save-campaign-btn:disabled:hover,
+#start-invite-btn:disabled:hover {
+	cursor: not-allowed;
+  }
 
 
                                                /* home */
@@ -428,12 +433,18 @@ h6 {
 	font-family: 'Poppins', sans-serif;
 }
 
-#charCount {
+#charCountMessage {
 	position: absolute;
 	bottom: 200px;
 	right: 50px;
 	color: gray;
 	font-family: Arial, Helvetica, sans-serif;
+}
+
+#error-message {
+	display: none;
+	color: red;
+	padding-top: 10px;
 }
 
 .trial input {

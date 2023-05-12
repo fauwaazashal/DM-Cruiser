@@ -70,25 +70,22 @@
                 <h5>Create a Campaign name</h5>
                 <input id="campaign-name" type="text" class="sizing" placeholder="Enter your Campaign's Name"
                     minlength="3" maxlength="12">
-                <!-- <textarea id="message-input" rows="1" cols="30" placeholder="Enter your message here" form="Default Campaign"></textarea> -->
+                <div id="error-message">The Campaign name is either empty or repeated.</div>
             </form>
             <form id="message-subheader" class="message-subheader">
                 <h5>Connection Request Message</h5>
-                <!-- <input type="text" placeholder="Enter your message here" maxlength="300"> -->
                 <textarea id="message-input" rows="8" cols="35" placeholder="Enter your message here" class="sizing"
                     form="Default Message" maxlength="275"></textarea>
-                <div id="charCount" class="charCount"></div>
+                <div id="charCountMessage" class="charCountMessage"></div>
             </form>
             <div class="placeholders">
                 <p>Placeholders Available:</p>
                 <button class="placeholder-button" id="firstName">First Name</button>
                 <button class="placeholder-button" id="lastName">Last Name</button>
                 <button class="placeholder-button" id="fullName">Full Name</button>
-                <!-- <br>
-                <button class="placeholder-button" id="jobTitle">Job Title</button> -->
             </div>
             <div class="newmessage-footer" id="newmessage-footer">
-                <button id="save-campaign" class="save-campaign">Save Campaign</button>
+                <button id="save-campaign-btn" class="save-campaign-btn">Save Campaign</button>
             </div>
         </div>
 

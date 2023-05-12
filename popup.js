@@ -114,6 +114,36 @@ if (window.location.href.includes("newsearch.html")) {
 			});
 		})
 
+		// Campaign Name Error Message
+		const textbox = document.getElementById('campaign-name');
+		const errorMessage = document.getElementById('error-message');
+		const saveBtn = document.getElementById('save-campaign-btn');
+
+		textbox.addEventListener('input', function() {
+			if (textbox.value === '') {
+				errorMessage.style.display = 'block';  // Show the message
+				textbox.style.borderColor = 'red'; // Change the border color to red
+				saveBtn.disabled = true; // Disable the Save button
+			} else {
+				errorMessage.style.display = 'none';   // Hide the message
+				textbox.style.borderColor = '';     // Reset the border color
+				saveBtn.disabled = false;        // Enable the Save button
+			}
+			async function campAllName(){
+				let campaignStorage = await chrome.storage.local.get("Campaigns");
+				let data = campaignStorage.Campaigns;
+				let campaignKeys = Object.keys(data);
+				for (let index = 0; index < campaignKeys.length; index++) {
+					if (textbox.value === campaignKeys[index]) {
+						errorMessage.style.display = 'block';  // Show the message
+						textbox.style.borderColor = 'red'; // Change the border color to red
+						saveBtn.disabled = true; // Disable the Save button
+					}
+				}
+			}
+			campAllName();
+		});
+
 		// placeholder buttons functionality
 		//first name
 		document.querySelector("#firstName").addEventListener("click", () => {
@@ -193,32 +223,6 @@ if (window.location.href.includes("newsearch.html")) {
 			updateCharacterCount();
 		});
 
-		//job title
-		// document.querySelector("#jobTitle").addEventListener("click", () => {
-		// 	var textarea = document.getElementById("message-input");
-		// 	var textToAdd = "{job_title}";
-		// 	var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
-		// 	// Check if there is enough space for the full string
-		// 	if (remainingSpace >= textToAdd.length) {
-		// 		// Get the current cursor position
-		// 		var startPos = textarea.selectionStart;
-		// 		var endPos = textarea.selectionEnd;
-		// 		// Insert the text at the cursor position
-		// 		textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-		// 		// Move the cursor to the end of the inserted text
-		// 		textarea.selectionStart = startPos + textToAdd.length;
-		// 		textarea.selectionEnd = startPos + textToAdd.length;
-		// 		// Scroll to the position of the cursor
-		// 		var cursorPos = textarea.selectionStart;
-		// 		var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-		// 		var linesAbove = Math.floor(cursorPos / textarea.cols);
-		// 		textarea.scrollTop = lineHeight * linesAbove;
-		// 		// Set focus on the textarea
-		// 		textarea.focus();
-		// 	}
-		// 	updateCharacterCount();
-		// });
-
 		var textarea = document.getElementById("message-input");
 		var charCount = document.getElementById("charCount");
 		function updateCharacterCount() {
@@ -287,7 +291,7 @@ if (window.location.href.includes("newsearch.html")) {
 		});
 
 		// button is clicked to complete campaign creation and store data in local storage
-		document.querySelector("#save-campaign").addEventListener("click", async () => {
+		document.querySelector("#save-campaign-btn").addEventListener("click", async () => {
 			campaignName = newmessageTemplateDiv.querySelector("#campaign-name").value;
 			messageTemplate = newmessageTemplateDiv.querySelector("#message-input").value;
 			date = new Date().toLocaleDateString("en-IN");
@@ -452,6 +456,7 @@ if (window.location.href.includes("activity.html")) {
 		const peopleSection = document.querySelector(".people-section");
 		const startInviteFooter = document.querySelector(".start-invite-activity-footer");
 		const stopInviteFooter = document.querySelector(".stop-invite-activity-footer");
+		stopInviteFooter.querySelector("#stop-invite-btn").style.backgroundColor = "#DF4545";
 		const inputElement = document.querySelector("#campaign-name");
 		const startScrapeFooter = document.querySelector(".start-search-footer");
 		const stopScrapeFooter = document.querySelector(".stop-search-footer");
@@ -494,6 +499,39 @@ if (window.location.href.includes("activity.html")) {
 				await injectOntoMessageTab(campaignName);
 				// updateCharacterCount();
 			}
+
+			// Campaign Name Error Message
+			const textbox = document.getElementById('campaign-name');
+			const errorMessage = document.getElementById('error-message');
+			const saveBtn = document.getElementById('save-campaign-btn');
+			const existingName = textbox.value;
+			// errorMessage.style.display = 'none';   // Hide the message
+			// textbox.style.borderColor = '';     // Reset the border color
+			// saveBtn.disabled = false;        // Enable the Save button
+			textbox.addEventListener('input', function() {
+				if (textbox.value === '') {
+					errorMessage.style.display = 'block';  // Show the message
+					textbox.style.borderColor = 'red'; // Change the border color to red
+					saveBtn.disabled = true; // Disable the Save button
+				} else {
+					errorMessage.style.display = 'none';   // Hide the message
+					textbox.style.borderColor = '';     // Reset the border color
+					saveBtn.disabled = false;        // Enable the Save button
+				}
+				async function campAllName(){
+					let campaignStorage = await chrome.storage.local.get("Campaigns");
+					let data = campaignStorage.Campaigns;
+					let campaignKeys = Object.keys(data);
+					for (let index = 0; index < campaignKeys.length; index++) {
+						if (textbox.value === campaignKeys[index] && existingName !== textbox.value) {
+							errorMessage.style.display = 'block';  // Show the message
+							textbox.style.borderColor = 'red'; // Change the border color to red
+							saveBtn.disabled = true; // Disable the Save button
+						}
+					}
+				}
+				campAllName();
+			});
 
 
 			// placeholder buttons functionality
@@ -574,32 +612,6 @@ if (window.location.href.includes("activity.html")) {
 				}
 				updateCharacterCount();
 			});
-
-			//job title
-			// document.querySelector("#jobTitle").addEventListener("click", () => {
-			// 	var textarea = document.getElementById("message-input");
-			// 	var textToAdd = "{job_title}";
-			// 	var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
-			// 	// Check if there is enough space for the full string
-			// 	if (remainingSpace >= textToAdd.length) {
-			// 		// Get the current cursor position
-			// 		var startPos = textarea.selectionStart;
-			// 		var endPos = textarea.selectionEnd;
-			// 		// Insert the text at the cursor position
-			// 		textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-			// 		// Move the cursor to the end of the inserted text
-			// 		textarea.selectionStart = startPos + textToAdd.length;
-			// 		textarea.selectionEnd = startPos + textToAdd.length;
-			// 		// Scroll to the position of the cursor
-			// 		var cursorPos = textarea.selectionStart;
-			// 		var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-			// 		var linesAbove = Math.floor(cursorPos / textarea.cols);
-			// 		textarea.scrollTop = lineHeight * linesAbove;
-			// 		// Set focus on the textarea
-			// 		textarea.focus();
-			// 	}
-			// 	updateCharacterCount();
-			// });
 
 			var textarea = document.getElementById("message-input");
 			var charCount = document.getElementById("charCountMessage");
