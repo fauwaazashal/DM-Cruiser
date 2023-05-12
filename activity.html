@@ -112,6 +112,7 @@
                     <li class="people-page-date"></li>
                 </div>
             </div>
+
             <div class="people-leads-section" id="people-leads-section"></div>
 
             <div class="people-footer" id="people-footer">
@@ -119,6 +120,45 @@
             </div>
         </div>
 
+    </div>
+
+    <div class="newsearch-popup hide" id="newsearch-popup">
+        <div class="header" id="header">
+            <img class="back" id="back" src="assets/left arrow.png" alt="" width="15px" height="24px">
+            <h4 id="heading-search" class="heading-search">Add People</h4>
+            <img class="close-btn" id="close-btn" src="assets/Close button.png" alt="" width="20px" height="20px">
+        </div>
+        <div class="search-Campaign" id="search-Campaign">
+            <div class="collected" id="collected">
+                <h6>Collected: 0</h6>
+            </div>
+
+            <div class="resume-search hide" id="resume-search">
+                <button id="resume-scrape-btn" class="resume-scrape-btn">Resume</button>
+            </div>
+            <div class="pause-search hide" id="pause-search">
+                <button id="pause-scrape-btn" class="pause-scrape-btn">Pause</button>
+            </div>
+        </div>
+        <div class="loading-container hide" id="loading-container">
+            <h2>Searching...</h2>
+            <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+        <div class="leads-section" id="leads-section"></div>
+
+        <div class="start-search-footer" id="start-search-footer">
+            <button id="start-search-btn" class="start-search-btn">Start Search</button>
+            <img class="right-arrow-btn-start-search" id="right-arrow-btn-start-search" src="assets/right arrow.png" alt="" width="10px" height="13px">
+        </div>
+        <div class="stop-search-footer hide" id="stop-search-footer">
+            <button id="stop-search-btn" class="stop-search-btn">Stop Search</button>
+            <img class="right-arrow-btn-stop-search" id="right-arrow-btn-stop-search" src="assets/right arrow.png" alt="" width="10px" height="13px">
+        </div>
     </div>
 
     <script src="popup.js"></script>

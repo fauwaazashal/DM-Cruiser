@@ -263,7 +263,7 @@ if (window.location.href.includes("newsearch.html")) {
 				let removeBtns = document.querySelectorAll(".remove-btn");
 				for (let i = 0; i < removeBtns.length; i++) {
 					removeBtns[i].addEventListener("click", async () => {
-						scrapedData.splice(i, 1);
+						
 						leads[i].remove();
 					});
 				}
@@ -325,7 +325,10 @@ if (window.location.href.includes("newsearch.html")) {
 				let removeBtns = document.querySelectorAll(".remove-btn");
 				for (let i = 0; i < removeBtns.length; i++) {
 					removeBtns[i].addEventListener("click", async () => {
-						scrapedData.splice(i, 1);
+						let leadName = leads[i].querySelector(".lead-name").innerText;
+
+						scrapedData = await deleteScrapedLead(leadName, scrapedData);
+						console.log(scrapedData)
 						leads[i].remove();
 					});
 				}
@@ -463,7 +466,7 @@ if (window.location.href.includes("activity.html")) {
 		const pauseScrapeFooter = document.querySelector(".pause-search");
 		const resumeScrapeFooter = document.querySelector(".resume-search");
 		const loadingContainer = document.querySelector(".loading-container");
-		const newsearchDiv = document.querySelector(".newsearch-popup");
+		const newsearchPopup = document.querySelector(".newsearch-popup");
 		const activityPopup = document.querySelector(".activity-popup");
 		const closeButtonActivity = document.querySelector("#activity-close-btn");
 
@@ -680,136 +683,149 @@ if (window.location.href.includes("activity.html")) {
 		})
 
 		// clicks on add more people btn to add/scrape more lead to the existing campaign
-		// document.querySelector("#add-people").addEventListener("click", async () => {
-		// 	await injectRemove();
-		// 	activityPopup.classList.add("hide");
-		// 	newsearchDiv.classList.remove("hide");
+		document.querySelector("#add-people").addEventListener("click", async () => {
+			await injectRemove();
+			activityPopup.classList.add("hide");
+			newsearchPopup.classList.remove("hide");
 
-		// 	const preScrapePort = chrome.runtime.connect({ name: "pre scrape url check" });
+			const preScrapePort = chrome.runtime.connect({ name: "pre scrape url check" });
 
-		// 	preScrapePort.postMessage({ action: "is user on the right page to scrape" });
-		// 	preScrapePort.onMessage.addListener( async function(response) {
-		// 		// if (response.message === "user is on the right page") {
+			preScrapePort.postMessage({ action: "is user on the right page to scrape" });
+			preScrapePort.onMessage.addListener( async function(response) {
+				// if (response.message === "user is on the right page") {
 					
-		// 		// }
-		// 	});
-		// })
+				// }
+			});
+		})
 
-		// chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-		// 	const scrapePort = chrome.tabs.connect(tabs[0].id, { name: "scrape leads" });
-		// 	console.log("created port between popup & content scripts to scrape leads");
+		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+			const scrapePort = chrome.tabs.connect(tabs[0].id, { name: "scrape leads" });
+			console.log("created port between popup & content scripts to scrape leads");
 
-		// 	// button is clicked to start scraping
-		// 	document.querySelector("#start-search-btn").addEventListener("click", () => {
-		// 		startScrapeFooter.classList.add("hide");
-		// 		stopScrapeFooter.classList.remove("hide");
-		// 		pauseScrapeFooter.classList.remove("hide");
-		// 		loadingContainer.classList.remove("hide");
+			// button is clicked to start scraping
+			document.querySelector("#start-search-btn").addEventListener("click", () => {
+				startScrapeFooter.classList.add("hide");
+				stopScrapeFooter.classList.remove("hide");
+				pauseScrapeFooter.classList.remove("hide");
+				loadingContainer.classList.remove("hide");
 
-		// 		console.log("sent request to content script to start scraping");
-		// 		scrapePort.postMessage({ action: "Start Scraping" });
+				console.log("sent request to content script to start scraping");
+				scrapePort.postMessage({ action: "Start Scraping" });
 
-		// 		scrapePort.onMessage.addListener(async function(response) {
-		// 			if (response.message === "Scraped one page") {
-		// 				console.log(response.data);
+				scrapePort.onMessage.addListener(async function(response) {
+					if (response.message === "Scraped one page") {
+						console.log(response.data);
 						
-		// 				// length of the data scraped thus far
-		// 				prevIterationData = scrapedData.length;
-		// 				// storing all scraped data in this variable
-		// 				scrapedData = response.data; 
-		// 				// obtaining the length of the data (from reverse) that is to be injected
-		// 				injectDataLength = scrapedData.length - prevIterationData;
-		// 				// updating the data that needs to be injected in this iteration
-		// 				if (injectDataLength != 0) {
-		// 					injectData = scrapedData.slice(-injectDataLength);
-		// 					console.log(injectData);
-		// 					// inject response.data onto popup
-		// 					await injectOntoNewsearch(injectData);
-		// 				}
+						// length of the data scraped thus far
+						prevIterationData = scrapedData.length;
+						// storing all scraped data in this variable
+						scrapedData = response.data; 
+						// obtaining the length of the data (from reverse) that is to be injected
+						injectDataLength = scrapedData.length - prevIterationData;
+						// updating the data that needs to be injected in this iteration
+						if (injectDataLength != 0) {
+							injectData = scrapedData.slice(-injectDataLength);
+							console.log(injectData);
+							// inject response.data onto popup
+							await injectOntoNewsearch(injectData);
+						}
 						
-		// 				// scrolls to bottom of leads section to show latest list of leads that were scraped
-		// 				setTimeout(() => {
-		// 					const section = document.querySelector(".leads-section");
-		// 					section.scrollTo({
-		// 						top: section.scrollHeight,
-		// 						behavior: "smooth"
-		// 					});
-		// 				}, 1000);
+						// scrolls to bottom of leads section to show latest list of leads that were scraped
+						setTimeout(() => {
+							const section = document.querySelector(".leads-section");
+							section.scrollTo({
+								top: section.scrollHeight,
+								behavior: "smooth"
+							});
+						}, 1000);
 
-		// 				// displays the numbers of leads that have been scraped
-		// 				document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
-		// 			}
-		// 		});
-		// 	})
+						// displays the numbers of leads that have been scraped
+						document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
+					}
+				});
+			})
 
-		// 	// button is clicked to pause scraping
-		// 	document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
-		// 		pauseScrapeFooter.classList.add("hide");
-		// 		resumeScrapeFooter.classList.remove("hide");
-		// 		loadingContainer.classList.add("hide");
+			// button is clicked to pause scraping
+			document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
+				pauseScrapeFooter.classList.add("hide");
+				resumeScrapeFooter.classList.remove("hide");
+				loadingContainer.classList.add("hide");
 				
-		// 		console.log("sent request to content script to pause scraping");
-		// 		scrapePort.postMessage({ action: "Pause Scraping" });
+				console.log("sent request to content script to pause scraping");
+				scrapePort.postMessage({ action: "Pause Scraping" });
 
-		// 		scrapePort.onMessage.addListener(function(response) {
-		// 			if (response.message === "Paused Scraping") {
+				scrapePort.onMessage.addListener(function(response) {
+					// if (response.message === "Paused Scraping") {
 						
-		// 			}
-		// 		});
+					// }
+				});
 
-		// 		// button is clicked to remove any selected leads before saving the campaign
-		// 		document.querySelector(".remove-btn").addEventListener("click", () => {
-		// 			let leads = document.querySelectorAll(".leads-scraped");
-		// 			let removeBtns = document.querySelectorAll(".remove-btn");
-		// 			for (let i = 0; i < removeBtns.length; i++) {
-		// 				removeBtns[i].addEventListener("click", async () => {
-		// 					scrapedData.splice(i, 1);
-		// 					leads[i].remove();
-		// 				});
-		// 			}
-		// 		})
-		// 	})
+				// button is clicked to remove any selected leads before saving the campaign
+				document.querySelector(".remove-btn").addEventListener("click", () => {
+					let leads = document.querySelectorAll(".leads-scraped");
+					let removeBtns = document.querySelectorAll(".remove-btn");
+					
+					for (let i = 0; i < removeBtns.length; i++) {
+						removeBtns[i].addEventListener("click", async () => {
+							let leadName = leads[i].querySelector(".lead-name").innerText;
+
+							scrapedData = await deleteScrapedLead(leadName, scrapedData);
+							console.log(scrapedData)
+							leads[i].remove();
+
+							// for (let j = 0; j < scrapedData.length; j++){
+							// 	if (leadName === scrapedData[j].fullName) {
+							// 		scrapedData.splice(j, 1);
+							// 		console.log(scrapedData.length)
+							// 		leads[i].remove(); 
+							// 		document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
+							// 	}
+							// }
+						});
+					}
+				})
+			})
 		
-		// 	// button is clicked to resume scraping
-		// 	document.querySelector("#resume-scrape-btn").addEventListener("click", () => {
-		// 		pauseScrapeFooter.classList.remove("hide");
-		// 		resumeScrapeFooter.classList.add("hide");
-		// 		loadingContainer.classList.remove("hide");
+			// button is clicked to resume scraping
+			document.querySelector("#resume-scrape-btn").addEventListener("click", () => {
+				pauseScrapeFooter.classList.remove("hide");
+				resumeScrapeFooter.classList.add("hide");
+				loadingContainer.classList.remove("hide");
 				
-		// 		scrapePort.postMessage({ action: "Resume Scraping" });
+				scrapePort.postMessage({ action: "Resume Scraping" });
 
-		// 		scrapePort.onMessage.addListener(function(response) {
-		// 			if (response.message === "Resumed Scraping") {
+				scrapePort.onMessage.addListener(function(response) {
+					if (response.message === "Resumed Scraping") {
 						
-		// 			}
-		// 		});
-		// 	})
+					}
+				});
+			})
 
-		// 	// button is clicked to stop scraping and now user has to create messsage template & campaign name
-		// 	document.querySelector("#stop-search-btn").addEventListener("click", () => {
-		// 		pauseScrapeFooter.classList.add("hide");
-		// 		resumeScrapeFooter.classList.add("hide");
-		// 		startScrapeFooter.classList.remove("hide");
-		// 		stopScrapeFooter.classList.add("hide");
-		// 		loadingContainer.classList.add("hide");
-		// 		newsearchDiv.classList.add("hide");
-		// 		activityPopup.classList.remove("hide");
-		// 		document.querySelector(".collected h6").innerText = "Collected: 0";
-		// 		injectRemove();
+			// button is clicked to stop scraping and now user has to create messsage template & campaign name
+			document.querySelector("#stop-search-btn").addEventListener("click", () => {
+				pauseScrapeFooter.classList.add("hide");
+				resumeScrapeFooter.classList.add("hide");
+				startScrapeFooter.classList.remove("hide");
+				stopScrapeFooter.classList.add("hide");
+				loadingContainer.classList.add("hide");
+				newsearchPopup.classList.add("hide");
+				activityPopup.classList.remove("hide");
+				document.querySelector(".collected h6").innerText = "Collected: 0";
+				injectRemove();
 		
-		// 		console.log("sent request to content script to stop scraping");
-		// 		scrapePort.postMessage({ action: "Stop Scraping" });
+				console.log("sent request to content script to stop scraping");
+				scrapePort.postMessage({ action: "Stop Scraping" });
 
-		// 		scrapePort.onMessage.addListener(async function(response) {
-		// 			if (response.message === "Stopped Scraping") {
-		// 				await addLeadsToCampaignData(campaignName, scrapedData);
-		// 				await injectOntoPeopleTab(campaignName);
-		// 				// scrapePort.disconnect();
-		// 				// console.log("disconnected port connection");
-		// 			}
-		// 		});
-		// 	})
-		// });
+				scrapePort.onMessage.addListener(async function(response) {
+					if (response.message === "Stopped Scraping") {
+						await addLeadsToCampaignData(campaignName, scrapedData);
+						await injectOntoPeopleTab(campaignName);
+						// scrapePort.disconnect();
+						// console.log("disconnected port connection");
+					}
+				});
+			})
+		});
 
 
 		// activity tab section
@@ -1325,6 +1341,18 @@ async function deleteLead(campaignName, leadName) {
 
 	// Save the updated data back to local storage
 	await chrome.storage.local.set({ Campaigns: campaignStorage.Campaigns });
+}
+
+// function to delete a lead's data beofre svaing the campaign
+async function deleteScrapedLead(leadName, scrapedData) {
+	for (let i = 0; i < scrapedData.length; i++){
+		if (leadName === scrapedData[i].fullName) {
+			scrapedData.splice(i, 1);
+			console.log(scrapedData.length);
+			document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
+		}
+	}
+	return scrapedData;
 }
 
 
