@@ -95,9 +95,16 @@ if (window.location.href.includes("newsearch.html")) {
 			loadingContainer.classList.add("hide");
 			newsearchDiv.classList.add("hide");
 			newmessageTemplateDiv.classList.remove("hide");
-	
+
 			console.log("sent request to content script to stop scraping");
 			scrapePort.postMessage({ action: "Stop Scraping" });
+
+			const textbox = document.getElementById('campaign-name');
+			const errorMessage = document.getElementById('error-message');
+			const saveBtn = document.getElementById('save-campaign');
+			errorMessage.style.display = 'none';   // Hide the message
+			textbox.style.borderColor = '';     // Reset the border color
+			saveBtn.disabled = false;        // Enable the Save button
 
 			scrapePort.onMessage.addListener(async function(response) {
 				if (response.message === "Stopped Scraping") {
@@ -117,7 +124,6 @@ if (window.location.href.includes("newsearch.html")) {
 		const saveBtn = document.getElementById('save-campaign');
 
 		textbox.addEventListener('input', function() {
-			campAllName();
 			if (textbox.value === '') {
 				errorMessage.style.display = 'block';  // Show the message
 				textbox.style.borderColor = 'red'; // Change the border color to red
@@ -131,7 +137,7 @@ if (window.location.href.includes("newsearch.html")) {
 				let campaignStorage = await chrome.storage.local.get("Campaigns");
 				let data = campaignStorage.Campaigns;
 				let campaignKeys = Object.keys(data);
-				for (let index = 0; index <= campaignKeys; index++) {
+				for (let index = 0; index < campaignKeys.length; index++) {
 					if (textbox.value === campaignKeys[index]) {
 						errorMessage.style.display = 'block';  // Show the message
 						textbox.style.borderColor = 'red'; // Change the border color to red
@@ -143,6 +149,7 @@ if (window.location.href.includes("newsearch.html")) {
 					}
 				}
 			}
+			campAllName();
 		});
 
 		// placeholder buttons functionality
