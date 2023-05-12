@@ -11,18 +11,24 @@
 	border-radius: 24px;
 
 }
+.people-page-date{
+	color: #9333EA;
+	font-size: 12px;
+}
 .today-limit{
 	color: #fff;
 	font-family: 'Prompt', sans-serif;
 	font-size: 15px;
 	text-align: left;
-	padding: 10px 10px 0px 35px;
+	padding: 10px 10px 5px 25px;
 }
 .status-box {
 	display: flex;
 	color: #fff;
 	font-family: 'Prompt', sans-serif;
-	padding: 5px 10px 0px 35px;
+	justify-content: center;
+	align-items: center;
+	/* padding: 5px 10px 0px 35px; */
 }
 
 .sender-count {
@@ -403,7 +409,7 @@ h6 {
 	/* text-shadow: 0 0 4px #9333EA;  */
 	text-overflow: ellipsis;
 	max-width: 20rem;
-	overflow: hidden;
+	/* overflow: hidden; */
 	white-space: nowrap;
 	margin-left: 18px;
 	font-size: 15px;
@@ -431,7 +437,6 @@ h6 {
 }
 
 .campaigns-section {
-	background-color: #1F2937;
 	overflow: scroll;
 	overflow-x: hidden;
 	overflow-y: hidden;
@@ -481,6 +486,7 @@ h6 {
 
 #pause-scrape-btn {
 	background-color: #DFAF34;
+	color: #fff;
 	border-radius: 5px;
 	padding: 5px 30px;
 	border: none;
@@ -541,9 +547,11 @@ h6 {
 	font-size: 12px;
 	border-radius: 4px; */
 	/* padding: 8px 16px; */
-	width: 24px;
+	width: 58px;
 	height: 26px;
 	cursor: pointer;
+	color: #fff;
+	font-family: 'Prompt', sans-serif;
 }
 
 .leads-section {
@@ -797,10 +805,10 @@ h6 {
 	/* align-items: center; */
 	text-align: left;
 	padding: 5px;
-	padding-left: 35px;
-	font-family: 'Poppins', sans-serif;
+	padding-left: 25px;
+	font-family: 'Prompt', sans-serif;
 	color: #fff;
-	font-size: 10px;
+	font-size: 15px;
 }
 
 .lead-status {
