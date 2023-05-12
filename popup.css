@@ -11,6 +11,14 @@
 	border-radius: 24px;
 
 }
+.people-page-pending{
+   color: #fff;
+   font-size: 12px;
+}
+.people-page-sent{
+	color: #fff;
+	font-size: 12px;
+}
 .people-page-date{
 	color: #9333EA;
 	font-size: 12px;
@@ -20,15 +28,14 @@
 	font-family: 'Prompt', sans-serif;
 	font-size: 15px;
 	text-align: left;
-	padding: 10px 10px 5px 25px;
+	padding: 10px 10px 5px 27px;
 }
 .status-box {
 	display: flex;
 	color: #fff;
 	font-family: 'Prompt', sans-serif;
 	justify-content: center;
-	align-items: center;
-	/* padding: 5px 10px 0px 35px; */
+	gap: 10px;
 }
 
 .sender-count {
@@ -62,11 +69,11 @@
 	font-family: 'Prompt', sans-serif;
 	font-size: 15px;
 }
-.activity-sent{
-	padding: 3px 0px 0px 10px;
-}
+/* .activity-sent{
+	padding: 0px 0px 0px 10px;
+} */
 .activity-pending{
-	padding: 3px 10px 0px 10px;
+	padding-left:  15px;
 }
 
 .activity-section {
@@ -126,20 +133,15 @@ body {
 
 .people-section {
 	display: flex;
-	color: #fff;
-	font-family: 'Prompt', sans-serif;
-	font-weight: 400;
-	font-size: 10px;
-	justify-content: space-between;
-	margin-left: 10px;
-	margin-top: 10px;
-	margin-right: 10px;
+	gap: 10px;
+	padding: 15px 0px 0px 20px;
 }
 
 .total-count {
 	font-family: 'Prompt', sans-serif;
+	color: #fff;
 	font-weight: 600;
-	font-size: 13px;
+	font-size: 16px;
 	margin-top: -3px;
 }
 
@@ -298,12 +300,12 @@ h6 {
 
 #start-invite-btn,
 #stop-invite-btn {
-	background-color: rgb(144, 131, 216);
+	background-color: #26BC74;
 	color: #fff;
 	border: none;
 	font-family: 'Poppins', sans-serif;
 	font-weight: 600;
-	padding: 12px 72px;
+	padding: 12px 62px;
 	margin-left: 10px;
 	cursor: pointer;
 	border-radius: 10px;
@@ -642,6 +644,8 @@ h6 {
 	border: 1px solid #9333EA;
 }
 
+
+
 .message-header h5 {
 	font-size: 15px;
 	color: #ccc;
@@ -754,8 +758,7 @@ h6 {
 	text-decoration: none;
 }
 
-.activity-heading-section,
-.people-top-section:hover {
+#activity-btn:hover,#message-btn:hover,#people-btn:hover {
 	text-decoration: underline;
 	text-decoration-color: #9333EA;
 	text-underline-offset: 0.4em;
@@ -805,7 +808,7 @@ h6 {
 	/* align-items: center; */
 	text-align: left;
 	padding: 5px;
-	padding-left: 25px;
+	padding-left: 27px;
 	font-family: 'Prompt', sans-serif;
 	color: #fff;
 	font-size: 15px;
@@ -862,8 +865,8 @@ h6 {
 
 
 #add-people {
-	background-color: rgb(144, 131, 216);
-	color: black;
+	background-color: #9333EA;
+	color: #fff;
 	border: none;
 	font-family: 'Poppins', sans-serif;
 	font-weight: 600;
