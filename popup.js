@@ -1,20 +1,3 @@
-// // loading previous popup page
-// chrome.storage.local.get("lastVisitedPopup", function(data) {
-// 	var lastVisitedPopup = data.lastVisitedPopup;
-// 	if (lastVisitedPopup) {
-// 		chrome.action.setPopup({ popup: lastVisitedPopup.url });
-// 		if (lastVisitedPopup.data) {
-// 			var currentUrl = lastVisitedPopup.data.url;
-// 			// do something with the stored data
-// 		}
-// 	}
-// });
-
-
-
-
-
-
 //---------------------------------------------global variables--------------------------------------------------
 
 let scrapedData = [];
@@ -26,6 +9,9 @@ let messageTemplate = "";
 let activityStatus = "";
 let pendingCount = 0;
 let sentCount = 0;
+let dailyInviteLimit = Math.floor(Math.random() * 21) + 80;
+
+let setPopupPort = chrome.runtime.connect({ name: "set popup" });
 
 //---------------------------------------------newsearch.html--------------------------------------------------
 
@@ -38,8 +24,8 @@ if (window.location.href.includes("newsearch.html")) {
 	const pauseScrapeFooter = document.querySelector(".pause-search");
 	const resumeScrapeFooter = document.querySelector(".resume-search");
 	const loadingContainer = document.querySelector(".loading-container");
-	const newmessageTemplateDiv = document.querySelector(".newmessage-popup");
-	const newsearchDiv = document.querySelector(".newsearch-popup");
+	const newmessagePopup = document.querySelector(".newmessage-popup");
+	const newsearchPopup = document.querySelector(".newsearch-popup");
 	const inputElement = document.querySelector("#campaign-name");
 	const closeButtonNewsearch = document.querySelector(".newsearch-popup .close-btn");
 	const closeButtonNewmessage = document.querySelector(".newmessage-popup .close-btn");
@@ -47,6 +33,43 @@ if (window.location.href.includes("newsearch.html")) {
 	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 		const scrapePort = chrome.tabs.connect(tabs[0].id, { name: "scrape leads" });
 		console.log("created port between popup & content scripts to scrape leads");
+
+
+		// (async () => {
+		// 	let lastVisitedStateStorage =  await chrome.storage.local.get("lastVisitedState");
+		// 	let popupUrl = lastVisitedStateStorage.lastVisitedState.popupUrl;
+		// 	let popupPageSection = lastVisitedStateStorage.lastVisitedState.popupPageSection;
+
+		// 	if (popupUrl === window.location.href) {
+		// 		scrapedData = lastVisitedStateStorage.lastVisitedState.scrapedData;
+
+		// 		if (popupPageSection === "paused scraping") {
+		// 			newsearchPopup.classList.remove("hide");
+		// 			newmessagePopup.classList.add("hide");
+		// 			startScrapeFooter.classList.add("hide");
+		// 			stopScrapeFooter.classList.remove("hide");
+		// 			pauseScrapeFooter.classList.add("hide");
+		// 			resumeScrapeFooter.classList.remove("hide");
+		// 			loadingContainer.classList.add("hide");
+		// 			document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
+		// 			await injectOntoNewsearch(scrapedData);
+		// 		}
+		// 		else if (popupPageSection === "message section") {
+		// 			newsearchPopup.classList.add("hide");
+		// 			newmessagePopup.classList.remove("hide");
+		// 			startScrapeFooter.classList.add("hide");
+		// 			stopScrapeFooter.classList.remove("hide");
+		// 			pauseScrapeFooter.classList.add("hide");
+		// 			resumeScrapeFooter.classList.remove("hide");
+		// 			loadingContainer.classList.add("hide");
+		// 			newmessagePopup.querySelector("#campaign-name").value = lastVisitedStateStorage.lastVisitedState.campaignName;
+		// 			newmessagePopup.querySelector("#message-input").value = lastVisitedStateStorage.lastVisitedState.messageTemplate;
+		// 			document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
+		// 			await injectOntoNewsearch(scrapedData);
+		// 		}
+		// 	}
+		// })();
+
 
 		// button is clicked to start scraping
 		document.querySelector("#start-search-btn").addEventListener("click", () => {
@@ -96,8 +119,8 @@ if (window.location.href.includes("newsearch.html")) {
 			pauseScrapeFooter.classList.add("hide");
 			resumeScrapeFooter.classList.remove("hide");
 			loadingContainer.classList.add("hide");
-			newsearchDiv.classList.add("hide");
-			newmessageTemplateDiv.classList.remove("hide");
+			newsearchPopup.classList.add("hide");
+			newmessagePopup.classList.remove("hide");
 	
 			console.log("sent request to content script to stop scraping");
 			scrapePort.postMessage({ action: "Stop Scraping" });
@@ -107,8 +130,8 @@ if (window.location.href.includes("newsearch.html")) {
 					let campaignStorage = await chrome.storage.local.get('Campaigns');
 					let campaignKeys = Object.keys(campaignStorage["Campaigns"]);
 					let campaignCount = campaignKeys.length;
-					newmessageTemplateDiv.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
-					newmessageTemplateDiv.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
+					newmessagePopup.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
+					newmessagePopup.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
 					updateCharacterCount();					  
 				}
 			});
@@ -276,7 +299,7 @@ if (window.location.href.includes("newsearch.html")) {
 			resumeScrapeFooter.classList.add("hide");
 			loadingContainer.classList.remove("hide");
 			
-			scrapePort.postMessage({ action: "Resume Scraping" });
+			scrapePort.postMessage({ action: "Resume Scraping", scrapedData: scrapedData });
 
 			scrapePort.onMessage.addListener(function(response) {
 				if (response.message === "Resumed Scraping") {
@@ -292,14 +315,14 @@ if (window.location.href.includes("newsearch.html")) {
 
 		// button is clicked to complete campaign creation and store data in local storage
 		document.querySelector("#save-campaign-btn").addEventListener("click", async () => {
-			campaignName = newmessageTemplateDiv.querySelector("#campaign-name").value;
-			messageTemplate = newmessageTemplateDiv.querySelector("#message-input").value;
+			campaignName = newmessagePopup.querySelector("#campaign-name").value;
+			messageTemplate = newmessagePopup.querySelector("#message-input").value;
 			date = new Date().toLocaleDateString("en-IN");
 
 			await storeCampaignData(campaignName, scrapedData, messageTemplate, date);
 
-			newmessageTemplateDiv.classList.add("hide");
-			newsearchDiv.classList.remove("hide");
+			newmessagePopup.classList.add("hide");
+			newsearchPopup.classList.remove("hide");
 			startScrapeFooter.classList.remove("hide");
 			stopScrapeFooter.classList.add("hide");
 			pauseScrapeFooter.classList.add("hide");
@@ -315,9 +338,9 @@ if (window.location.href.includes("newsearch.html")) {
 		})
 
 		// button is clicked to go from message page back to newsearch page
-		newmessageTemplateDiv.querySelector(".back").addEventListener("click", () => {
-			newsearchDiv.classList.remove("hide");
-			newmessageTemplateDiv.classList.add("hide");
+		newmessagePopup.querySelector(".back").addEventListener("click", () => {
+			newsearchPopup.classList.remove("hide");
+			newmessagePopup.classList.add("hide");
 
 			// button is clicked to remove any selected leads before saving the campaign
 			document.querySelector(".remove-btn").addEventListener("click", () => {
@@ -336,7 +359,7 @@ if (window.location.href.includes("newsearch.html")) {
 		})
 
 		// button is clicked to go from newsearch page back to home page
-		newsearchDiv.querySelector(".back").addEventListener("click", () => {
+		newsearchPopup.querySelector(".back").addEventListener("click", () => {
 			startScrapeFooter.classList.remove("hide");
 			stopScrapeFooter.classList.add("hide");
 			pauseScrapeFooter.classList.add("hide");
@@ -347,11 +370,39 @@ if (window.location.href.includes("newsearch.html")) {
 		})
 
 		// button is clicked to close the popup
-		closeButtonNewsearch.addEventListener("click", function() {
+		closeButtonNewsearch.addEventListener("click", async () => {
+			// let currentUrl = window.location.href;
+			// let popupPageSection;
+			// if (!pauseScrapeFooter.classList.contains("hide") || !resumeScrapeFooter.classList.contains("hide")) 
+			// popupPageSection = "paused scraping";
+
+			// await storeLastVisitedState(currentUrl, "", popupPageSection, scrapedData);
+			// setPopupPort.postMessage({ action: "set popup to last visited state", url: currentUrl });
+			// setPopupPort.onMessage.addListener(function(response) {
+			// 	if (response.message === "succesfully set popup to last visited state") {
+			// 		console.log(response.message);
+			// 		window.close();
+			// 	}
+			// });
 			window.close();
 		});
 
-		closeButtonNewmessage.addEventListener("click", function() {
+		// button is clicked to close the popup
+		closeButtonNewmessage.addEventListener("click", async () => {
+			// let currentUrl = window.location.href;
+			// let popupPageSection;
+			// popupPageSection = "message section";
+			// let tempMessageTemplate = newmessagePopup.querySelector("#message-input").value;
+			// let tempCampaignName = newmessagePopup.querySelector("#campaign-name").value;
+
+			// await storeLastVisitedState(currentUrl, tempCampaignName, popupPageSection, scrapedData, tempMessageTemplate);
+			// setPopupPort.postMessage({ action: "set popup to last visited state", url: currentUrl });
+			// setPopupPort.onMessage.addListener(function(response) {
+			// 	if (response.message === "succesfully set popup to last visited state") {
+			// 		console.log(response.message);
+			// 		window.close();
+			// 	}
+			// });
 			window.close();
 		});
 
@@ -368,7 +419,11 @@ if (window.location.href.includes("home.html")) {
 	console.log('this is home.html');
 
 	(async () => {
-		await injectOntoHome();
+
+		let lastVisitedStateStorage =  await chrome.storage.local.get("lastVisitedState");
+		let popupUrl = lastVisitedStateStorage.lastVisitedState.popupUrl;
+		if (popupUrl === window.location.href) await injectOntoHome();
+		else await injectOntoHome();
 
 		console.log(document.querySelectorAll(".campaign-box"));
 
@@ -438,8 +493,19 @@ if (window.location.href.includes("home.html")) {
 
 	// button is clicked to close the popup
 	const closeButtonHome = document.querySelector(".close-btn");
-	closeButtonHome.addEventListener("click", function() {
-		window.close();
+	closeButtonHome.addEventListener("click", async () => {
+		let currentUrl = window.location.href;
+
+		await storeLastVisitedState(currentUrl);
+		setPopupPort.postMessage({ action: "set popup to last visited state", url: currentUrl });
+		setPopupPort.onMessage.addListener(function(response) {
+			if (response.message === "succesfully set popup to last visited state") {
+				console.log(response.message);
+				window.close();
+			}
+		});
+		//window.close();
+		
 	});
 }
 
@@ -476,6 +542,35 @@ if (window.location.href.includes("activity.html")) {
 		pendingCount = 0;
 		sentCount = 0;
 		let loadUrlPort;
+
+		let lastVisitedStateStorage =  await chrome.storage.local.get("lastVisitedState");
+		let popupUrl = lastVisitedStateStorage.lastVisitedState.popupUrl;
+		let popupPageSection = lastVisitedStateStorage.lastVisitedState.popupPageSection;
+
+		if (popupUrl === window.location.href) {
+			campaignName = lastVisitedStateStorage.lastVisitedState.campaignName;
+			document.querySelector("#heading-activity").innerText = campaignName;
+
+			if (popupPageSection === "activity section") {
+				activitySection.classList.remove("hide");
+				messageSection.classList.add("hide");
+				peopleSection.classList.add("hide");
+				await injectOntoActivityTab(campaignName);
+			}
+			else if (popupPageSection === "message section") {
+				activitySection.classList.add("hide");
+				messageSection.classList.remove("hide");
+				peopleSection.classList.add("hide");
+				await injectOntoMessageTab(campaignName);
+			}
+			else if (popupPageSection === "people section") {
+				activitySection.classList.add("hide");
+				messageSection.classList.add("hide");
+				peopleSection.classList.remove("hide");
+				await injectOntoPeopleTab(campaignName);
+			}
+		}
+		
 
 		// creates port between popup and background script to send invites to leads
 		if (!activitySection.classList.contains("hide")) {
@@ -639,7 +734,7 @@ if (window.location.href.includes("activity.html")) {
 			
 
 			// clicks on btn to save changes made to campaign name and/or message template
-			document.querySelector("#save-update-msg-campname-btn").addEventListener("click", async () => {
+			document.querySelector("#save-campaign-btn").addEventListener("click", async () => {
 				
 				let messageTemplateDiv = document.querySelector(".message-template");
 				let oldCampaignName = campaignName;
@@ -692,140 +787,151 @@ if (window.location.href.includes("activity.html")) {
 
 			preScrapePort.postMessage({ action: "is user on the right page to scrape" });
 			preScrapePort.onMessage.addListener( async function(response) {
-				// if (response.message === "user is on the right page") {
+				if (response.message === "user is on the right page") {
+					chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+						const scrapePort = chrome.tabs.connect(tabs[0].id, { name: "scrape leads" });
+						console.log("created port between popup & content scripts to scrape leads");
+			
+						// button is clicked to start scraping
+						document.querySelector("#start-search-btn").addEventListener("click", () => {
+							startScrapeFooter.classList.add("hide");
+							stopScrapeFooter.classList.remove("hide");
+							pauseScrapeFooter.classList.remove("hide");
+							loadingContainer.classList.remove("hide");
+			
+							console.log("sent request to content script to start scraping");
+							scrapePort.postMessage({ action: "Start Scraping" });
+			
+							scrapePort.onMessage.addListener(async function(response) {
+								if (response.message === "Scraped one page") {
+									console.log(response.data);
+									
+									// length of the data scraped thus far
+									prevIterationData = scrapedData.length;
+									// storing all scraped data in this variable
+									scrapedData = response.data; 
+									// obtaining the length of the data (from reverse) that is to be injected
+									injectDataLength = scrapedData.length - prevIterationData;
+									// updating the data that needs to be injected in this iteration
+									if (injectDataLength != 0) {
+										injectData = scrapedData.slice(-injectDataLength);
+										console.log(injectData);
+										// inject response.data onto popup
+										await injectOntoNewsearch(injectData);
+									}
+									
+									// scrolls to bottom of leads section to show latest list of leads that were scraped
+									setTimeout(() => {
+										const section = document.querySelector(".leads-section");
+										section.scrollTo({
+											top: section.scrollHeight,
+											behavior: "smooth"
+										});
+									}, 1000);
+			
+									// displays the numbers of leads that have been scraped
+									document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
+								}
+							});
+						})
+			
+						// button is clicked to pause scraping
+						document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
+							pauseScrapeFooter.classList.add("hide");
+							resumeScrapeFooter.classList.remove("hide");
+							loadingContainer.classList.add("hide");
+							
+							console.log("sent request to content script to pause scraping");
+							scrapePort.postMessage({ action: "Pause Scraping" });
+			
+							scrapePort.onMessage.addListener(function(response) {
+								// if (response.message === "Paused Scraping") {
+									
+								// }
+							});
+			
+							// button is clicked to remove any selected leads before saving the campaign
+							document.querySelector(".remove-btn").addEventListener("click", () => {
+								let leads = document.querySelectorAll(".leads-scraped");
+								let removeBtns = document.querySelectorAll(".remove-btn");
+								
+								for (let i = 0; i < removeBtns.length; i++) {
+									removeBtns[i].addEventListener("click", async () => {
+										let leadName = leads[i].querySelector(".lead-name").innerText;
+			
+										scrapedData = await deleteScrapedLead(leadName, scrapedData);
+										console.log(scrapedData)
+										leads[i].remove();
+			
+										// for (let j = 0; j < scrapedData.length; j++){
+										// 	if (leadName === scrapedData[j].fullName) {
+										// 		scrapedData.splice(j, 1);
+										// 		console.log(scrapedData.length)
+										// 		leads[i].remove(); 
+										// 		document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
+										// 	}
+										// }
+									});
+								}
+							})
+						})
 					
-				// }
+						// button is clicked to resume scraping
+						document.querySelector("#resume-scrape-btn").addEventListener("click", () => {
+							pauseScrapeFooter.classList.remove("hide");
+							resumeScrapeFooter.classList.add("hide");
+							loadingContainer.classList.remove("hide");
+							
+							scrapePort.postMessage({ action: "Resume Scraping" });
+			
+							scrapePort.onMessage.addListener(function(response) {
+								if (response.message === "Resumed Scraping") {
+									
+								}
+							});
+						})
+			
+						// button is clicked to stop scraping and now user has to create messsage template & campaign name
+						document.querySelector("#stop-search-btn").addEventListener("click", () => {
+							pauseScrapeFooter.classList.add("hide");
+							resumeScrapeFooter.classList.add("hide");
+							startScrapeFooter.classList.remove("hide");
+							stopScrapeFooter.classList.add("hide");
+							loadingContainer.classList.add("hide");
+							newsearchPopup.classList.add("hide");
+							activityPopup.classList.remove("hide");
+							document.querySelector(".collected h6").innerText = "Collected: 0";
+							injectRemove();
+					
+							console.log("sent request to content script to stop scraping");
+							scrapePort.postMessage({ action: "Stop Scraping" });
+			
+							scrapePort.onMessage.addListener(async function(response) {
+								if (response.message === "Stopped Scraping") {
+									await addLeadsToCampaignData(campaignName, scrapedData);
+									await injectOntoPeopleTab(campaignName);
+									// scrapePort.disconnect();
+									// console.log("disconnected port connection");
+								}
+							});
+						})
+						// button is clicked to go from newsearch page back to people page
+						newsearchPopup.querySelector(".back").addEventListener("click", async () => {
+							startScrapeFooter.classList.remove("hide");
+							stopScrapeFooter.classList.add("hide");
+							pauseScrapeFooter.classList.add("hide");
+							resumeScrapeFooter.classList.add("hide");
+							await injectRemove(document.querySelectorAll(".leads-scraped"));
+							newsearchPopup.classList.add("hide");
+							activityPopup.classList.remove("hide");
+							await injectOntoPeopleTab(campaignName);
+						})
+					});
+				}
 			});
 		})
 
-		chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-			const scrapePort = chrome.tabs.connect(tabs[0].id, { name: "scrape leads" });
-			console.log("created port between popup & content scripts to scrape leads");
-
-			// button is clicked to start scraping
-			document.querySelector("#start-search-btn").addEventListener("click", () => {
-				startScrapeFooter.classList.add("hide");
-				stopScrapeFooter.classList.remove("hide");
-				pauseScrapeFooter.classList.remove("hide");
-				loadingContainer.classList.remove("hide");
-
-				console.log("sent request to content script to start scraping");
-				scrapePort.postMessage({ action: "Start Scraping" });
-
-				scrapePort.onMessage.addListener(async function(response) {
-					if (response.message === "Scraped one page") {
-						console.log(response.data);
-						
-						// length of the data scraped thus far
-						prevIterationData = scrapedData.length;
-						// storing all scraped data in this variable
-						scrapedData = response.data; 
-						// obtaining the length of the data (from reverse) that is to be injected
-						injectDataLength = scrapedData.length - prevIterationData;
-						// updating the data that needs to be injected in this iteration
-						if (injectDataLength != 0) {
-							injectData = scrapedData.slice(-injectDataLength);
-							console.log(injectData);
-							// inject response.data onto popup
-							await injectOntoNewsearch(injectData);
-						}
-						
-						// scrolls to bottom of leads section to show latest list of leads that were scraped
-						setTimeout(() => {
-							const section = document.querySelector(".leads-section");
-							section.scrollTo({
-								top: section.scrollHeight,
-								behavior: "smooth"
-							});
-						}, 1000);
-
-						// displays the numbers of leads that have been scraped
-						document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
-					}
-				});
-			})
-
-			// button is clicked to pause scraping
-			document.querySelector("#pause-scrape-btn").addEventListener("click", () => {
-				pauseScrapeFooter.classList.add("hide");
-				resumeScrapeFooter.classList.remove("hide");
-				loadingContainer.classList.add("hide");
-				
-				console.log("sent request to content script to pause scraping");
-				scrapePort.postMessage({ action: "Pause Scraping" });
-
-				scrapePort.onMessage.addListener(function(response) {
-					// if (response.message === "Paused Scraping") {
-						
-					// }
-				});
-
-				// button is clicked to remove any selected leads before saving the campaign
-				document.querySelector(".remove-btn").addEventListener("click", () => {
-					let leads = document.querySelectorAll(".leads-scraped");
-					let removeBtns = document.querySelectorAll(".remove-btn");
-					
-					for (let i = 0; i < removeBtns.length; i++) {
-						removeBtns[i].addEventListener("click", async () => {
-							let leadName = leads[i].querySelector(".lead-name").innerText;
-
-							scrapedData = await deleteScrapedLead(leadName, scrapedData);
-							console.log(scrapedData)
-							leads[i].remove();
-
-							// for (let j = 0; j < scrapedData.length; j++){
-							// 	if (leadName === scrapedData[j].fullName) {
-							// 		scrapedData.splice(j, 1);
-							// 		console.log(scrapedData.length)
-							// 		leads[i].remove(); 
-							// 		document.querySelector(".collected h6").innerText = `Collected: ${scrapedData.length}`;
-							// 	}
-							// }
-						});
-					}
-				})
-			})
 		
-			// button is clicked to resume scraping
-			document.querySelector("#resume-scrape-btn").addEventListener("click", () => {
-				pauseScrapeFooter.classList.remove("hide");
-				resumeScrapeFooter.classList.add("hide");
-				loadingContainer.classList.remove("hide");
-				
-				scrapePort.postMessage({ action: "Resume Scraping" });
-
-				scrapePort.onMessage.addListener(function(response) {
-					if (response.message === "Resumed Scraping") {
-						
-					}
-				});
-			})
-
-			// button is clicked to stop scraping and now user has to create messsage template & campaign name
-			document.querySelector("#stop-search-btn").addEventListener("click", () => {
-				pauseScrapeFooter.classList.add("hide");
-				resumeScrapeFooter.classList.add("hide");
-				startScrapeFooter.classList.remove("hide");
-				stopScrapeFooter.classList.add("hide");
-				loadingContainer.classList.add("hide");
-				newsearchPopup.classList.add("hide");
-				activityPopup.classList.remove("hide");
-				document.querySelector(".collected h6").innerText = "Collected: 0";
-				injectRemove();
-		
-				console.log("sent request to content script to stop scraping");
-				scrapePort.postMessage({ action: "Stop Scraping" });
-
-				scrapePort.onMessage.addListener(async function(response) {
-					if (response.message === "Stopped Scraping") {
-						await addLeadsToCampaignData(campaignName, scrapedData);
-						await injectOntoPeopleTab(campaignName);
-						// scrapePort.disconnect();
-						// console.log("disconnected port connection");
-					}
-				});
-			})
-		});
 
 
 		// activity tab section
@@ -838,6 +944,26 @@ if (window.location.href.includes("activity.html")) {
 
 				await injectRemove();
 				await injectOntoActivityTab(campaignName);
+			}
+		});
+
+		let todaysLimitCount = document.querySelector(".number-count .count").innerText;
+		todaysLimitCount = parseInt(todaysLimitCount);
+		// let pendingCount = document.querySelector(".activity-pending > li > span").textContent;
+
+		// clicks on btn to increase the count for number leads they want to send invites to
+		document.querySelector(".count-increase-btn").addEventListener("click", async () => {
+			if (todaysLimitCount >= 0 && todaysLimitCount < 30) {
+				++todaysLimitCount;
+				document.querySelector(".number-count .count").innerText = todaysLimitCount;
+			}
+		});
+
+		// clicks on btn to decrease the count for number leads they want to send invites to
+		document.querySelector(".count-decrease-btn").addEventListener("click", async () => {
+			if (todaysLimitCount > 0 && todaysLimitCount <= 30) {
+				--todaysLimitCount;
+				document.querySelector(".number-count .count").innerText = todaysLimitCount;
 			}
 		});
 
@@ -887,10 +1013,13 @@ if (window.location.href.includes("activity.html")) {
 		});
 
 		// clicks on back btn to go back to home page
-		document.querySelector("#activity-back").addEventListener("click", () => {
+		document.querySelector("#activity-back").addEventListener("click", async () => {
 			activitySection.classList.remove("hide");
 			messageSection.classList.add("hide");
 			peopleSection.classList.add("hide");
+
+			// resetting lastVisitedState of the popup to avoid issue when opening other campaigns during same session
+			await chrome.storage.local.set({ lastVisitedState: {} });
 
 			//remove campaign's content from activity tab
 			injectRemove(document.querySelectorAll(".leads-scraped"));
@@ -899,11 +1028,56 @@ if (window.location.href.includes("activity.html")) {
 		});
 
 		// button is clicked to close the popup
-		closeButtonActivity.addEventListener('click', function() {
-			window.close();
+		closeButtonActivity.addEventListener('click', async () => {
+			let currentUrl = window.location.href;
+			let popupPageSection;
+			if (!activityPopup.classList.contains("hide")) {
+				if (!activitySection.classList.contains("hide")) popupPageSection = "activity section";
+				else if (!messageSection.classList.contains("hide")) popupPageSection = "message section";
+				else if (!peopleSection.classList.contains("hide")) popupPageSection = "people section";
+			}
+			await storeLastVisitedState(currentUrl, campaignName, popupPageSection);
+			setPopupPort.postMessage({ action: "set popup to last visited state", url: currentUrl });
+			setPopupPort.onMessage.addListener(function(response) {
+				if (response.message === "succesfully set popup to last visited state") {
+					console.log(response.message);
+					window.close();
+				}
+			});
+			// window.close();
 		});
 	})();
 }
+
+
+// save lastVisitedState of the popup before it unloading
+// window.addEventListener('beforeunload', async (event) => {
+// 	let currentUrl = window.location.href;
+// 	let popupPageSection;
+
+// 	// if (currentUrl.includes("home.html")) {
+
+// 	// }
+// 	// else if (currentUrl.includes("newsearch.html")) {
+		
+// 	// }
+// 	if (currentUrl.includes("activity.html")) {
+// 		const campaignName = document.querySelector("#heading-activity").innerText;
+// 		const activityPopup = document.querySelector(".activity-popup");
+// 		const activitySection = document.querySelector(".activity-section");
+// 		const messageSection = document.querySelector(".message-section");
+// 		const peopleSection = document.querySelector(".people-section");
+
+// 		if (!activityPopup.classList.contains("hide")) {
+// 				if (!activitySection.classList.contains("hide")) popupPageSection = "activity section";
+// 				else if (!messageSection.classList.contains("hide")) popupPageSection = "message section";
+// 				else if (!peopleSection.classList.contains("hide")) popupPageSection = "people section";
+// 		}
+// 		event.preventDefault();
+// 		await storeLastVisitedState(currentUrl, campaignName, popupPageSection);
+// 		event.returnValue = '';
+// 	}
+// });
 
 
 
@@ -1353,6 +1527,39 @@ async function deleteScrapedLead(leadName, scrapedData) {
 		}
 	}
 	return scrapedData;
+}
+
+// function to store lastVisitedState of the popup and also the name of the campaign that was last open
+async function storeLastVisitedState(popupUrl, campaignName, popupPageSection, scrapedData, messageTemplate){
+	let lastVisitedStateStorage = await chrome.storage.local.get('lastVisitedState');
+	let lastVisitedState;
+
+	if (popupUrl.includes("home.html")) {
+		lastVisitedState = {
+			popupUrl: popupUrl
+		};
+	}
+	else if (popupUrl.includes("newsearch.html")) {
+		lastVisitedState = {
+			popupUrl: popupUrl,
+			campaignName: campaignName,
+			popupPageSection: popupPageSection,
+			scrapedData: scrapedData,
+			messageTemplate: messageTemplate
+		};
+	}
+	else  if (popupUrl.includes("activity.html")) {
+		lastVisitedState = {
+			popupUrl: popupUrl,
+			campaignName: campaignName,
+			popupPageSection: popupPageSection
+		};
+	}
+
+	
+	
+	lastVisitedStateStorage.lastVisitedState = lastVisitedState;
+	await chrome.storage.local.set({ lastVisitedState: lastVisitedStateStorage.lastVisitedState });
 }
 
 

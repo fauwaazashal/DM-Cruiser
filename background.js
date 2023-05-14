@@ -17,7 +17,12 @@ chrome.runtime.onInstalled.addListener(function() {
 			chrome.storage.local.set({
 				Campaigns: {},
 				messageTemplates: {},
-				lastVisitedState: ""
+				lastVisitedState: {
+					popupUrl: "home.html",
+					campaignName: "",
+					popupPageSection: "",
+					scrapedData: []
+				}
 				}, function() {
 				console.log("Data saved");
 			});
@@ -28,27 +33,24 @@ chrome.runtime.onInstalled.addListener(function() {
 
 // Listens for when the extension icon in the toolbar is clicked
 chrome.action.onClicked.addListener(function () {
-	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+	console.log('clicked on the extension icon');
+	chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
 		let currentTab = tabs[0];
 		let currentUrl = currentTab.url;
+		let popupUrl = "home.html";
 
-		chrome.storage.local.get("lastVisitedState", function (data) {
-			let popupUrl = data.lastVisitedPopup ? data.lastVisitedPopup.url : "home.html";
+		// if the URL includes LinkedIn then no need for a redirect
+		if (currentUrl.includes("linkedin.com")) {
+			await chrome.action.setPopup({ popup: popupUrl });
+			console.log("No need for page redirect as we are already on LinkedIn");
+		}
 
-			// if the URL includes LinkedIn then no need for a redirect
-			if (currentUrl.includes("linkedin.com")) {
-				chrome.action.setPopup({ tabId: currentTab.id, popup: popupUrl });
-				console.log("No need for page redirect as we are already on LinkedIn");
-			}
-
-			// if the current URL is not LinkedIn, then create a new tab and enter the LinkedIn URL
-			else {
-				chrome.tabs.create({ url: "https://www.linkedin.com/search/results/people" }, function (tab) {
-					chrome.action.setPopup({ tabId: tab.id, popup: popupUrl });
-					console.log("Page redirected to LinkedIn");
-				});
-			}
-		});
+		// if the current URL is not LinkedIn, then create a new tab and enter the LinkedIn URL
+		else {
+			await chrome.tabs.create({ url: "https://www.linkedin.com/search/results/people" });
+			await chrome.action.setPopup({ popup: popupUrl });
+			console.log("Page redirected to LinkedIn");
+		}
 	});
 });
 
@@ -57,10 +59,20 @@ chrome.action.onClicked.addListener(function () {
 chrome.runtime.onConnect.addListener(function(port) {
 	console.log("background port detected");
 
+	// port for setting popup url to latest state
+	if (port.name === "set popup") {
+		port.onMessage.addListener(async function(request) {
+			if (request.action === "set popup to last visited state") {
+				await chrome.action.setPopup({ popup: request.url });
+				port.postMessage({ message: "succesfully set popup to last visited state" });
+			}
+		});
+	}
+
 	// port for checking if the user is on the right page before initiating scraping
 	if (port.name === "pre scrape url check") {
 		port.onMessage.addListener(async function(request) {
-			if (request.action == "is user on the right page to scrape") {
+			if (request.action === "is user on the right page to scrape") {
 				chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
 					let currentTab = tabs[0];
 					let currentUrl = currentTab.url;
@@ -80,7 +92,7 @@ chrome.runtime.onConnect.addListener(function(port) {
 
 		async function navigateSendInvites(campaignName) {
 
-			while (!isStopped) {
+			while (!isStopped || dailyLimit !== 31) {
 				let campaignData = await retrieveCampaignData(campaignName);
 				let leadsData = campaignData.scrapedData;
 				let messageTemplate = campaignData.messageTemplate;

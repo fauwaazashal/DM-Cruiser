@@ -80,6 +80,7 @@ chrome.runtime.onConnect.addListener(function(port) {
 
 			else if (request.action === "Resume Scraping") {
 				console.log('receieved request from popup to resume scraping');
+				scrapedData = request.scrapedData;
 				isPaused = false;
 				isStopped = false;
 				port.postMessage({ message: "Resuming Scraping", data: scrapedData });

@@ -668,6 +668,7 @@ h6 {
 	padding: 10px;
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
+	cursor: pointer;
 
 }
 
@@ -676,6 +677,7 @@ h6 {
 	padding: 10px;
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
+	cursor: pointer;
 }
 
 .sending-status {
