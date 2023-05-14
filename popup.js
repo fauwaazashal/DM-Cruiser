@@ -12,6 +12,8 @@ let sentCount = 0;
 let dailyInviteLimit = Math.floor(Math.random() * 21) + 80;
 
 let setPopupPort = chrome.runtime.connect({ name: "set popup" });
+let linkedinUrlCheckPort = chrome.runtime.connect({ name: "linkedin url check" });
+linkedinUrlCheckPort.postMessage({ action: "is user on the linkedin" });
 
 //---------------------------------------------newsearch.html--------------------------------------------------
 

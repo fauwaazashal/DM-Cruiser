@@ -33,7 +33,6 @@ chrome.runtime.onInstalled.addListener(function() {
 
 // Listens for when the extension icon in the toolbar is clicked
 chrome.action.onClicked.addListener(function () {
-	console.log('clicked on the extension icon');
 	chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
 		let currentTab = tabs[0];
 		let currentUrl = currentTab.url;
@@ -65,6 +64,31 @@ chrome.runtime.onConnect.addListener(function(port) {
 			if (request.action === "set popup to last visited state") {
 				await chrome.action.setPopup({ popup: request.url });
 				port.postMessage({ message: "succesfully set popup to last visited state" });
+			}
+		});
+	}
+
+	// port for checking if the user is on linkedin or not at the time of clciking on the extension icon
+	if (port.name === "linkedin url check") {
+		port.onMessage.addListener(async function(request) {
+			if (request.action === "is user on the linkedin") {
+				chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+					let currentTab = tabs[0];
+					let currentUrl = currentTab.url;
+			
+					// if the URL includes LinkedIn then no need for a redirect
+					if (currentUrl.includes("linkedin.com")) {
+						//await chrome.action.setPopup({ popup: request.url });
+						console.log("No need for page redirect as we are already on LinkedIn");
+					}
+			
+					// if the current URL is not LinkedIn, then create a new tab and enter the LinkedIn URL
+					else {
+						await chrome.tabs.create({ url: "https://www.linkedin.com/search/results/people" });
+						//await chrome.action.setPopup({ popup: request.url });
+						console.log("Page redirected to LinkedIn");
+					}
+				});
 			}
 		});
 	}
