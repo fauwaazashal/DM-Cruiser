@@ -560,18 +560,33 @@ if (window.location.href.includes("activity.html")) {
 				activitySection.classList.remove("hide");
 				messageSection.classList.add("hide");
 				peopleSection.classList.add("hide");
+
+				activityTab.classList.add("tab-clicked");
+				messageTab.classList.remove("tab-clicked");
+				peopleTab.classList.remove("tab-clicked");
+
 				await injectOntoActivityTab(campaignName);
 			}
 			else if (popupPageSection === "message section") {
 				activitySection.classList.add("hide");
 				messageSection.classList.remove("hide");
 				peopleSection.classList.add("hide");
+
+				activityTab.classList.remove("tab-clicked");
+				messageTab.classList.add("tab-clicked");
+				peopleTab.classList.remove("tab-clicked");
+
 				await injectOntoMessageTab(campaignName);
 			}
 			else if (popupPageSection === "people section") {
 				activitySection.classList.add("hide");
 				messageSection.classList.add("hide");
 				peopleSection.classList.remove("hide");
+
+				activityTab.classList.remove("tab-clicked");
+				messageTab.classList.remove("tab-clicked");
+				peopleTab.classList.add("tab-clicked");
+
 				await injectOntoPeopleTab(campaignName);
 			}
 		}
