@@ -137,28 +137,29 @@ chrome.runtime.onConnect.addListener(function(port) {
 
 		async function navigateAndSendInvites(campaignName, inviteeCount) {
 
-			let dailyInviteQuotaStorage = await chrome.storage.local.get('dailyInviteQuota');
-			let dailyInviteQuota = dailyInviteQuotaStorage.dailyInviteQuota;
+			let dailyInviteQuota = retrieveDailyInviteQuota();
 
-			if (dailyInviteQuota !== 0 || inviteeCount !== 0) {
-				while (!isStopped && inviteeCount !== 0) {
+			while (!isStopped) {
+				dailyInviteQuota = retrieveDailyInviteQuota();
+
+				if (dailyInviteQuota !== 0 && inviteeCount !== 0) {
 					let campaignData = await retrieveCampaignData(campaignName);
 					let leadsData = campaignData.scrapedData;
 					let messageTemplate = campaignData.messageTemplate;
 					console.log(leadsData);
-	
+
 					let pendingCount = 0;
 					for (let i = 0; i < leadsData.length; i++) {
 						if (leadsData[i].status == "pending") ++pendingCount;
 					}
-	
+
 					if (pendingCount != 0) {
 						console.log(leadsData[0].profileLink);
 						// loads leads's profile onto webpage
 						await navigate(leadsData[0].profileLink);
 						console.log("profile page loaded");
-	
-	
+
+
 						if (!isStopped) {
 							// calls function to send invite to lead
 							await sendInvite(campaignName, leadsData[0], messageTemplate);
@@ -166,27 +167,31 @@ chrome.runtime.onConnect.addListener(function(port) {
 							port.postMessage({ message: "invite sent and updated data in storage" });
 							--inviteeCount; // decrement the invitee count set by the user after each invite is sent
 						}
-	
+
 						else break;
 					}
-	
+
 					else {
 						isStopped = true;
 						console.log("sent invites to all leads in campaign");
-					}
-					
+					}	
+				}
+
+				else if (inviteeCount === 0) {
+					isStopped = true;
+					port.postMessage({ message: "completed user's invitee counter" });
+				}
+				else if (dailyInviteQuota === 0) {
+					isStopped = true;
+					port.postMessage({ message: "exhausted daily invite quota" });
 				}
 			}
-			else {
-				if (inviteeCount === 0) port.postMessage({ message: "completed user's invitee counter" });
-				else port.postMessage({ message: "exhausted daily invite quota" });
-			}
-			
 		}
 
 		port.onMessage.addListener(async function(request) {
 			if (request.action === "Start Sending Invites") {
 				console.log("receieved request from popup to load users' profiles");
+				isStopped = false;
 				campaignName = request.campaignName;
 				let inviteeCount = request.inviteeCount;
 
@@ -206,6 +211,13 @@ chrome.runtime.onConnect.addListener(function(port) {
 
 //-----------------------------------------------functions ()----------------------------------------------------
 
+
+// function to retrieve dailyInvite Quota
+async function retrieveDailyInviteQuota() {
+	let dailyInviteQuotaStorage = await chrome.storage.local.get('dailyInviteQuota');
+	let dailyInviteQuota = dailyInviteQuotaStorage.dailyInviteQuota;
+	return dailyInviteQuota;
+}
 
 
 // function to retrieve selected campaign's data

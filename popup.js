@@ -1041,7 +1041,7 @@ if (window.location.href.includes("activity.html")) {
 
 		// clicks on btn to decrease the count for number leads they want to send invites to
 		document.querySelector(".count-decrease-btn").addEventListener("click", async () => {
-			if (inviteeCount > 0 && inviteeCount <= 30) {
+			if (inviteeCount > 1 && inviteeCount <= 30) {
 				--inviteeCount;
 				document.querySelector(".number-count .count").innerText = inviteeCount;
 			}
@@ -1049,17 +1049,16 @@ if (window.location.href.includes("activity.html")) {
 
 		// clicks on btn to start sending invites to leads
 		document.querySelector("#start-invite-btn").addEventListener("click", async () => {
-			startInviteFooter.classList.add("hide");
-			stopInviteFooter.classList.remove("hide");
-			loadingContainerInvite.classList.remove("hide");
-
 			console.log("sent request to background script to load leads' profiles");
 
-			let dailyInviteQuotaStorage = await chrome.storage.local.get('dailyInviteQuota');
-			let dailyInviteQuota = dailyInviteQuotaStorage.dailyInviteQuota;
+			let dailyInviteQuota = await retrieveDailyInviteQuota();
 
 			// proceed to send invites only the user has not exhausted their daily quota
 			if (dailyInviteQuota !== 0) {
+				startInviteFooter.classList.add("hide");
+				stopInviteFooter.classList.remove("hide");
+				loadingContainerInvite.classList.remove("hide");
+				
 				loadUrlPort.postMessage({ 
 					action: "Start Sending Invites", 
 					campaignName: campaignName,
@@ -1085,15 +1084,22 @@ if (window.location.href.includes("activity.html")) {
 						document.querySelector(".activity-sent > span").textContent = sentCount;
 						document.querySelector(".activity-pending > li > span").textContent = pendingCount;
 
-						let dailyInviteQuotaStorage = await chrome.storage.local.get('dailyInviteQuota');
-						let dailyInviteQuota = dailyInviteQuotaStorage.dailyInviteQuota;
+						dailyInviteQuota = await retrieveDailyInviteQuota();
 						document.querySelector("#queue-num").textContent = `Available Invites Today: ${dailyInviteQuota}`;
 					}
-					else if (response.message === "exhausted daily invite quota") {
+					if (response.message === "exhausted daily invite quota") {
+						startInviteFooter.classList.remove("hide");
+						stopInviteFooter.classList.add("hide");
+						loadingContainerInvite.classList.add("hide");
+
 						console.log("reached daily invite limit for the day, come back tomorrow");
 						alert("reached daily invite limit for the day, come back tomorrow");
 					}
-					else if (response.message === "completed user's invitee counter") {
+					if (response.message === "completed user's invitee counter") {
+						startInviteFooter.classList.remove("hide");
+						stopInviteFooter.classList.add("hide");
+						loadingContainerInvite.classList.add("hide");
+
 						console.log(`successfully sent ${inviteeCount} invites`);
 						alert(`successfully sent ${inviteeCount} invites`);
 					}
@@ -1639,8 +1645,14 @@ async function storeLastVisitedState(popupUrl, campaignName, popupPageSection, s
 	await chrome.storage.local.set({ lastVisitedState: lastVisitedStateStorage.lastVisitedState });
 }
 
+// function to retrieve dailyInvite Quota
+async function retrieveDailyInviteQuota() {
+	let dailyInviteQuotaStorage = await chrome.storage.local.get('dailyInviteQuota');
+	let dailyInviteQuota = dailyInviteQuotaStorage.dailyInviteQuota;
+	return dailyInviteQuota;
+}
 
-// function to retriev campaign data
+// function to retrieve campaign data
 async function retrieveCampaignData() {
 	campaignStorage = await chrome.storage.local.get('Campaigns');
 	return campaignStorage.Campaigns;
