@@ -801,7 +801,7 @@ h6 {
 
 .campaign-status-data{
 	display: flex;
-	padding: 15px 0px 0px 20px;
+	padding: 15px 0px 5px 20px;
 	gap: 10px;
 	background-color: #1F2937;
 }
