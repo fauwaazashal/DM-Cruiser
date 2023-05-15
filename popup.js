@@ -522,6 +522,9 @@ if (window.location.href.includes("activity.html")) {
 
 	(async () => {
 
+		const activityTab = document.querySelector("#activity-btn");
+		const messageTab = document.querySelector("#message-btn");
+		const peopleTab = document.querySelector("#people-btn");
 		const activitySection = document.querySelector(".activity-section");
 		const messageSection = document.querySelector(".message-section");
 		const peopleSection = document.querySelector(".people-section");
@@ -572,7 +575,13 @@ if (window.location.href.includes("activity.html")) {
 				await injectOntoPeopleTab(campaignName);
 			}
 		}
-		
+
+		else {
+			await injectOntoActivityTab(campaignName);
+			activityTab.classList.add("tab-clicked");
+			messageTab.classList.remove("tab-clicked");
+			peopleTab.classList.remove("tab-clicked");
+		}
 
 		// creates port between popup and background script to send invites to leads
 		if (!activitySection.classList.contains("hide")) {
@@ -585,15 +594,19 @@ if (window.location.href.includes("activity.html")) {
 
 		// }
 
-		await injectOntoActivityTab(campaignName);
+		// await injectOntoActivityTab(campaignName);
 
 		// message tab section
 		// clicks on message tab
-		document.querySelector("#message-btn").addEventListener("click", async () => {
+		messageTab.addEventListener("click", async () => {
 			if (messageSection.classList.contains("hide")) {
 				activitySection.classList.add("hide");
 				messageSection.classList.remove("hide");
 				peopleSection.classList.add("hide");
+
+				activityTab.classList.remove("tab-clicked");
+				messageTab.classList.add("tab-clicked");
+				peopleTab.classList.remove("tab-clicked");
 
 				//await injectRemove();
 				await injectOntoMessageTab(campaignName);
@@ -756,11 +769,15 @@ if (window.location.href.includes("activity.html")) {
 
 		// people tab section
 		// clicks on people tab
-		document.querySelector("#people-btn").addEventListener("click", async () => {
+		peopleTab.addEventListener("click", async () => {
 			if (peopleSection.classList.contains("hide")) {
 				activitySection.classList.add("hide");
 				messageSection.classList.add("hide");
 				peopleSection.classList.remove("hide");
+
+				activityTab.classList.remove("tab-clicked");
+				messageTab.classList.remove("tab-clicked");
+				peopleTab.classList.add("tab-clicked");
 
 				await injectRemove();
 				await injectOntoPeopleTab(campaignName);
@@ -938,11 +955,15 @@ if (window.location.href.includes("activity.html")) {
 
 		// activity tab section
 		// clicks on activity tab
-		document.querySelector("#activity-btn").addEventListener("click", async () => {
+		activityTab.addEventListener("click", async () => {
 			if (activitySection.classList.contains("hide")) {
 				activitySection.classList.remove("hide");
 				messageSection.classList.add("hide");
 				peopleSection.classList.add("hide");
+
+				activityTab.classList.add("tab-clicked");
+				messageTab.classList.remove("tab-clicked");
+				peopleTab.classList.remove("tab-clicked");
 
 				await injectRemove();
 				await injectOntoActivityTab(campaignName);

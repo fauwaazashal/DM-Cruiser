@@ -65,6 +65,13 @@ h6 {
 	cursor: pointer;
 }
 
+.tab-clicked {
+	text-decoration: underline;
+	text-decoration-color: #9333EA;
+	text-underline-offset: 0.4em;
+	text-decoration-thickness: 0.30em;
+}
+
 .home-footer,
 .start-search-footer,
 .stop-search-footer,
