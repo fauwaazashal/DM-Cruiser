@@ -32,6 +32,7 @@
     "storage",
     "https://www.linkedin.com/*",
     "tabs",
-    "scripting"
+    "scripting",
+    "alarms"
   ]
 }
