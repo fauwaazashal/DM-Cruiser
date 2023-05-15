@@ -140,7 +140,7 @@ chrome.runtime.onConnect.addListener(function(port) {
 			let dailyInviteQuotaStorage = await chrome.storage.local.get('dailyInviteQuota');
 			let dailyInviteQuota = dailyInviteQuotaStorage.dailyInviteQuota;
 
-			if (dailyInviteQuota !== 0) {
+			if (dailyInviteQuota !== 0 || inviteeCount !== 0) {
 				while (!isStopped && inviteeCount !== 0) {
 					let campaignData = await retrieveCampaignData(campaignName);
 					let leadsData = campaignData.scrapedData;
@@ -164,7 +164,7 @@ chrome.runtime.onConnect.addListener(function(port) {
 							await sendInvite(campaignName, leadsData[0], messageTemplate);
 							console.log("sent invite to one lead");
 							port.postMessage({ message: "invite sent and updated data in storage" });
-							// also update the daily limit and/or the user's limit that they set as long as it is under the daily limit
+							--inviteeCount; // decrement the invitee count set by the user after each invite is sent
 						}
 	
 						else break;
@@ -178,7 +178,8 @@ chrome.runtime.onConnect.addListener(function(port) {
 				}
 			}
 			else {
-				port.postMessage({ message: "exhausted daily invite quota" });
+				if (inviteeCount === 0) port.postMessage({ message: "completed user's invitee counter" });
+				else port.postMessage({ message: "exhausted daily invite quota" });
 			}
 			
 		}

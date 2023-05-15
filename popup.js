@@ -496,17 +496,7 @@ if (window.location.href.includes("home.html")) {
 	// button is clicked to close the popup
 	const closeButtonHome = document.querySelector(".close-btn");
 	closeButtonHome.addEventListener("click", async () => {
-		let currentUrl = window.location.href;
-
-		await storeLastVisitedState(currentUrl);
-		setPopupPort.postMessage({ action: "set popup to last visited state", url: currentUrl });
-		setPopupPort.onMessage.addListener(function(response) {
-			if (response.message === "succesfully set popup to last visited state") {
-				console.log(response.message);
-				window.close();
-			}
-		});
-		//window.close();
+		window.close();
 		
 	});
 }
@@ -597,6 +587,19 @@ if (window.location.href.includes("activity.html")) {
 			activityTab.classList.add("tab-clicked");
 			messageTab.classList.remove("tab-clicked");
 			peopleTab.classList.remove("tab-clicked");
+
+			// saving state of the page that we are on currently
+			let currentUrl = window.location.href;
+			if (!activityPopup.classList.contains("hide")) {
+				if (!activitySection.classList.contains("hide")) popupPageSection = "activity section";
+			}
+			await storeLastVisitedState(currentUrl, campaignName, popupPageSection);
+			setPopupPort.postMessage({ action: "set popup to last visited state", url: currentUrl });
+			setPopupPort.onMessage.addListener(function(response) {
+				if (response.message === "succesfully set popup to last visited state") {
+					console.log(response.message);
+				}
+			});
 		}
 
 		// creates port between popup and background script to send invites to leads
@@ -624,7 +627,19 @@ if (window.location.href.includes("activity.html")) {
 				messageTab.classList.add("tab-clicked");
 				peopleTab.classList.remove("tab-clicked");
 
-				//await injectRemove();
+				// saving state of the page that we are on currently
+				let currentUrl = window.location.href;
+				if (!activityPopup.classList.contains("hide")) {
+					if (!messageSection.classList.contains("hide")) popupPageSection = "message section";
+				}
+				await storeLastVisitedState(currentUrl, campaignName, popupPageSection);
+				setPopupPort.postMessage({ action: "set popup to last visited state", url: currentUrl });
+				setPopupPort.onMessage.addListener(function(response) {
+					if (response.message === "succesfully set popup to last visited state") {
+						console.log(response.message);
+					}
+				});
+				
 				await injectOntoMessageTab(campaignName);
 				// updateCharacterCount();
 			}
@@ -794,6 +809,19 @@ if (window.location.href.includes("activity.html")) {
 				activityTab.classList.remove("tab-clicked");
 				messageTab.classList.remove("tab-clicked");
 				peopleTab.classList.add("tab-clicked");
+
+				// saving state of the page that we are on currently
+				let currentUrl = window.location.href;
+				if (!activityPopup.classList.contains("hide")) {
+					if (!peopleSection.classList.contains("hide")) popupPageSection = "people section";
+				}
+				await storeLastVisitedState(currentUrl, campaignName, popupPageSection);
+				setPopupPort.postMessage({ action: "set popup to last visited state", url: currentUrl });
+				setPopupPort.onMessage.addListener(function(response) {
+					if (response.message === "succesfully set popup to last visited state") {
+						console.log(response.message);
+					}
+				});
 
 				await injectRemove();
 				await injectOntoPeopleTab(campaignName);
@@ -981,6 +1009,19 @@ if (window.location.href.includes("activity.html")) {
 				messageTab.classList.remove("tab-clicked");
 				peopleTab.classList.remove("tab-clicked");
 
+				// saving state of the page that we are on currently
+				let currentUrl = window.location.href;
+				if (!activityPopup.classList.contains("hide")) {
+					if (!activitySection.classList.contains("hide")) popupPageSection = "activity section";
+				}
+				await storeLastVisitedState(currentUrl, campaignName, popupPageSection);
+				setPopupPort.postMessage({ action: "set popup to last visited state", url: currentUrl });
+				setPopupPort.onMessage.addListener(function(response) {
+					if (response.message === "succesfully set popup to last visited state") {
+						console.log(response.message);
+					}
+				});
+
 				await injectRemove();
 				await injectOntoActivityTab(campaignName);
 			}
@@ -1052,6 +1093,10 @@ if (window.location.href.includes("activity.html")) {
 						console.log("reached daily invite limit for the day, come back tomorrow");
 						alert("reached daily invite limit for the day, come back tomorrow");
 					}
+					else if (response.message === "completed user's invitee counter") {
+						console.log(`successfully sent ${inviteeCount} invites`);
+						alert(`successfully sent ${inviteeCount} invites`);
+					}
 				});
 			}
 			else {
@@ -1101,22 +1146,7 @@ if (window.location.href.includes("activity.html")) {
 
 		// button is clicked to close the popup
 		closeButtonActivity.addEventListener('click', async () => {
-			let currentUrl = window.location.href;
-			let popupPageSection;
-			if (!activityPopup.classList.contains("hide")) {
-				if (!activitySection.classList.contains("hide")) popupPageSection = "activity section";
-				else if (!messageSection.classList.contains("hide")) popupPageSection = "message section";
-				else if (!peopleSection.classList.contains("hide")) popupPageSection = "people section";
-			}
-			await storeLastVisitedState(currentUrl, campaignName, popupPageSection);
-			setPopupPort.postMessage({ action: "set popup to last visited state", url: currentUrl });
-			setPopupPort.onMessage.addListener(function(response) {
-				if (response.message === "succesfully set popup to last visited state") {
-					console.log(response.message);
-					window.close();
-				}
-			});
-			// window.close();
+			window.close();
 		});
 	})();
 }
