@@ -22,7 +22,8 @@ chrome.runtime.onInstalled.addListener(function() {
 					campaignName: "",
 					popupPageSection: "",
 					scrapedData: []
-				}
+				},
+				dailyInviteLimit: 30
 				}, function() {
 				console.log("Data saved");
 			});

@@ -25,7 +25,7 @@ if (window.location.href.includes("newsearch.html")) {
 	const stopScrapeFooter = document.querySelector(".stop-search-footer");
 	const pauseScrapeFooter = document.querySelector(".pause-search");
 	const resumeScrapeFooter = document.querySelector(".resume-search");
-	const loadingContainer = document.querySelector(".loading-container");
+	const loadingContainer = document.querySelector(".loading-container-newsearch");
 	const newmessagePopup = document.querySelector(".newmessage-popup");
 	const newsearchPopup = document.querySelector(".newsearch-popup");
 	const inputElement = document.querySelector("#campaign-name");
@@ -528,6 +528,7 @@ if (window.location.href.includes("activity.html")) {
 		const activitySection = document.querySelector(".activity-section");
 		const messageSection = document.querySelector(".message-section");
 		const peopleSection = document.querySelector(".people-section");
+		const loadingContainerInvite = document.querySelector(".loading-container-activity");
 		const startInviteFooter = document.querySelector(".start-invite-activity-footer");
 		const stopInviteFooter = document.querySelector(".stop-invite-activity-footer");
 		stopInviteFooter.querySelector("#stop-invite-btn").style.backgroundColor = "#DF4545";
@@ -536,7 +537,7 @@ if (window.location.href.includes("activity.html")) {
 		const stopScrapeFooter = document.querySelector(".stop-search-footer");
 		const pauseScrapeFooter = document.querySelector(".pause-search");
 		const resumeScrapeFooter = document.querySelector(".resume-search");
-		const loadingContainer = document.querySelector(".loading-container");
+		const loadingContainer = document.querySelector(".loading-container-newsearch");
 		const newsearchPopup = document.querySelector(".newsearch-popup");
 		const activityPopup = document.querySelector(".activity-popup");
 		const closeButtonActivity = document.querySelector("#activity-close-btn");
@@ -1009,6 +1010,7 @@ if (window.location.href.includes("activity.html")) {
 		document.querySelector("#start-invite-btn").addEventListener("click", async () => {
 			startInviteFooter.classList.add("hide");
 			stopInviteFooter.classList.remove("hide");
+			loadingContainerInvite.classList.remove("hide");
 
 			console.log("sent request to background script to load leads' profiles");
 			loadUrlPort.postMessage({ 
@@ -1039,6 +1041,7 @@ if (window.location.href.includes("activity.html")) {
 		document.querySelector("#stop-invite-btn").addEventListener("click", async () => {
 			startInviteFooter.classList.remove("hide");
 			stopInviteFooter.classList.add("hide");
+			loadingContainerInvite.classList.add("hide");
 
 			console.log("sent request to content script to stop sending invites");
 			loadUrlPort.postMessage({ action: "Stop Sending Invites" });
@@ -1057,12 +1060,19 @@ if (window.location.href.includes("activity.html")) {
 			peopleSection.classList.add("hide");
 
 			// resetting lastVisitedState of the popup to avoid issue when opening other campaigns during same session
-			await chrome.storage.local.set({ lastVisitedState: {} });
+			let currentUrl = "home.html";
 
-			//remove campaign's content from activity tab
-			injectRemove(document.querySelectorAll(".leads-scraped"));
+			await storeLastVisitedState(currentUrl);
+			setPopupPort.postMessage({ action: "set popup to last visited state", url: currentUrl });
+			setPopupPort.onMessage.addListener(function(response) {
+				if (response.message === "succesfully set popup to last visited state") {
+					console.log(response.message);
+					//remove campaign's content from activity tab
+					injectRemove(document.querySelectorAll(".leads-scraped"));
 
-			window.location.href = "home.html";
+					window.location.href = "home.html";
+				}
+			});
 		});
 
 		// button is clicked to close the popup
@@ -1086,36 +1096,6 @@ if (window.location.href.includes("activity.html")) {
 		});
 	})();
 }
-
-
-// save lastVisitedState of the popup before it unloading
-// window.addEventListener('beforeunload', async (event) => {
-// 	let currentUrl = window.location.href;
-// 	let popupPageSection;
-
-// 	// if (currentUrl.includes("home.html")) {
-
-// 	// }
-// 	// else if (currentUrl.includes("newsearch.html")) {
-		
-// 	// }
-// 	if (currentUrl.includes("activity.html")) {
-// 		const campaignName = document.querySelector("#heading-activity").innerText;
-// 		const activityPopup = document.querySelector(".activity-popup");
-// 		const activitySection = document.querySelector(".activity-section");
-// 		const messageSection = document.querySelector(".message-section");
-// 		const peopleSection = document.querySelector(".people-section");
-
-// 		if (!activityPopup.classList.contains("hide")) {
-// 				if (!activitySection.classList.contains("hide")) popupPageSection = "activity section";
-// 				else if (!messageSection.classList.contains("hide")) popupPageSection = "message section";
-// 				else if (!peopleSection.classList.contains("hide")) popupPageSection = "people section";
-// 		}
-// 		event.preventDefault();
-// 		await storeLastVisitedState(currentUrl, campaignName, popupPageSection);
-// 		event.returnValue = '';
-// 	}
-// });
 
 
 
