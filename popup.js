@@ -710,11 +710,12 @@ if (window.location.href.includes("activity.html")) {
 		const textbox = document.getElementById('campaign-name');
 		const errorMessage = document.getElementById('error-message');
 		const saveBtn = document.getElementById('save-campaign-btn');
-		let existingName = textbox.value;
+		// let existingName = textbox.value;
+		let existingName = document.querySelector("#heading-activity").innerText;
 		// errorMessage.style.display = 'none';   // Hide the message
 		// textbox.style.borderColor = '';     // Reset the border color
 		// saveBtn.disabled = false;        // Enable the Save button
-		textbox.addEventListener('input', function() {
+		textbox.addEventListener('input', async function() {
 			if (textbox.value === '') {
 				errorMessage.style.display = 'block';  // Show the message
 				textbox.style.borderColor = 'red'; // Change the border color to red
@@ -736,7 +737,7 @@ if (window.location.href.includes("activity.html")) {
 					}
 				}
 			}
-			campAllName();
+			await campAllName();
 		});
 
 

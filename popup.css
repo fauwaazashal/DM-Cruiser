@@ -473,9 +473,11 @@ h6 {
 }
 
 #error-message {
+	position: fixed;
 	display: none;
 	color: red;
-	padding-top: 10px;
+	padding-top: 6px;
+	padding-left: 41px;
 }
 
 .trial input {
