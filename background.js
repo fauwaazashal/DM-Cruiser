@@ -1,8 +1,5 @@
-//-----------------------------------------------global variables----------------------------------------------------
+//-----------------------------------------------global variables---------------------------------------------------------
 
-const minDelay = 5000; // minimum delay in milliseconds
-const maxDelay = 8000; // maximum delay in milliseconds
-const randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
 let isStopped = false;
 let campaignName = "";
 
@@ -70,7 +67,7 @@ chrome.action.onClicked.addListener(function () {
 
 		// if the current URL is not LinkedIn, then create a new tab and enter the LinkedIn URL
 		else {
-			await chrome.tabs.create({ url: "https://www.linkedin.com/search/results/people" });
+			await chrome.tabs.create({ url: 'https://www.linkedin.com/search/results/people/?network=%5B"O"%2C"S"%5D' });
 			await chrome.action.setPopup({ popup: popupUrl });
 			console.log("Page redirected to LinkedIn");
 		}
@@ -108,7 +105,7 @@ chrome.runtime.onConnect.addListener(function(port) {
 			
 					// if the current URL is not LinkedIn, then create a new tab and enter the LinkedIn URL
 					else {
-						await chrome.tabs.create({ url: "https://www.linkedin.com/search/results/people" });
+						await chrome.tabs.create({ url: 'https://www.linkedin.com/search/results/people/?network=%5B"O"%2C"S"%5D' });
 						//await chrome.action.setPopup({ popup: request.url });
 						console.log("Page redirected to LinkedIn");
 					}
@@ -125,8 +122,9 @@ chrome.runtime.onConnect.addListener(function(port) {
 					let currentTab = tabs[0];
 					let currentUrl = currentTab.url;
 					let targetUrl = "https://www.linkedin.com/search/results/people";
+					let loadUrl = 'https://www.linkedin.com/search/results/people/?network=%5B"O"%2C"S"%5D';
 					
-					if (!currentUrl.startsWith(targetUrl)) await navigate(targetUrl);
+					if (!currentUrl.startsWith(targetUrl)) await navigate(loadUrl);
 					port.postMessage({ message: "user is on the right page" });
 				});
 			} 
