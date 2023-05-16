@@ -670,7 +670,7 @@ if (window.location.href.includes("activity.html")) {
 				});
 				
 				await injectOntoMessageTab(campaignName);
-				// updateCharacterCount();
+				updateCharacterCount();
 			}
 		});
 
