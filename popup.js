@@ -530,6 +530,10 @@ if (window.location.href.includes("activity.html")) {
 		const loadingContainer = document.querySelector(".loading-container-newsearch");
 		const newsearchPopup = document.querySelector(".newsearch-popup");
 		const activityPopup = document.querySelector(".activity-popup");
+		const alertDailyInviteLimitReached = document.querySelector("#alert-daily-invite-limit-reached");
+		const alertAllCampaignInvitesSent = document.querySelector("#alert-all-campaign-invites-sent");
+		const alertUserSetInvitesSent = document.querySelector("#alert-user-set-invites-sent");
+		const alertConfirmUpdatedCampaignSave = document.querySelector("#alert-confirm-updated-campaign-save");
 		const closeButtonActivity = document.querySelector("#activity-close-btn");
 
 		// retrieve campaignName from session storage
@@ -643,160 +647,172 @@ if (window.location.href.includes("activity.html")) {
 				await injectOntoMessageTab(campaignName);
 				// updateCharacterCount();
 			}
+		});
 
-			// Campaign Name Error Message
-			const textbox = document.getElementById('campaign-name');
-			const errorMessage = document.getElementById('error-message');
-			const saveBtn = document.getElementById('save-campaign-btn');
-			const existingName = textbox.value;
-			// errorMessage.style.display = 'none';   // Hide the message
-			// textbox.style.borderColor = '';     // Reset the border color
-			// saveBtn.disabled = false;        // Enable the Save button
-			textbox.addEventListener('input', function() {
-				if (textbox.value === '') {
-					errorMessage.style.display = 'block';  // Show the message
-					textbox.style.borderColor = 'red'; // Change the border color to red
-					saveBtn.disabled = true; // Disable the Save button
-				} else {
-					errorMessage.style.display = 'none';   // Hide the message
-					textbox.style.borderColor = '';     // Reset the border color
-					saveBtn.disabled = false;        // Enable the Save button
-				}
-				async function campAllName(){
-					let campaignStorage = await chrome.storage.local.get("Campaigns");
-					let data = campaignStorage.Campaigns;
-					let campaignKeys = Object.keys(data);
-					for (let index = 0; index < campaignKeys.length; index++) {
-						if (textbox.value === campaignKeys[index] && existingName !== textbox.value) {
-							errorMessage.style.display = 'block';  // Show the message
-							textbox.style.borderColor = 'red'; // Change the border color to red
-							saveBtn.disabled = true; // Disable the Save button
-						}
-					}
-				}
-				campAllName();
-			});
+		// clicks on btn to save changes made to campaign name and/or message template
+		document.querySelector("#save-campaign-btn").addEventListener("click", async () => {
+			let oldCampaignName = campaignName;
+			let newCampaignName = messageSection.querySelector("#campaign-name").value;
+			let newMessageTemplate = messageSection.querySelector("#message-input").value;
 
+			activityPopup.classList.add('popup-opacity');
+			alertConfirmUpdatedCampaignSave.classList.remove('hide');
 
-			// placeholder buttons functionality
-			//first name
-			document.querySelector("#firstName").addEventListener("click", () => {
-				var textarea = document.getElementById("message-input");
-				var textToAdd = "{first_name}";
-				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
-				// Check if there is enough space for the full string
-				if (remainingSpace >= textToAdd.length) {
-					// Get the current cursor position
-					var startPos = textarea.selectionStart;
-					var endPos = textarea.selectionEnd;
-					// Insert the text at the cursor position
-					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-					// Move the cursor to the end of the inserted text
-					textarea.selectionStart = startPos + textToAdd.length;
-					textarea.selectionEnd = startPos + textToAdd.length;
-					// Scroll to the position of the cursor
-					var cursorPos = textarea.selectionStart;
-					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-					var linesAbove = Math.floor(cursorPos / textarea.cols);
-					textarea.scrollTop = lineHeight * linesAbove;
-					// Set focus on the textarea
-					textarea.focus();
-				}
-				updateCharacterCount();
-			});
-
-			//last name
-			document.querySelector("#lastName").addEventListener("click", () => {
-				var textarea = document.getElementById("message-input");
-				var textToAdd = "{last_name}";
-				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
-				// Check if there is enough space for the full string
-				if (remainingSpace >= textToAdd.length) {
-					// Get the current cursor position
-					var startPos = textarea.selectionStart;
-					var endPos = textarea.selectionEnd;
-					// Insert the text at the cursor position
-					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-					// Move the cursor to the end of the inserted text
-					textarea.selectionStart = startPos + textToAdd.length;
-					textarea.selectionEnd = startPos + textToAdd.length;
-					// Scroll to the position of the cursor
-					var cursorPos = textarea.selectionStart;
-					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-					var linesAbove = Math.floor(cursorPos / textarea.cols);
-					textarea.scrollTop = lineHeight * linesAbove;
-					// Set focus on the textarea
-					textarea.focus();
-				}
-				updateCharacterCount();
-			});
-
-			//full name
-			document.querySelector("#fullName").addEventListener("click", () => {
-				var textarea = document.getElementById("message-input");
-				var textToAdd = "{full_name}";
-				var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
-				// Check if there is enough space for the full string
-				if (remainingSpace >= textToAdd.length) {
-					// Get the current cursor position
-					var startPos = textarea.selectionStart;
-					var endPos = textarea.selectionEnd;
-					// Insert the text at the cursor position
-					textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
-					// Move the cursor to the end of the inserted text
-					textarea.selectionStart = startPos + textToAdd.length;
-					textarea.selectionEnd = startPos + textToAdd.length;
-					// Scroll to the position of the cursor
-					var cursorPos = textarea.selectionStart;
-					var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-					var linesAbove = Math.floor(cursorPos / textarea.cols);
-					textarea.scrollTop = lineHeight * linesAbove;
-					// Set focus on the textarea
-					textarea.focus();
-				}
-				updateCharacterCount();
-			});
-
-			var textarea = document.getElementById("message-input");
-			var charCount = document.getElementById("charCountMessage");
-			function updateCharacterCount() {
-				var count = textarea.value.length;
-				// Display the character count
-				charCount.textContent = count + "/275";
-				// Limit the input to 275 characters
-				if (count >= 275) {
-					textarea.value = textarea.value.slice(0, 275);
-					count = 275;
-					charCount.textContent = count + "/275";
-				}
-			};
-
-			// Call the function initially to display the character count
-			updateCharacterCount();
-
-			// Update the character count whenever there is an input event
-			textarea.addEventListener("input", updateCharacterCount);
-
-			
-
-			// clicks on btn to save changes made to campaign name and/or message template
-			document.querySelector("#save-campaign-btn").addEventListener("click", async () => {
-				
-				let messageTemplateDiv = document.querySelector(".message-template");
-				let oldCampaignName = campaignName;
-				let newCampaignName = messageTemplateDiv.querySelector("#campaign-name").value;
-				let newMessageTemplate = messageTemplateDiv.querySelector("#message-input").value;
+			alertConfirmUpdatedCampaignSave.querySelector(".btn-ok").addEventListener("click", async () => {
+				activityPopup.classList.remove('popup-opacity');
+				alertConfirmUpdatedCampaignSave.classList.add('hide');
 
 				await updateCampaignData(oldCampaignName, newCampaignName, newMessageTemplate);
 				campaignName = newCampaignName;
 				document.querySelector("#heading-activity").innerText = campaignName;
 			});
 
-			// handling click of enter key inside the input tag
-			inputElement.addEventListener("keypress", (event) => {
-				if (event.key === "Enter") event.preventDefault();
+			alertConfirmUpdatedCampaignSave.querySelector(".btn-cancel").addEventListener("click", async () => {
+				activityPopup.classList.remove('popup-opacity');
+				alertConfirmUpdatedCampaignSave.classList.add('hide');
 			});
 		});
+
+		// handling click of enter key inside the input tag
+		inputElement.addEventListener("keypress", (event) => {
+			if (event.key === "Enter") event.preventDefault();
+		});
+
+		// Campaign Name Error Message
+		const textbox = document.getElementById('campaign-name');
+		const errorMessage = document.getElementById('error-message');
+		const saveBtn = document.getElementById('save-campaign-btn');
+		let existingName = textbox.value;
+		// errorMessage.style.display = 'none';   // Hide the message
+		// textbox.style.borderColor = '';     // Reset the border color
+		// saveBtn.disabled = false;        // Enable the Save button
+		textbox.addEventListener('input', function() {
+			if (textbox.value === '') {
+				errorMessage.style.display = 'block';  // Show the message
+				textbox.style.borderColor = 'red'; // Change the border color to red
+				saveBtn.disabled = true; // Disable the Save button
+			} else {
+				errorMessage.style.display = 'none';   // Hide the message
+				textbox.style.borderColor = '';     // Reset the border color
+				saveBtn.disabled = false;        // Enable the Save button
+			}
+			async function campAllName(){
+				let campaignStorage = await chrome.storage.local.get("Campaigns");
+				let data = campaignStorage.Campaigns;
+				let campaignKeys = Object.keys(data);
+				for (let index = 0; index < campaignKeys.length; index++) {
+					if (textbox.value === campaignKeys[index] && existingName !== textbox.value) {
+						errorMessage.style.display = 'block';  // Show the message
+						textbox.style.borderColor = 'red'; // Change the border color to red
+						saveBtn.disabled = true; // Disable the Save button
+					}
+				}
+			}
+			campAllName();
+		});
+
+
+		// placeholder buttons functionality
+		//first name
+		document.querySelector("#firstName").addEventListener("click", () => {
+			var textarea = document.getElementById("message-input");
+			var textToAdd = "{first_name}";
+			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			// Check if there is enough space for the full string
+			if (remainingSpace >= textToAdd.length) {
+				// Get the current cursor position
+				var startPos = textarea.selectionStart;
+				var endPos = textarea.selectionEnd;
+				// Insert the text at the cursor position
+				textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+				// Move the cursor to the end of the inserted text
+				textarea.selectionStart = startPos + textToAdd.length;
+				textarea.selectionEnd = startPos + textToAdd.length;
+				// Scroll to the position of the cursor
+				var cursorPos = textarea.selectionStart;
+				var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+				var linesAbove = Math.floor(cursorPos / textarea.cols);
+				textarea.scrollTop = lineHeight * linesAbove;
+				// Set focus on the textarea
+				textarea.focus();
+			}
+			updateCharacterCount();
+		});
+
+		//last name
+		document.querySelector("#lastName").addEventListener("click", () => {
+			var textarea = document.getElementById("message-input");
+			var textToAdd = "{last_name}";
+			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			// Check if there is enough space for the full string
+			if (remainingSpace >= textToAdd.length) {
+				// Get the current cursor position
+				var startPos = textarea.selectionStart;
+				var endPos = textarea.selectionEnd;
+				// Insert the text at the cursor position
+				textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+				// Move the cursor to the end of the inserted text
+				textarea.selectionStart = startPos + textToAdd.length;
+				textarea.selectionEnd = startPos + textToAdd.length;
+				// Scroll to the position of the cursor
+				var cursorPos = textarea.selectionStart;
+				var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+				var linesAbove = Math.floor(cursorPos / textarea.cols);
+				textarea.scrollTop = lineHeight * linesAbove;
+				// Set focus on the textarea
+				textarea.focus();
+			}
+			updateCharacterCount();
+		});
+
+		//full name
+		document.querySelector("#fullName").addEventListener("click", () => {
+			var textarea = document.getElementById("message-input");
+			var textToAdd = "{full_name}";
+			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			// Check if there is enough space for the full string
+			if (remainingSpace >= textToAdd.length) {
+				// Get the current cursor position
+				var startPos = textarea.selectionStart;
+				var endPos = textarea.selectionEnd;
+				// Insert the text at the cursor position
+				textarea.value = textarea.value.substring(0, startPos) + textToAdd + textarea.value.substring(endPos, textarea.value.length);
+				// Move the cursor to the end of the inserted text
+				textarea.selectionStart = startPos + textToAdd.length;
+				textarea.selectionEnd = startPos + textToAdd.length;
+				// Scroll to the position of the cursor
+				var cursorPos = textarea.selectionStart;
+				var lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
+				var linesAbove = Math.floor(cursorPos / textarea.cols);
+				textarea.scrollTop = lineHeight * linesAbove;
+				// Set focus on the textarea
+				textarea.focus();
+			}
+			updateCharacterCount();
+		});
+
+		var textarea = document.getElementById("message-input");
+		var charCount = document.getElementById("charCountMessage");
+		function updateCharacterCount() {
+			var count = textarea.value.length;
+			// Display the character count
+			charCount.textContent = count + "/275";
+			// Limit the input to 275 characters
+			if (count >= 275) {
+				textarea.value = textarea.value.slice(0, 275);
+				count = 275;
+				charCount.textContent = count + "/275";
+			}
+		};
+
+		// Call the function initially to display the character count
+		updateCharacterCount();
+
+		// Update the character count whenever there is an input event
+		textarea.addEventListener("input", updateCharacterCount);
+
+
+
 
 		// people tab section
 		// clicks on people tab
@@ -1087,27 +1103,78 @@ if (window.location.href.includes("activity.html")) {
 						dailyInviteQuota = await retrieveDailyInviteQuota();
 						document.querySelector("#queue-num").textContent = `Available Invites Today: ${dailyInviteQuota}`;
 					}
+
+					// run the below code if the daily invite quota has been exhausted
 					if (response.message === "exhausted daily invite quota") {
 						startInviteFooter.classList.remove("hide");
 						stopInviteFooter.classList.add("hide");
 						loadingContainerInvite.classList.add("hide");
 
+						activityPopup.classList.add("popup-opacity");
+						activityPopup.style.pointerEvents = 'none';
+						alertDailyInviteLimitReached.classList.remove("hide");
+
+						alertDailyInviteLimitReached.querySelector(".single-btn-ok").addEventListener('click', () => {
+							activityPopup.classList.remove("popup-opacity");
+							activityPopup.style.pointerEvents = 'auto';
+							alertDailyInviteLimitReached.classList.add("hide");
+						});
+
 						console.log("reached daily invite limit for the day, come back tomorrow");
-						alert("reached daily invite limit for the day, come back tomorrow");
+						
 					}
+
+					// run the below code if the user's set limit for the invites has been completed
 					if (response.message === "completed user's invitee counter") {
 						startInviteFooter.classList.remove("hide");
 						stopInviteFooter.classList.add("hide");
 						loadingContainerInvite.classList.add("hide");
 
-						console.log(`successfully sent ${inviteeCount} invites`);
-						alert(`successfully sent ${inviteeCount} invites`);
+						activityPopup.classList.add("popup-opacity");
+						activityPopup.style.pointerEvents = 'none';
+						alertUserSetInvitesSent.classList.remove("hide");
+						alertUserSetInvitesSent.querySelector('p').innerText = `Successfully sent ${inviteeCount} invites`;
+
+						alertUserSetInvitesSent.querySelector(".single-btn-ok").addEventListener('click', () => {
+							activityPopup.classList.remove("popup-opacity");
+							activityPopup.style.pointerEvents = 'auto';
+							alertUserSetInvitesSent.classList.add("hide");
+						});
+
+						console.log(`successfully sent ${inviteeCount} invites`);	
+					}
+
+					// run the below code if there are no more leads left in the campaign to send invites to
+					if (response.message === "campaign invitations complete") {
+						startInviteFooter.classList.remove("hide");
+						stopInviteFooter.classList.add("hide");
+						loadingContainerInvite.classList.add("hide");
+
+						activityPopup.classList.add("popup-opacity");
+						activityPopup.style.pointerEvents = 'none';
+						alertAllCampaignInvitesSent.classList.remove("hide");
+
+						alertAllCampaignInvitesSent.querySelector(".single-btn-ok").addEventListener('click', () => {
+							activityPopup.classList.remove("popup-opacity");
+							activityPopup.style.pointerEvents = 'auto';
+							alertAllCampaignInvitesSent.classList.add("hide");
+						});
 					}
 				});
 			}
+
+			// run the below code if the daily invite quota has been exhausted
 			else {
 				console.log("reached daily invite limit for the day, come back tomorrow");
-				alert("reached daily invite limit for the day, come back tomorrow");
+				activityPopup.classList.add("popup-opacity");
+				activityPopup.style.pointerEvents = 'none';
+				alertDailyInviteLimitReached.classList.remove("hide");
+
+				alertDailyInviteLimitReached.querySelector(".single-btn-ok").addEventListener('click', () => {
+					activityPopup.classList.remove("popup-opacity");
+					activityPopup.style.pointerEvents = 'auto';
+					alertDailyInviteLimitReached.classList.add("hide");
+				});
 			}
 			
 		});

@@ -173,6 +173,7 @@ chrome.runtime.onConnect.addListener(function(port) {
 
 					else {
 						isStopped = true;
+						port.postMessage({ message: "campaign invitations complete" });
 						console.log("sent invites to all leads in campaign");
 					}	
 				}
