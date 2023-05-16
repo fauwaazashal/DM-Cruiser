@@ -442,42 +442,67 @@ if (window.location.href.includes("home.html")) {
 				}
 			});
 
-			// storing refernces of the delete btn, cancel delete btn and confirm delete btn
-			let deleteCampaignBtn = campaignDivs[i].querySelector(".delete-campaign-btn");
-			let confirmDeleteBtn = campaignDivs[i].querySelector(".confirm-delete-btn");
-			let cancelDeleteBtn = campaignDivs[i].querySelector(".cancel-delete-btn");
+			// // storing refernces of the delete btn, cancel delete btn and confirm delete btn
+			// let deleteCampaignBtn = campaignDivs[i].querySelector(".delete-campaign-btn");
+			// let confirmDeleteBtn = campaignDivs[i].querySelector(".confirm-delete-btn");
+			// let cancelDeleteBtn = campaignDivs[i].querySelector(".cancel-delete-btn");
+
+			const homePopup = document.querySelector('.popup');
+			const alertConfirmCampaignDeletion = document.querySelector("#alert-confirm-campaign-deletion");
 
 			// Add click event listener to the delete button
 			campaignDivs[i].querySelector(".delete-campaign-btn").addEventListener("click", async (event) => {
 				// Stop the event propagation to prevent the parent div's click event from being triggered
 				event.stopPropagation();
 				
-				deleteCampaignBtn.classList.add("hide");
-				confirmDeleteBtn.classList.remove("hide");
-				cancelDeleteBtn.classList.remove("hide");				
-			});
-
-			// btn is clicked to confirm the deleting of the campaign
-			campaignDivs[i].querySelector(".confirm-delete-btn").addEventListener("click", async (event) => {
-				// Stop the event propagation to prevent the parent div's click event from being triggered
-				event.stopPropagation();
-
-				campaignName = campaignDivs[i].querySelector(".campaign-name").innerText;
-				// call function to delete selected campaign
-				await deleteCampaignData(campaignName);
-				// Delete the parent div
-				campaignDivs[i].remove();
-			});
-			
-			// btn is clicked to cancel the deleting of the campaign
-			campaignDivs[i].querySelector(".cancel-delete-btn").addEventListener("click", async (event) => {
-				// Stop the event propagation to prevent the parent div's click event from being triggered
-				event.stopPropagation();
+				// deleteCampaignBtn.classList.add("hide");
+				// confirmDeleteBtn.classList.remove("hide");
+				// cancelDeleteBtn.classList.remove("hide");	
 				
-				deleteCampaignBtn.classList.remove("hide");
-				confirmDeleteBtn.classList.add("hide");
-				cancelDeleteBtn.classList.add("hide");
+				campaignName = campaignDivs[i].querySelector(".campaign-name").innerText;
+				homePopup.classList.add('popup-opacity');
+				homePopup.style.pointerEvents = 'none';
+				alertConfirmCampaignDeletion.classList.remove('hide');
+
+				alertConfirmCampaignDeletion.querySelector(".btn-ok").addEventListener("click", async () => {
+					homePopup.classList.remove('popup-opacity');
+					homePopup.style.pointerEvents = 'auto';
+					alertConfirmCampaignDeletion.classList.add('hide');
+
+					// call function to delete selected campaign
+					await deleteCampaignData(campaignName);
+					// Delete the parent div
+					campaignDivs[i].remove();
+				});
+
+				alertConfirmCampaignDeletion.querySelector(".btn-cancel").addEventListener("click", () => {
+					homePopup.classList.remove('popup-opacity');
+					homePopup.style.pointerEvents = 'auto';
+					alertConfirmCampaignDeletion.classList.add('hide');
+				});
 			});
+
+			// // btn is clicked to confirm the deleting of the campaign
+			// campaignDivs[i].querySelector(".confirm-delete-btn").addEventListener("click", async (event) => {
+			// 	// Stop the event propagation to prevent the parent div's click event from being triggered
+			// 	event.stopPropagation();
+
+			// 	campaignName = campaignDivs[i].querySelector(".campaign-name").innerText;
+			// 	// call function to delete selected campaign
+			// 	await deleteCampaignData(campaignName);
+			// 	// Delete the parent div
+			// 	campaignDivs[i].remove();
+			// });
+			
+			// // btn is clicked to cancel the deleting of the campaign
+			// campaignDivs[i].querySelector(".cancel-delete-btn").addEventListener("click", async (event) => {
+			// 	// Stop the event propagation to prevent the parent div's click event from being triggered
+			// 	event.stopPropagation();
+				
+			// 	deleteCampaignBtn.classList.remove("hide");
+			// 	confirmDeleteBtn.classList.add("hide");
+			// 	cancelDeleteBtn.classList.add("hide");
+			// });
 		}
 	})();
 
@@ -656,10 +681,12 @@ if (window.location.href.includes("activity.html")) {
 			let newMessageTemplate = messageSection.querySelector("#message-input").value;
 
 			activityPopup.classList.add('popup-opacity');
+			activityPopup.style.pointerEvents = 'none';
 			alertConfirmUpdatedCampaignSave.classList.remove('hide');
 
 			alertConfirmUpdatedCampaignSave.querySelector(".btn-ok").addEventListener("click", async () => {
 				activityPopup.classList.remove('popup-opacity');
+				activityPopup.style.pointerEvents = 'auto';
 				alertConfirmUpdatedCampaignSave.classList.add('hide');
 
 				await updateCampaignData(oldCampaignName, newCampaignName, newMessageTemplate);
@@ -669,6 +696,7 @@ if (window.location.href.includes("activity.html")) {
 
 			alertConfirmUpdatedCampaignSave.querySelector(".btn-cancel").addEventListener("click", async () => {
 				activityPopup.classList.remove('popup-opacity');
+				activityPopup.style.pointerEvents = 'auto';
 				alertConfirmUpdatedCampaignSave.classList.add('hide');
 			});
 		});
