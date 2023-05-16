@@ -9,12 +9,17 @@
 	height: 528px;
 	text-align: center;
 	border-radius: 24px;
+	
 
+}
+.popup-opacity{
+	opacity: 0.7;
 }
 
 body {
 	background-color: #F3F2EF;
 }
+
 
 .heading1 {
 	padding: 19px 0px 10px 30px;
@@ -820,3 +825,85 @@ h6 {
 	gap: 10px;
 	background-color: #1F2937;
 }
+.new-popup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #1F2937;
+	color: white;
+	width: 216px;
+	height: 128px;
+	padding: 20px 20px 0px 20px;
+	text-align: center;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	border-radius: 10px;
+  }
+  
+  .new-popup h2 {
+	margin: 0px;
+	text-align: left;
+	font-family: 'Poppins', sans-serif;
+	font-size: 20px;
+	font-weight: 600;
+  }
+  
+  .new-popup p {
+	margin-bottom: 38px;
+	white-space: nowrap;
+	text-align: left;
+	font-size: 10px;
+	font-weight: 400;
+	font-family: 'Prompt', sans-serif;
+  }
+  
+  .button-container {
+	display: flex;
+	justify-content: center;
+   
+  }
+  
+  .btn-cancel {
+	height: 35px;
+	background-color: #2B323D;
+	color: white;
+	border: none;
+	text-align: center;
+	padding: 0px  45px 0px 45px;
+	font-size: 16px;
+	cursor: pointer;
+	font-family: 'Prompt', sans-serif;
+	font-size: 16px;
+	font-weight: 500;
+	border-bottom-left-radius: 10px;
+  }
+  .btn-ok {
+	height: 35px;
+	background-color: #2B323D;
+	padding: 0px  45px 0px 45px;
+	color: white;
+	border: none;
+	font-size: 16px;
+	cursor: pointer;
+	font-family: 'Prompt', sans-serif;
+	font-size: 16px;
+	font-weight: 500;
+	text-align: center;
+	border-bottom-right-radius: 10px;
+  }
+  
+  .btn-cancel:hover {
+	background-color: #374151;
+  }
+  
+  .btn-cancel:active {
+	background-color: #374151;
+  }
+  
+  .btn-ok:hover {
+	background-color: #374151;
+  }
+  
+  .btn-ok:active {
+	background-color: #374151;
+  }
