@@ -1098,7 +1098,7 @@ if (window.location.href.includes("activity.html")) {
 			let dailyInviteQuota = await retrieveDailyInviteQuota();
 
 			// proceed to send invites only the user has not exhausted their daily quota
-			if (dailyInviteQuota !== 0) {
+			if (dailyInviteQuota > 0) {
 				startInviteFooter.classList.add("hide");
 				stopInviteFooter.classList.remove("hide");
 				loadingContainerInvite.classList.remove("hide");

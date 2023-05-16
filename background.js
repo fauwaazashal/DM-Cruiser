@@ -47,7 +47,10 @@ function tomorrowAtMidnight() {
 
 chrome.alarms.onAlarm.addListener(async function(alarm) {
 	if (alarm.name === 'resetDailyInviteQuota') {
-		await chrome.storage.local.set({ dailyInviteQuota: 30 });;
+		let minLimit = 30; // minimum invite limit
+		let maxLimit = 50; // maximum invite limit
+		let dailyInviteQuota = Math.floor(Math.random() * (maxLimit - minLimit + 1)) + minLimit;
+		await chrome.storage.local.set({ dailyInviteQuota: dailyInviteQuota });
 	}
 });
 
@@ -140,9 +143,9 @@ chrome.runtime.onConnect.addListener(function(port) {
 			let dailyInviteQuota = retrieveDailyInviteQuota();
 
 			while (!isStopped) {
-				dailyInviteQuota = retrieveDailyInviteQuota();
+				dailyInviteQuota = await retrieveDailyInviteQuota();
 
-				if (dailyInviteQuota !== 0 && inviteeCount !== 0) {
+				if (dailyInviteQuota > 0 && inviteeCount > 0) {
 					let campaignData = await retrieveCampaignData(campaignName);
 					let leadsData = campaignData.scrapedData;
 					let messageTemplate = campaignData.messageTemplate;

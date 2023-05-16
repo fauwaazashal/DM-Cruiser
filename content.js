@@ -261,7 +261,7 @@ async function sendInvites(leadData, messageTemplate) {
 
 	// click on the send btn
 	const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1");
-	//sendBtn.click();
+	sendBtn.click();
 	console.log("clicked send btn");
 	randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
 	await new Promise(resolve => setTimeout(resolve, randomDelay));
