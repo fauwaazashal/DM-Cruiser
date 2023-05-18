@@ -1084,6 +1084,9 @@ if (window.location.href.includes("activity.html")) {
 			}
 		});
 
+		let dailyInviteLimit = await retrieveDailyInviteQuota();
+		document.querySelector(".number-count .count").innerText = dailyInviteLimit;
+		
 		let inviteeCount = document.querySelector(".number-count .count").innerText;
 		inviteeCount = parseInt(inviteeCount);
 		// let pendingCount = document.querySelector(".activity-pending > li > span").textContent;
