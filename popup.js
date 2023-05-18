@@ -872,18 +872,30 @@ if (window.location.href.includes("activity.html")) {
 				await injectOntoPeopleTab(campaignName);
 			}
 			
-			// clicks on btn to remove selected lead from campaign 
-			let leads = document.querySelectorAll(".leads-scraped");
-			let removeBtns = document.querySelectorAll(".remove-btn");
-			for (let i = 0; i < removeBtns.length; i++) {
-				removeBtns[i].addEventListener("click", async () => {
-					let leadName = leads[i].querySelector(".lead-name").innerText;
+			// // clicks on btn to remove selected lead from campaign 
+			// let leads = document.querySelectorAll(".leads-scraped");
+			// let removeBtns = document.querySelectorAll(".remove-btn");
+			// for (let i = 0; i < removeBtns.length; i++) {
+			// 	removeBtns[i].addEventListener("click", async () => {
+			// 		let leadName = leads[i].querySelector(".lead-name").innerText;
 
-					await deleteLead(campaignName, leadName);
-					leads[i].remove();
-				});
-			}
+			// 		await deleteLead(campaignName, leadName);
+			// 		leads[i].remove();
+			// 	});
+			// }
 		})
+
+		// clicks on btn to remove selected lead from campaign 
+		let leads = document.querySelectorAll(".leads-scraped");
+		let removeBtns = document.querySelectorAll(".remove-btn");
+		for (let i = 0; i < removeBtns.length; i++) {
+			removeBtns[i].addEventListener("click", async () => {
+				let leadName = leads[i].querySelector(".lead-name").innerText;
+
+				await deleteLead(campaignName, leadName);
+				leads[i].remove();
+			});
+		}
 
 		// clicks on add more people btn to add/scrape more lead to the existing campaign
 		document.querySelector("#add-people").addEventListener("click", async () => {
