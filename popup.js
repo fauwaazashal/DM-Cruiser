@@ -1685,7 +1685,7 @@ async function deleteLead(campaignName, leadName) {
 		if (data[i].fullName === leadName) {
 			document.querySelector(".total-count > span").textContent = --totalCount;
 			if (data[i].status === "pending") document.querySelector(".people-page-pending > span").textContent = --pendingCount;
-			else document.querySelector(".sent .number").textContent = --sentCount;
+			else document.querySelector(".people-page-sent > span").textContent = --sentCount;
 
 			// Remove the item at selected index postion
 			data.splice(i, 1);
