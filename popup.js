@@ -133,7 +133,7 @@ if (window.location.href.includes("newsearch.html")) {
 					let campaignKeys = Object.keys(campaignStorage["Campaigns"]);
 					let campaignCount = campaignKeys.length;
 					newmessagePopup.querySelector("#campaign-name").value = `Campaign ${campaignCount + 1}`;
-					newmessagePopup.querySelector("#message-input").value = "Hey {first_name}, \nI hope this message finds you well. We just recently finished developing a website for one of your competitors Archf.in, are you looking to upgrade your website?. If so, I'd love to understand your business and help.\n\nBest Regards \n{my_name} \nskitmedia.in";
+					newmessagePopup.querySelector("#message-input").value = "Hi {first_name},\nI'm Hamza from skitmedia.in & we've been designing websites for a while now. I understand how hard it can be to stand out in a crowded online space, I'd love to offer you some feedback to help improve your website. Let me know if you're interested!\nRegards";
 					updateCharacterCount();					  
 				}
 			});
