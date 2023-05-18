@@ -872,17 +872,17 @@ if (window.location.href.includes("activity.html")) {
 				await injectOntoPeopleTab(campaignName);
 			}
 			
-			// // clicks on btn to remove selected lead from campaign 
-			// let leads = document.querySelectorAll(".leads-scraped");
-			// let removeBtns = document.querySelectorAll(".remove-btn");
-			// for (let i = 0; i < removeBtns.length; i++) {
-			// 	removeBtns[i].addEventListener("click", async () => {
-			// 		let leadName = leads[i].querySelector(".lead-name").innerText;
+			// clicks on btn to remove selected lead from campaign 
+			let leads = document.querySelectorAll(".leads-scraped");
+			let removeBtns = document.querySelectorAll(".remove-btn");
+			for (let i = 0; i < removeBtns.length; i++) {
+				removeBtns[i].addEventListener("click", async () => {
+					let leadName = leads[i].querySelector(".lead-name").innerText;
 
-			// 		await deleteLead(campaignName, leadName);
-			// 		leads[i].remove();
-			// 	});
-			// }
+					await deleteLead(campaignName, leadName);
+					leads[i].remove();
+				});
+			}
 		})
 
 		// clicks on btn to remove selected lead from campaign 
@@ -1086,14 +1086,14 @@ if (window.location.href.includes("activity.html")) {
 
 		let dailyInviteLimit = await retrieveDailyInviteQuota();
 		document.querySelector(".number-count .count").innerText = dailyInviteLimit;
-		
+
 		let inviteeCount = document.querySelector(".number-count .count").innerText;
 		inviteeCount = parseInt(inviteeCount);
 		// let pendingCount = document.querySelector(".activity-pending > li > span").textContent;
 
 		// clicks on btn to increase the count for number leads they want to send invites to
 		document.querySelector(".count-increase-btn").addEventListener("click", async () => {
-			if (inviteeCount >= 0 && inviteeCount < 30) {
+			if (inviteeCount >= 0 && inviteeCount < dailyInviteLimit) {
 				++inviteeCount;
 				document.querySelector(".number-count .count").innerText = inviteeCount;
 			}
@@ -1101,7 +1101,7 @@ if (window.location.href.includes("activity.html")) {
 
 		// clicks on btn to decrease the count for number leads they want to send invites to
 		document.querySelector(".count-decrease-btn").addEventListener("click", async () => {
-			if (inviteeCount > 1 && inviteeCount <= 30) {
+			if (inviteeCount > 1 && inviteeCount <= dailyInviteLimit) {
 				--inviteeCount;
 				document.querySelector(".number-count .count").innerText = inviteeCount;
 			}
