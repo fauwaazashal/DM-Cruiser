@@ -29,6 +29,7 @@ if (window.location.href.includes("newsearch.html")) {
 	const newmessagePopup = document.querySelector(".newmessage-popup");
 	const newsearchPopup = document.querySelector(".newsearch-popup");
 	const inputElement = document.querySelector("#campaign-name");
+	const alertNoMoreLeadstoScrape = document.querySelector("#alert-no-more-leads-to-scrape");
 	const closeButtonNewsearch = document.querySelector(".newsearch-popup .close-btn");
 	const closeButtonNewmessage = document.querySelector(".newmessage-popup .close-btn");
 
@@ -310,6 +311,24 @@ if (window.location.href.includes("newsearch.html")) {
 			});
 		})
 
+		// listens for message from content script informing if the page has no more leads to scrape
+		scrapePort.onMessage.addListener(function(response) {
+			if (response.message === "no more leads to scrape") {
+				newsearchPopup.classList.add('popup-opacity');
+				newsearchPopup.style.pointerEvents = 'none';
+				pauseScrapeFooter.classList.add("hide");
+				resumeScrapeFooter.classList.remove("hide");
+				loadingContainer.classList.add("hide");
+				alertNoMoreLeadstoScrape.classList.remove('hide');
+
+				alertNoMoreLeadstoScrape.querySelector(".single-btn-ok").addEventListener("click", async () => {
+					newsearchPopup.classList.remove('popup-opacity');
+					newsearchPopup.style.pointerEvents = 'auto';
+					alertNoMoreLeadstoScrape.classList.add('hide');
+				});
+			}
+		});
+
 		// handling click of enter key inside the input tag
 		inputElement.addEventListener("keypress", (event) => {
 			if (event.key === "Enter") event.preventDefault();
@@ -555,6 +574,7 @@ if (window.location.href.includes("activity.html")) {
 		const loadingContainer = document.querySelector(".loading-container-newsearch");
 		const newsearchPopup = document.querySelector(".newsearch-popup");
 		const activityPopup = document.querySelector(".activity-popup");
+		const alertNoMoreLeadstoScrape = document.querySelector("#alert-no-more-leads-to-scrape");
 		const alertDailyInviteLimitReached = document.querySelector("#alert-daily-invite-limit-reached");
 		const alertAllCampaignInvitesSent = document.querySelector("#alert-all-campaign-invites-sent");
 		const alertUserSetInvitesSent = document.querySelector("#alert-user-set-invites-sent");
@@ -1010,6 +1030,24 @@ if (window.location.href.includes("activity.html")) {
 								}
 							});
 						})
+
+						// listens for message from content script informing if the page has no more leads to scrape
+						scrapePort.onMessage.addListener(function(response) {
+							if (response.message === "no more leads to scrape") {
+								newsearchPopup.classList.add('popup-opacity');
+								newsearchPopup.style.pointerEvents = 'none';
+								pauseScrapeFooter.classList.add("hide");
+								resumeScrapeFooter.classList.remove("hide");
+								loadingContainer.classList.add("hide");
+								alertNoMoreLeadstoScrape.classList.remove('hide');
+				
+								alertNoMoreLeadstoScrape.querySelector(".single-btn-ok").addEventListener("click", async () => {
+									newsearchPopup.classList.remove('popup-opacity');
+									newsearchPopup.style.pointerEvents = 'auto';
+									alertNoMoreLeadstoScrape.classList.add('hide');
+								});
+							}
+						});
 			
 						// button is clicked to stop scraping and now user has to create messsage template & campaign name
 						document.querySelector("#stop-search-btn").addEventListener("click", () => {

@@ -20,39 +20,68 @@ chrome.runtime.onConnect.addListener(function(port) {
 		async function scrape() {
 			if (!isStopped) {
 				if (!isPaused) {
-				// await waitForWindowToLoad();
-				// console.log("Page Loaded");
-			
-				// Wait for 2 seconds before checking if page is loaded
-				await new Promise(resolve => setTimeout(resolve, 2000));
-				// for every iteration, we scrape one page
-				scrapedData = await scraping(scrapedData);
-				port.postMessage({ message: "Scraped one page", data: scrapedData });
-				await scroll();
-				await goToNextPage();
+					// await waitForWindowToLoad();
+					// console.log("Page Loaded");
+				
+					// Wait for 2 seconds before checking if page is loaded
+					await new Promise(resolve => setTimeout(resolve, 2000));
 
-				// Wait for 5 seconds before checking if page is loaded
-				randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-				await new Promise(resolve => setTimeout(resolve, randomDelay)); 
-				// Wait for the page to finish loading before calling scraping()
-				const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
-				randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-				const timeout = new Promise(resolve => setTimeout(resolve, randomDelay)); // Wait for 5 seconds before timing out
-				await Promise.race([loaded, timeout])
-					.then(() => console.log('Page loaded'))
-					.catch(() => console.log('Page load timed out'));
+					// check if current page has any leads to scrape	
+					if (document.querySelectorAll('.entity-result').length === 0) {
+						port.postMessage({ message: "no more leads to scrape", data: scrapedData });
+						isPaused = true;
+						isStopped = true;
+					}
 
-				// Recursively call the scrape function
-				await scrape();
+					else {
+						// for every iteration, we scrape one page
+						scrapedData = await scraping(scrapedData);
+						port.postMessage({ message: "Scraped one page", data: scrapedData });
+						await scroll();
+						await goToNextPage();
+
+						// Wait for 5 seconds before checking if page is loaded
+						randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+						await new Promise(resolve => setTimeout(resolve, randomDelay)); 
+						// Wait for the page to finish loading before calling scraping()
+						const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
+						randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+						const timeout = new Promise(resolve => setTimeout(resolve, randomDelay)); // Wait for 5 seconds before timing out
+						await Promise.race([loaded, timeout])
+							.then(() => console.log('Page loaded'))
+							.catch(() => console.log('Page load timed out'));
+
+						// Recursively call the scrape function
+						await scrape();
+					}
+					// // for every iteration, we scrape one page
+					// scrapedData = await scraping(scrapedData);
+					// port.postMessage({ message: "Scraped one page", data: scrapedData });
+					// await scroll();
+					// await goToNextPage();
+
+					// // Wait for 5 seconds before checking if page is loaded
+					// randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+					// await new Promise(resolve => setTimeout(resolve, randomDelay)); 
+					// // Wait for the page to finish loading before calling scraping()
+					// const loaded = new Promise(resolve => window.addEventListener('DOMContentLoaded', resolve));
+					// randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+					// const timeout = new Promise(resolve => setTimeout(resolve, randomDelay)); // Wait for 5 seconds before timing out
+					// await Promise.race([loaded, timeout])
+					// 	.then(() => console.log('Page loaded'))
+					// 	.catch(() => console.log('Page load timed out'));
+
+					// // Recursively call the scrape function
+					// await scrape();
 				} 
 				else {
-				console.log('scraping is paused');
-				await new Promise(resolve => setTimeout(resolve, 2000));
+					console.log('scraping is paused');
+					await new Promise(resolve => setTimeout(resolve, 2000));
 
-				// Recursively call the scrape function
-				await scrape();
+					// Recursively call the scrape function
+					await scrape();
 				}
-			} 
+			}
 		}
 
 		port.onMessage.addListener(async function(request) {
