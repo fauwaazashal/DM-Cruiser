@@ -197,23 +197,23 @@ async function scraping(scrapedData) {
 		}
 	}
 	console.log(scrapedData);
-	return Promise.resolve(scrapedData);
+	return scrapedData;
 }
 
 
 
 async function scroll() {
 	return new Promise(resolve => {
-		// Wait for 3 seconds before scrolling down to the bottom of the page
+		// Wait for 2 seconds before scrolling down to the bottom of the page
 		setTimeout(function() {
 			// Scroll down to the bottom of the page smoothly
-			document.body.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+			document.body.scrollIntoView({ behavior: 'smooth', block: 'end' });
 		}, 2000);
 
-		// Wait for 6 seconds before scrolling back to the top of the page
+		// Wait for 4 seconds before scrolling back to the top of the page
 		setTimeout(function() {
 			// Scroll back to the top of the page smoothly
-			document.body.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+			document.body.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
 			// Resolve the promise after the scrolling animation has completed
 			resolve();
