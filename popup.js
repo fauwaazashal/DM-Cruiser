@@ -175,7 +175,7 @@ if (window.location.href.includes("newsearch.html")) {
 		document.querySelector("#firstName").addEventListener("click", () => {
 			var textarea = document.getElementById("message-input");
 			var textToAdd = "{first_name}";
-			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			var remainingSpace = 300 - textarea.value.length; // Calculate remaining space in the textarea
 			// Check if there is enough space for the full string
 			if (remainingSpace >= textToAdd.length) {
 				// Get the current cursor position
@@ -201,7 +201,7 @@ if (window.location.href.includes("newsearch.html")) {
 		document.querySelector("#lastName").addEventListener("click", () => {
 			var textarea = document.getElementById("message-input");
 			var textToAdd = "{last_name}";
-			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			var remainingSpace = 300 - textarea.value.length; // Calculate remaining space in the textarea
 			// Check if there is enough space for the full string
 			if (remainingSpace >= textToAdd.length) {
 				// Get the current cursor position
@@ -227,7 +227,7 @@ if (window.location.href.includes("newsearch.html")) {
 		document.querySelector("#fullName").addEventListener("click", () => {
 			var textarea = document.getElementById("message-input");
 			var textToAdd = "{full_name}";
-			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			var remainingSpace = 300 - textarea.value.length; // Calculate remaining space in the textarea
 			// Check if there is enough space for the full string
 			if (remainingSpace >= textToAdd.length) {
 				// Get the current cursor position
@@ -254,12 +254,12 @@ if (window.location.href.includes("newsearch.html")) {
 		function updateCharacterCount() {
 			var count = textarea.value.length;
 			// Display the character count
-			charCount.textContent = count + "/275";
-			// Limit the input to 275 characters
-			if (count >= 275) {
-				textarea.value = textarea.value.slice(0, 275);
-				count = 275;
-				charCount.textContent = count + "/275";
+			charCount.textContent = count + "/300";
+			// Limit the input to 300 characters
+			if (count >= 300) {
+				textarea.value = textarea.value.slice(0, 300);
+				count = 300;
+				charCount.textContent = count + "/300";
 			}
 		};
 
@@ -766,7 +766,7 @@ if (window.location.href.includes("activity.html")) {
 		document.querySelector("#firstName").addEventListener("click", () => {
 			var textarea = document.getElementById("message-input");
 			var textToAdd = "{first_name}";
-			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			var remainingSpace = 300 - textarea.value.length; // Calculate remaining space in the textarea
 			// Check if there is enough space for the full string
 			if (remainingSpace >= textToAdd.length) {
 				// Get the current cursor position
@@ -792,7 +792,7 @@ if (window.location.href.includes("activity.html")) {
 		document.querySelector("#lastName").addEventListener("click", () => {
 			var textarea = document.getElementById("message-input");
 			var textToAdd = "{last_name}";
-			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			var remainingSpace = 300 - textarea.value.length; // Calculate remaining space in the textarea
 			// Check if there is enough space for the full string
 			if (remainingSpace >= textToAdd.length) {
 				// Get the current cursor position
@@ -818,7 +818,7 @@ if (window.location.href.includes("activity.html")) {
 		document.querySelector("#fullName").addEventListener("click", () => {
 			var textarea = document.getElementById("message-input");
 			var textToAdd = "{full_name}";
-			var remainingSpace = 275 - textarea.value.length; // Calculate remaining space in the textarea
+			var remainingSpace = 300 - textarea.value.length; // Calculate remaining space in the textarea
 			// Check if there is enough space for the full string
 			if (remainingSpace >= textToAdd.length) {
 				// Get the current cursor position
@@ -845,12 +845,12 @@ if (window.location.href.includes("activity.html")) {
 		function updateCharacterCount() {
 			var count = textarea.value.length;
 			// Display the character count
-			charCount.textContent = count + "/275";
-			// Limit the input to 275 characters
-			if (count >= 275) {
-				textarea.value = textarea.value.slice(0, 275);
-				count = 275;
-				charCount.textContent = count + "/275";
+			charCount.textContent = count + "/300";
+			// Limit the input to 300 characters
+			if (count >= 300) {
+				textarea.value = textarea.value.slice(0, 300);
+				count = 300;
+				charCount.textContent = count + "/300";
 			}
 		};
 
