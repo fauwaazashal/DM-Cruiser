@@ -20,7 +20,7 @@ chrome.runtime.onInstalled.addListener(function() {
 					popupPageSection: "",
 					scrapedData: []
 				},
-				dailyInviteQuota: 30
+				dailyInviteQuota: 25
 				}, function() {
 				console.log("Data saved");
 			});
