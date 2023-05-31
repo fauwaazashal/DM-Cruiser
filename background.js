@@ -44,8 +44,8 @@ function tomorrowAtMidnight() {
 
 chrome.alarms.onAlarm.addListener(async function(alarm) {
 	if (alarm.name === 'resetDailyInviteQuota') {
-		let minLimit = 30; // minimum invite limit
-		let maxLimit = 50; // maximum invite limit
+		let minLimit = 20; // minimum invite limit
+		let maxLimit = 25; // maximum invite limit
 		let dailyInviteQuota = Math.floor(Math.random() * (maxLimit - minLimit + 1)) + minLimit;
 		await chrome.storage.local.set({ dailyInviteQuota: dailyInviteQuota });
 	}
