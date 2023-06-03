@@ -251,6 +251,23 @@ async function sendInvites(leadData, messageTemplate) {
 	console.log("loaded lead's profile");
 	randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
 	await new Promise(resolve => setTimeout(resolve, randomDelay));
+
+	// const primaryBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+	// const dropdownBtn =  document.querySelector(".artdeco-dropdown__trigger.artdeco-dropdown__trigger--placement-bottom.ember-view.pvs-profile-actions__action.artdeco-button.artdeco-button--secondary.artdeco-button--muted.artdeco-button--1.artdeco-button--circle");
+	
+	// if (primaryBtn) {
+	// 	if (primaryBtn.innerText == "Connect") {
+	// 		primaryBtn.click();
+	// 		console.log("clicked on connect btn");
+	// 		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+	// 		await new Promise(resolve => setTimeout(resolve, randomDelay));
+	// 	}
+
+	// 	else if (primaryBtn.innerText == "Follow") {
+
+	// 	}
+	// }
+
 	
 	// click on the connect btn
 	const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
