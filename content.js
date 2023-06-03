@@ -252,29 +252,63 @@ async function sendInvites(leadData, messageTemplate) {
 	randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
 	await new Promise(resolve => setTimeout(resolve, randomDelay));
 
-	// const primaryBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
-	// const dropdownBtn =  document.querySelector(".artdeco-dropdown__trigger.artdeco-dropdown__trigger--placement-bottom.ember-view.pvs-profile-actions__action.artdeco-button.artdeco-button--secondary.artdeco-button--muted.artdeco-button--1.artdeco-button--circle");
+	const primaryBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+	const dropDownBtns =  document.querySelectorAll(".artdeco-dropdown__trigger.artdeco-dropdown__trigger--placement-bottom.ember-view.pvs-profile-actions__action.artdeco-button.artdeco-button--secondary.artdeco-button--muted.artdeco-button--2");
+	const dropDownOptions = document.querySelectorAll(".display-flex.t-normal.flex-1");
 	
-	// if (primaryBtn) {
-	// 	if (primaryBtn.innerText == "Connect") {
-	// 		primaryBtn.click();
-	// 		console.log("clicked on connect btn");
-	// 		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-	// 		await new Promise(resolve => setTimeout(resolve, randomDelay));
-	// 	}
+	// checking if primary btn exists
+	if (primaryBtn) {
 
-	// 	else if (primaryBtn.innerText == "Follow") {
+		// checking if the primary btn is connect
+		if (primaryBtn.innerText == "Connect") {
+			primaryBtn.click();
+			console.log("clicked on connect btn");
+			randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+			await new Promise(resolve => setTimeout(resolve, randomDelay));
+		}
 
-	// 	}
-	// }
+		// if it isn't the connect btn then proceed to click on dropdown and then click on connect
+		else {
+			dropDownBtns[1].click();
+			console.log("clicked on dropdown btn");
+			randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+			await new Promise(resolve => setTimeout(resolve, randomDelay));
+
+			for (let i = 0; i < dropDownOptions.length; i++) {
+				if (dropDownOptions[i].innerHTML == 'Connect') {
+					dropDownOptions[i].click();
+					console.log("clicked on connect btn");
+					randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+					await new Promise(resolve => setTimeout(resolve, randomDelay));
+				}
+			}
+		}
+	}
+
+	// if there is no primary btn then proceed to click on dropdown and then click on connect
+	else {
+		dropDownBtns[1].click();
+		console.log("clicked on dropdown btn");
+		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+		await new Promise(resolve => setTimeout(resolve, randomDelay));
+
+		for (let i = 0; i < dropDownOptions.length; i++) {
+			if (dropDownOptions[i].innerHTML == 'Connect') {
+				dropDownOptions[i].click();
+				console.log("clicked on connect btn");
+				randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+				await new Promise(resolve => setTimeout(resolve, randomDelay));
+			}
+		}
+	}
 
 	
-	// click on the connect btn
-	const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
-	connectBtn.click();
-	console.log("clicked on connect btn");
-	randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-	await new Promise(resolve => setTimeout(resolve, randomDelay));
+	// // click on the connect btn
+	// const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+	// connectBtn.click();
+	// console.log("clicked on connect btn");
+	// randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+	// await new Promise(resolve => setTimeout(resolve, randomDelay));
 
 
 	if (messageTemplate.length > 0) {
