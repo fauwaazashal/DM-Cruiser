@@ -3,8 +3,8 @@
 let scrapedData = [];
 let isPaused = false;
 let isStopped = false;
-const minDelay = 5000; // minimum delay in milliseconds
-const maxDelay = 8000; // maximum delay in milliseconds
+const minDelay = 4000; // minimum delay in milliseconds
+const maxDelay = 7000; // maximum delay in milliseconds
 let randomDelay = 0;
 
 //----------------------------------------Listening to Port requests----------------------------------------------------
@@ -333,10 +333,23 @@ async function sendInvites(leadData, messageTemplate) {
 		.replace(/{full_name}/g, leadData.fullName)
 		.replace(/{job_title}/g, leadData.jobTitle);
 
-		textBox.value = customMessage;
-		// Manually trigger the input event on the text box
-		const inputEvent = new Event('input');
-		textBox.dispatchEvent(inputEvent);
+		// textBox.value = customMessage;
+		// // Manually trigger the input event on the text box
+		// const inputEvent = new Event('input');
+		// textBox.dispatchEvent(inputEvent);
+
+		textBox.value = '';
+
+		// Simulate typing by dispatching keydown and input events for each character
+		customMessage.split('').forEach((character) => {
+			const keydownEvent = new KeyboardEvent('keydown', { key: character });
+			const inputEvent = new Event('input', { bubbles: true, cancelable: true });
+
+			textBox.dispatchEvent(keydownEvent);
+			textBox.value += character;
+			textBox.dispatchEvent(inputEvent);
+		});
+
 		console.log("injected msg onto text box");
 		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
 		await new Promise(resolve => setTimeout(resolve, randomDelay));
