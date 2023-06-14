@@ -124,6 +124,129 @@ chrome.runtime.onConnect.addListener(function(port) {
 
 	if (port.name === "send invites") {
 		console.log("established connection with port to send invites");
+
+		async function sendInvites(leadData, messageTemplate) {
+  
+			console.log("loaded lead's profile");
+			port.postMessage({ type: 'heartbeat' });
+			randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+			await new Promise(resolve => setTimeout(resolve, randomDelay));
+		
+			const primaryBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+			const dropDownBtns =  document.querySelectorAll(".artdeco-dropdown__trigger.artdeco-dropdown__trigger--placement-bottom.ember-view.pvs-profile-actions__action.artdeco-button.artdeco-button--secondary.artdeco-button--muted.artdeco-button--2");
+			const dropDownOptions = document.querySelectorAll(".display-flex.t-normal.flex-1");
+			
+			// checking if primary btn exists
+			if (primaryBtn) {
+		
+				// checking if the primary btn is connect
+				if (primaryBtn.innerText == "Connect") {
+					primaryBtn.click();
+					console.log("clicked on connect btn");
+					port.postMessage({ type: 'heartbeat' });
+					randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+					await new Promise(resolve => setTimeout(resolve, randomDelay));
+				}
+		
+				// if it isn't the connect btn then proceed to click on dropdown and then click on connect
+				else {
+					dropDownBtns[1].click();
+					console.log("clicked on dropdown btn");
+					randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+					await new Promise(resolve => setTimeout(resolve, randomDelay));
+		
+					for (let i = 0; i < dropDownOptions.length; i++) {
+						if (dropDownOptions[i].innerHTML == 'Connect') {
+							dropDownOptions[i].click();
+							console.log("clicked on connect btn");
+							port.postMessage({ type: 'heartbeat' });
+							randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+							await new Promise(resolve => setTimeout(resolve, randomDelay));
+						}
+					}
+				}
+			}
+		
+			// if there is no primary btn then proceed to click on dropdown and then click on connect
+			else {
+				dropDownBtns[1].click();
+				console.log("clicked on dropdown btn");
+				randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+				await new Promise(resolve => setTimeout(resolve, randomDelay));
+		
+				for (let i = 0; i < dropDownOptions.length; i++) {
+					if (dropDownOptions[i].innerHTML == 'Connect') {
+						dropDownOptions[i].click();
+						console.log("clicked on connect btn");
+						port.postMessage({ type: 'heartbeat' });
+						randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+						await new Promise(resolve => setTimeout(resolve, randomDelay));
+					}
+				}
+			}
+		
+			
+			// // click on the connect btn
+			// const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+			// connectBtn.click();
+			// console.log("clicked on connect btn");
+			// randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+			// await new Promise(resolve => setTimeout(resolve, randomDelay));
+		
+		
+			if (messageTemplate.length > 0) {
+				// click on the add a note btn
+				const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view.mr1");
+				addNoteBtn.click();
+				console.log("clicked on add note btn");
+				port.postMessage({ type: 'heartbeat' });
+				randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+				await new Promise(resolve => setTimeout(resolve, randomDelay));
+				
+		
+				// enter text from msg template onot the text box
+				const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
+				
+				let customMessage = messageTemplate
+				.replace(/{first_name}/g, leadData.firstName)
+				.replace(/{last_name}/g, leadData.lastName)
+				.replace(/{full_name}/g, leadData.fullName)
+				.replace(/{job_title}/g, leadData.jobTitle);
+		
+				// textBox.value = customMessage;
+				// // Manually trigger the input event on the text box
+				// const inputEvent = new Event('input');
+				// textBox.dispatchEvent(inputEvent);
+		
+				textBox.value = '';
+		
+				// Simulate typing by dispatching keydown and input events for each character
+				customMessage.split('').forEach((character) => {
+					const keydownEvent = new KeyboardEvent('keydown', { key: character });
+					const inputEvent = new Event('input', { bubbles: true, cancelable: true });
+		
+					textBox.dispatchEvent(keydownEvent);
+					textBox.value += character;
+					textBox.dispatchEvent(inputEvent);
+				});
+		
+				console.log("injected msg onto text box");
+				port.postMessage({ type: 'heartbeat' });
+				randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+				await new Promise(resolve => setTimeout(resolve, randomDelay));
+			  }
+		
+		
+			// click on the send btn
+			const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1");
+			sendBtn.click();
+			console.log("clicked send btn");
+			port.postMessage({ type: 'heartbeat' });
+			randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+			await new Promise(resolve => setTimeout(resolve, randomDelay));
+		  
+		}
+
 		port.onMessage.addListener(async function(request) {
 			if (request.action === "Start Sending Invites") {
 				console.log('receieved request from popup to start sending invites');
@@ -250,120 +373,120 @@ async function goToNextPage() {
 
 
 
-async function sendInvites(leadData, messageTemplate) {
+// async function sendInvites(leadData, messageTemplate) {
   
-	console.log("loaded lead's profile");
-	randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-	await new Promise(resolve => setTimeout(resolve, randomDelay));
+// 	console.log("loaded lead's profile");
+// 	randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+// 	await new Promise(resolve => setTimeout(resolve, randomDelay));
 
-	const primaryBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
-	const dropDownBtns =  document.querySelectorAll(".artdeco-dropdown__trigger.artdeco-dropdown__trigger--placement-bottom.ember-view.pvs-profile-actions__action.artdeco-button.artdeco-button--secondary.artdeco-button--muted.artdeco-button--2");
-	const dropDownOptions = document.querySelectorAll(".display-flex.t-normal.flex-1");
+// 	const primaryBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+// 	const dropDownBtns =  document.querySelectorAll(".artdeco-dropdown__trigger.artdeco-dropdown__trigger--placement-bottom.ember-view.pvs-profile-actions__action.artdeco-button.artdeco-button--secondary.artdeco-button--muted.artdeco-button--2");
+// 	const dropDownOptions = document.querySelectorAll(".display-flex.t-normal.flex-1");
 	
-	// checking if primary btn exists
-	if (primaryBtn) {
+// 	// checking if primary btn exists
+// 	if (primaryBtn) {
 
-		// checking if the primary btn is connect
-		if (primaryBtn.innerText == "Connect") {
-			primaryBtn.click();
-			console.log("clicked on connect btn");
-			randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-			await new Promise(resolve => setTimeout(resolve, randomDelay));
-		}
+// 		// checking if the primary btn is connect
+// 		if (primaryBtn.innerText == "Connect") {
+// 			primaryBtn.click();
+// 			console.log("clicked on connect btn");
+// 			randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+// 			await new Promise(resolve => setTimeout(resolve, randomDelay));
+// 		}
 
-		// if it isn't the connect btn then proceed to click on dropdown and then click on connect
-		else {
-			dropDownBtns[1].click();
-			console.log("clicked on dropdown btn");
-			randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-			await new Promise(resolve => setTimeout(resolve, randomDelay));
+// 		// if it isn't the connect btn then proceed to click on dropdown and then click on connect
+// 		else {
+// 			dropDownBtns[1].click();
+// 			console.log("clicked on dropdown btn");
+// 			randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+// 			await new Promise(resolve => setTimeout(resolve, randomDelay));
 
-			for (let i = 0; i < dropDownOptions.length; i++) {
-				if (dropDownOptions[i].innerHTML == 'Connect') {
-					dropDownOptions[i].click();
-					console.log("clicked on connect btn");
-					randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-					await new Promise(resolve => setTimeout(resolve, randomDelay));
-				}
-			}
-		}
-	}
+// 			for (let i = 0; i < dropDownOptions.length; i++) {
+// 				if (dropDownOptions[i].innerHTML == 'Connect') {
+// 					dropDownOptions[i].click();
+// 					console.log("clicked on connect btn");
+// 					randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+// 					await new Promise(resolve => setTimeout(resolve, randomDelay));
+// 				}
+// 			}
+// 		}
+// 	}
 
-	// if there is no primary btn then proceed to click on dropdown and then click on connect
-	else {
-		dropDownBtns[1].click();
-		console.log("clicked on dropdown btn");
-		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-		await new Promise(resolve => setTimeout(resolve, randomDelay));
+// 	// if there is no primary btn then proceed to click on dropdown and then click on connect
+// 	else {
+// 		dropDownBtns[1].click();
+// 		console.log("clicked on dropdown btn");
+// 		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+// 		await new Promise(resolve => setTimeout(resolve, randomDelay));
 
-		for (let i = 0; i < dropDownOptions.length; i++) {
-			if (dropDownOptions[i].innerHTML == 'Connect') {
-				dropDownOptions[i].click();
-				console.log("clicked on connect btn");
-				randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-				await new Promise(resolve => setTimeout(resolve, randomDelay));
-			}
-		}
-	}
+// 		for (let i = 0; i < dropDownOptions.length; i++) {
+// 			if (dropDownOptions[i].innerHTML == 'Connect') {
+// 				dropDownOptions[i].click();
+// 				console.log("clicked on connect btn");
+// 				randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+// 				await new Promise(resolve => setTimeout(resolve, randomDelay));
+// 			}
+// 		}
+// 	}
 
 	
-	// // click on the connect btn
-	// const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
-	// connectBtn.click();
-	// console.log("clicked on connect btn");
-	// randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-	// await new Promise(resolve => setTimeout(resolve, randomDelay));
+// 	// // click on the connect btn
+// 	// const connectBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.pvs-profile-actions__action");
+// 	// connectBtn.click();
+// 	// console.log("clicked on connect btn");
+// 	// randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+// 	// await new Promise(resolve => setTimeout(resolve, randomDelay));
 
 
-	if (messageTemplate.length > 0) {
-		// click on the add a note btn
-		const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view.mr1");
-		addNoteBtn.click();
-		console.log("clicked on add note btn");
-		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-		await new Promise(resolve => setTimeout(resolve, randomDelay));
+// 	if (messageTemplate.length > 0) {
+// 		// click on the add a note btn
+// 		const addNoteBtn = document.querySelector(".artdeco-button.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary.ember-view.mr1");
+// 		addNoteBtn.click();
+// 		console.log("clicked on add note btn");
+// 		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+// 		await new Promise(resolve => setTimeout(resolve, randomDelay));
 		
 
-		// enter text from msg template onot the text box
-		const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
+// 		// enter text from msg template onot the text box
+// 		const textBox = document.querySelector(".ember-text-area.ember-view.connect-button-send-invite__custom-message.mb3");
 		
-		let customMessage = messageTemplate
-		.replace(/{first_name}/g, leadData.firstName)
-		.replace(/{last_name}/g, leadData.lastName)
-		.replace(/{full_name}/g, leadData.fullName)
-		.replace(/{job_title}/g, leadData.jobTitle);
+// 		let customMessage = messageTemplate
+// 		.replace(/{first_name}/g, leadData.firstName)
+// 		.replace(/{last_name}/g, leadData.lastName)
+// 		.replace(/{full_name}/g, leadData.fullName)
+// 		.replace(/{job_title}/g, leadData.jobTitle);
 
-		// textBox.value = customMessage;
-		// // Manually trigger the input event on the text box
-		// const inputEvent = new Event('input');
-		// textBox.dispatchEvent(inputEvent);
+// 		// textBox.value = customMessage;
+// 		// // Manually trigger the input event on the text box
+// 		// const inputEvent = new Event('input');
+// 		// textBox.dispatchEvent(inputEvent);
 
-		textBox.value = '';
+// 		textBox.value = '';
 
-		// Simulate typing by dispatching keydown and input events for each character
-		customMessage.split('').forEach((character) => {
-			const keydownEvent = new KeyboardEvent('keydown', { key: character });
-			const inputEvent = new Event('input', { bubbles: true, cancelable: true });
+// 		// Simulate typing by dispatching keydown and input events for each character
+// 		customMessage.split('').forEach((character) => {
+// 			const keydownEvent = new KeyboardEvent('keydown', { key: character });
+// 			const inputEvent = new Event('input', { bubbles: true, cancelable: true });
 
-			textBox.dispatchEvent(keydownEvent);
-			textBox.value += character;
-			textBox.dispatchEvent(inputEvent);
-		});
+// 			textBox.dispatchEvent(keydownEvent);
+// 			textBox.value += character;
+// 			textBox.dispatchEvent(inputEvent);
+// 		});
 
-		console.log("injected msg onto text box");
-		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-		await new Promise(resolve => setTimeout(resolve, randomDelay));
-  	}
+// 		console.log("injected msg onto text box");
+// 		randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+// 		await new Promise(resolve => setTimeout(resolve, randomDelay));
+//   	}
 
 
-	// click on the send btn
-	const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1");
-	sendBtn.click();
-	console.log("clicked send btn");
-	randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-	await new Promise(resolve => setTimeout(resolve, randomDelay));
+// 	// click on the send btn
+// 	const sendBtn = document.querySelector(".artdeco-button.artdeco-button--2.artdeco-button--primary.ember-view.ml1");
+// 	sendBtn.click();
+// 	console.log("clicked send btn");
+// 	randomDelay = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+// 	await new Promise(resolve => setTimeout(resolve, randomDelay));
   
-}
+// }
 
 
 

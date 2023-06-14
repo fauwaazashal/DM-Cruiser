@@ -270,6 +270,10 @@ async function sendInvite(campaignName, leadData, messageTemplate) {
 					await updateCampaignData(campaignName);
 					resolve();
 				}
+
+				if (response.type === "heartbeat"){
+					console.log("keeping bg script active");
+				}
 			});
 		});
 	});
