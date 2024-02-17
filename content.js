@@ -27,7 +27,7 @@ chrome.runtime.onConnect.addListener(function(port) {
 					await new Promise(resolve => setTimeout(resolve, 2000));
 
 					// check if current page has any leads to scrape	
-					if (document.querySelectorAll('.entity-result').length === 0) {
+					if (document.querySelectorAll('.linked-area.flex-1.cursor-pointer').length === 0) {
 						port.postMessage({ message: "no more leads to scrape", data: scrapedData });
 						isPaused = true;
 						isStopped = true;
@@ -290,7 +290,7 @@ async function waitForWindowToLoad() {
 // function to scraped leads from the current page 
 async function scraping(scrapedData) {
 
-	let leads = document.querySelectorAll('.entity-result');
+	let leads = document.querySelectorAll('.linked-area.flex-1.cursor-pointer');
 	
 	if (leads) {
 		for (let i = 0; i < leads.length; i++) {
